@@ -26,4 +26,4 @@ jobs:
 
       - name: Build e Testes com Maven
         run: mvn clean verify
-        working-directory: ./backend
+        working-directory: ./Backend/meusFuncionarios
