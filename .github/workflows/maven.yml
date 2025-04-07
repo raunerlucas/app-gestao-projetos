@@ -12,13 +12,14 @@ jobs:
 
     steps:
       - name: Checkout do código
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4  # Atualize para a versão mais recente
 
-      - name: Configurar JDK 11
-        uses: actions/setup-java@v2
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v3  # Versão mais recente
         with:
-          distribution: 'adopt'
+          distribution: 'temurin'    # Eclipse Temurin (recomendado)
           java-version: '17'
+          cache: 'maven'             # Habilita cache do Maven
 
       - name: Build e Testes com Maven
         run: mvn clean verify
