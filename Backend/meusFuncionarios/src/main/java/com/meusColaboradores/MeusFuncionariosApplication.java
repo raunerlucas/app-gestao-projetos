@@ -9,5 +9,4 @@ public class MeusFuncionariosApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MeusFuncionariosApplication.class, args);
 	}
-
 }
