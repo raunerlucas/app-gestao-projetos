@@ -25,5 +25,5 @@ jobs:
           cache: 'maven'             # Habilita cache do Maven
 
       - name: Build e Testes com Maven
-        run: mvn clean verify
+        run: mvn clean verify -Dfile.encoding=UTF-8
         working-directory: ./Backend/meusFuncionarios
