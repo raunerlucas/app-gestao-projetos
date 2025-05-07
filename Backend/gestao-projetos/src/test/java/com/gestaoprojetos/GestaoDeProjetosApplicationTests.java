@@ -1,4 +1,4 @@
-package com.gestao_projetos;
+package com.gestaoprojetos;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
