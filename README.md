@@ -1,3 +1,7 @@
+## Funcionamento do Projeto
+ [![CI](https://github.com/raunerlucas/app-gestao-projetos/actions/workflows/maven.yml/badge.svg)](https://github.com/raunerlucas/app-gestao-projetos/actions/workflows/maven.yml)
+
+## Diagrama de Classe
 ```mermaid
 classDiagram
     %% Classe abstrata Pessoa
