@@ -7,20 +7,20 @@ classDiagram
     %% Classe abstrata Pessoa
     class Pessoa {
       <<abstract>>
-      + nome: String
-      + cpf: String
-      + email: String
-      + telefone: String
+      - nome: String
+      - cpf: String
+      - email: String
+      - telefone: String
     }
 
     %% Classes que estendem Pessoa
     class Autor {
-      + projetos: List<Projeto>
+      - projetos: List<Projeto>
     }
     class Avaliador {
-      + titulacao: String
-      + areaAtuacao: String
-      + avaliacoes: List<Avaliacao>
+      - titulacao: String
+      - areaAtuacao: String
+      - avaliacoes: List<Avaliacao>
     }
 
     Pessoa <|-- Autor
@@ -28,24 +28,24 @@ classDiagram
 
     %% Classe Premio e composição com Cronograma
     class Premio {
-      + nome: String
-      + descricao: String
-      + anoEdicao: int
+      - nome: String
+      - descricao: String
+      - anoEdicao: int
     }
     class Cronograma {
-      + dataInicio: Date
-      + descricao: String
-      + dataFim: Date
+      - dataInicio: Date
+      - descricao: String
+      - dataFim: Date
     }
 
     Premio *-- Cronograma : possui
 
     %% Classe Projeto
     class Projeto {
-      + titulo: String
-      + resumo: String
-      + dataEnvio: Date
-      + areaTematica: String
+      - titulo: String
+      - resumo: String
+      - dataEnvio: Date
+      - areaTematica: String
     }
 
     %% Associação muitos-para-muitos entre Autor e Projeto
@@ -53,9 +53,9 @@ classDiagram
 
     %% Classe Avaliacao e relacionamentos
     class Avaliacao {
-      + parecer: String
-      + nota: Double
-      + dataAvaliacao: Date
+      - parecer: String
+      - nota: Double
+      - dataAvaliacao: Date
     }
 
     Projeto "1" -- "*" Avaliacao : recebe
