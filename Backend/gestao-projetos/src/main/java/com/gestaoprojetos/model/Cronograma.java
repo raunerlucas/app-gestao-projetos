@@ -8,6 +8,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,7 +19,7 @@ public class Cronograma {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @NotNull(message = "A data de início é obrigatória")
     @Column(name = "data_inicio")
@@ -33,6 +35,9 @@ public class Cronograma {
 
     @Enumerated(EnumType.STRING)
     private StatusCronograma status = StatusCronograma.NAO_INICIADO;
+
+    @OneToMany(mappedBy = "cronograma", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Premio> premios = new ArrayList<>();
 
     public enum StatusCronograma {
         NAO_INICIADO,
