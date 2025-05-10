@@ -1,4 +1,14 @@
 package com.gestaoprojetos.model;
 
-public class Autor {
+import jakarta.persistence.Entity;
+import lombok.Data;
+import lombok.ToString;
+
+import java.io.Serializable;
+
+
+@Data
+@ToString(callSuper = true)
+@Entity(name = "_autor")
+public class Autor extends Pessoa implements Serializable {
 }
