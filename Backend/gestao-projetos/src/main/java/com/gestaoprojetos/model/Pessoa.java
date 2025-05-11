@@ -16,6 +16,9 @@ import java.io.Serializable;
 @Entity(name = "_pessoa")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Pessoa implements Serializable {
+
+    //[] TODO: Colocar os Validações de cada campo
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

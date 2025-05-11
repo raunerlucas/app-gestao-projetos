@@ -11,6 +11,9 @@ import java.io.Serializable;
 @Data
 @Entity(name = "_premio")
 public class Premio implements Serializable {
+
+    //[] TODO: Colocar os Validações de cada campo
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

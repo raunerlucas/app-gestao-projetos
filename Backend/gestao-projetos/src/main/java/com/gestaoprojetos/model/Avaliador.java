@@ -14,16 +14,19 @@ import java.util.Date;
 @Entity(name = "_avaliador")
 public class Avaliador extends Pessoa implements Serializable {
 
-    private Long id;
+    //[] TODO: Colocar os Validações de cada campo
+
     private String parecer;
-    private double nota;
+
+    private Double nota;
+
     private Date dataAvaliacao;
 
-    @ManyToOne //  um avaliador pode ter várias avaliações, avalicao pertence a um avaliador
+    @ManyToOne
     @JoinColumn(name = "avaliador_id")
     private Avaliacao avaliador;
 
-    @ManyToOne // avaliador pode avaliar vários projetos
+    @ManyToOne
     @JoinColumn(name = "projeto_id")
     private Projeto projeto;
 }

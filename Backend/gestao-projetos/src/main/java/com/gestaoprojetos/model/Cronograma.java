@@ -18,6 +18,8 @@ import java.util.List;
 @Entity(name = "_cronograma")
 public class Cronograma implements Serializable {
 
+    //[] TODO: Colocar os Validações de cada campo
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

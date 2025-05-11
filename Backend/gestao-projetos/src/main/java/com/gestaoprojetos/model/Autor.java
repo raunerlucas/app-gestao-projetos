@@ -1,5 +1,6 @@
 package com.gestaoprojetos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.Data;
@@ -13,7 +14,9 @@ import java.util.List;
 @Entity(name = "_autor")
 public class Autor extends Pessoa implements Serializable {
 
+    //[] TODO: Colocar os Validações de cada campo
+
+    @JsonIgnore
     @ManyToMany(mappedBy = "autores")
     private List<Projeto> projetos;
-
 }
