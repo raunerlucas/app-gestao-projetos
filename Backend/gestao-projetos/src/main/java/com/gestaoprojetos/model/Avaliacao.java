@@ -32,5 +32,8 @@ public class Avaliacao implements Serializable {
     private  Avaliador avaliador;
 
     @ManyToOne(optional = false)
+    private Status status;
+
+    @ManyToOne(optional = false)
     private Projeto projeto;
 }
