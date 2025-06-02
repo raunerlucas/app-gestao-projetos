@@ -2,12 +2,14 @@ package com.gestaoprojetos.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -22,11 +24,11 @@ public class Avaliador extends Pessoa implements Serializable {
 
     private Date dataAvaliacao;
 
-    @ManyToOne
+    @OneToMany(mappedBy = "avaliador")
     @JoinColumn(name = "avaliador_id")
-    private Avaliacao avaliador;
+    private List<Avaliacao> avaliacoes = new ArrayList<>();
 
-    @ManyToOne
+    @OneToMany
     @JoinColumn(name = "projeto_id")
-    private Projeto projeto;
+    private List<Projeto> projetos = new ArrayList<>();
 }
