@@ -4,7 +4,6 @@ import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.model.Avaliador;
-import com.gestaoprojetos.model.Projeto;
 import com.gestaoprojetos.repository.AvaliadorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,29 +127,6 @@ public class AvaliadorServiceIMP extends
 
         // Se Avaliacao tiver vínculo bidirecional, faça avaliacao.setAvaliador(avaliador);
         avaliacao.setAvaliador(avaliador);
-
-        return save(avaliador);
-    }
-
-    /**
-     * Atribui um Projeto a este Avaliador (caso seu modelo permita essa associação).
-     *
-     * @param idAvaliador ID do Avaliador.
-     * @param projeto     Objeto Projeto que será associado.
-     * @return Avaliador atualizado.
-     * @throws ResourceNotFoundException se o Avaliador não existir.
-     * @throws BadRequestException       se o Projeto for nulo.
-     */
-    public Avaliador atribuirProjeto(Long idAvaliador, Projeto projeto) {
-        if (projeto == null) {
-            throw new BadRequestException("Objeto Projeto não pode ser nulo.");
-        }
-        Avaliador avaliador = buscarPorId(idAvaliador);
-
-        if (avaliador.getProjetos() == null) {
-            avaliador.setProjetos(new java.util.ArrayList<>());
-        }
-        avaliador.getProjetos().add(projeto);
 
         return save(avaliador);
     }

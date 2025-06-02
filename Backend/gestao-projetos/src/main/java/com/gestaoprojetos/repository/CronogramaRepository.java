@@ -2,11 +2,20 @@ package com.gestaoprojetos.repository;
 
 import com.gestaoprojetos.model.Cronograma;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface CronogramaRepository extends JpaRepository<Cronograma, Long> {
-    Optional<Cronograma> findByPremioId(Long premioId);
+
+    /**
+     * Busca um Cronograma baseado no ID de um Premio que pertence a ele.
+     *
+     * Por causa do relacionamento:
+     *   Cronograma → List<Premio> premios
+     * cada Premio tem um campo 'id' e um campo 'cronograma'.
+     *
+     * A consulta derivada deve usar 'premios_Id':
+     *   <nomeDoAtributoDaLista>_<propriedadeDoElementoNaLista>
+     */
+    Optional<Cronograma> findByPremios_Id(Long premioId);
 }

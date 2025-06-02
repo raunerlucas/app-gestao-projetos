@@ -1,7 +1,7 @@
 package com.gestaoprojetos.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.ToString;
@@ -24,11 +24,11 @@ public class Avaliador extends Pessoa implements Serializable {
 
     private Date dataAvaliacao;
 
-    @OneToMany(mappedBy = "avaliador")
-    @JoinColumn(name = "avaliador_id")
+    /**
+     * Um Avaliador faz várias Avaliações.
+     * O atributo mappedBy="avaliador" indica que a FK (avaliador_id) está na entidade Avaliacao.
+     * Portanto não usamos @JoinColumn aqui.
+     */
+    @OneToMany(mappedBy = "avaliador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Avaliacao> avaliacoes = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name = "projeto_id")
-    private List<Projeto> projetos = new ArrayList<>();
 }
