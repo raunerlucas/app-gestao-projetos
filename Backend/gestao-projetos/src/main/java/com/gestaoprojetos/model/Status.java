@@ -16,6 +16,7 @@ public class Status implements Serializable {
 
     @Id
     private Long id;
+
     private String description;
 
     public enum Values {
