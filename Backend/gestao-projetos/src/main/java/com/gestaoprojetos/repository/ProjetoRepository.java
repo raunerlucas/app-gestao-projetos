@@ -29,6 +29,6 @@ import java.util.List;
 @Repository
 public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
     List<Projeto> findByDataEnvioBefore(LocalDate dataEnvioBefore);
-
     List<Projeto> findByTituloContainingIgnoreCase(String titulo);
+    List<Projeto> findByDataEnvioAfter(LocalDate data);
 }
