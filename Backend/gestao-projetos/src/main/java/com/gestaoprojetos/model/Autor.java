@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -18,5 +19,5 @@ public class Autor extends Pessoa implements Serializable {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "autores")
-    private List<Projeto> projetos;
+    private List<Projeto> projetos = new ArrayList<>();
 }
