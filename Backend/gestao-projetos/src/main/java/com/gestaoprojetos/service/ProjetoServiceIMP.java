@@ -279,6 +279,41 @@ public class ProjetoServiceIMP extends
             throw new BadRequestException("A data de envio não pode ser futura: " + dataEnvio);
         }
     }
+
+    /**
+     * Retorna todos os projetos submetidos que ainda não foram avaliados,
+     * incluindo os dados dos autores.
+     *
+     * @return lista de projetos sem avaliações.
+     */
+    public List<Projeto> listarProjetosSemAvaliacao() {
+        return findAll().stream()
+                .filter(p -> p.getAvaliacoes() == null
+                        || p.getAvaliacoes().isEmpty())
+                .toList();
+    }
+
+    /**
+     * Retorna todos os projetos submetidos que já foram avaliados,
+     * incluindo os dados dos autores.
+     *
+     * @return lista de projetos com pelo menos uma avaliação.
+     */
+    public List<Projeto> listarProjetosComAvaliacao() {
+        return findAll().stream()
+                .filter(p -> p.getAvaliacoes() != null
+                        && !p.getAvaliacoes().isEmpty())
+                .toList();
+    }
+
+    /**
+     * Lista projetos vencedores em ordem decrescente de nota.
+     * Considera o projeto vencedor aquele que possui pelo menos uma avaliação.
+     * Retorna todos os dados do projeto.
+     */
+    public List<Projeto> listarProjetosVencedoresPorNotaDesc() {
+        return getRepository().findProjetosVencedoresOrderByNotaDesc();
+    }
 }
 
 
