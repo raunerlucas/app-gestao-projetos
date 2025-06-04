@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 @Data
-@Entity
+@Entity(name = "_status")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Status implements Serializable {

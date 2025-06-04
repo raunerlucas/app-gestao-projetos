@@ -4,8 +4,14 @@ import com.gestaoprojetos.model.Pessoa;
 import com.gestaoprojetos.model.Usuario;
 import com.gestaoprojetos.security.JwtUtil;
 import com.gestaoprojetos.service.UsuarioServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -43,6 +50,13 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Registra um novo usuário",
+            description = "Registra um novo usuário associado a uma pessoa existente. " +
+                    "O ID da pessoa deve ser fornecido no corpo da requisição.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+    })
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequest request) {
         Usuario novo = new Usuario();
         novo.setUsername(request.getUsername());
@@ -64,11 +78,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
+    @Operation(summary = "Realiza o login do usuário",
+            description = "Autentica o usuário e retorna um token JWT se as credenciais forem válidas.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Login bem-sucedido, token JWT retornado",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
+    })
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getUsername(), request.getPassword()
+                            request.getUsername(),
+                            request.getPassword()
                     )
             );
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -81,6 +105,8 @@ public class AuthController {
 
     @Data
     public static class AuthResponse {
+        private final String message = "Login bem-sucedido";
+        private final String tipoToken = "Bearer";
         private final String token;
     }
 }
