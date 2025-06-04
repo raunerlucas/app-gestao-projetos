@@ -37,7 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 //    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioService.buscarPorUsername(username);
+        Usuario usuario = usuarioService.buscarPorUsername(new Usuario(username, null, null));
 
         // Aqui, usuario.getPassword() deve retornar o hash (ex: $2a$10$...)
         return User

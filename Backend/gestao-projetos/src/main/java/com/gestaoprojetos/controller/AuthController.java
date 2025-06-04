@@ -1,5 +1,6 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.controller.DTO.UserResponseDTO;
 import com.gestaoprojetos.model.Pessoa;
 import com.gestaoprojetos.model.Usuario;
 import com.gestaoprojetos.security.JwtUtil;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @Slf4j
 @RestController
 @RequestMapping("/auth")
@@ -32,6 +36,7 @@ public class AuthController {
     private final UsuarioServiceImpl usuarioService;
     private final JwtUtil jwtUtil;
 
+    @Autowired
     public AuthController(
             AuthenticationManager authenticationManager,
             UsuarioServiceImpl usuarioService,
@@ -42,39 +47,52 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-    @Data
-    public static class RegisterRequest {
-        private String username;
-        private String password;
-        private Long pessoaId;
-    }
 
+    /**
+     * Endpoint para registrar um novo usuário associado a uma pessoa existente.
+     * O ID da pessoa deve ser fornecido no corpo da requisição.
+     *
+     * @param request Dados do usuário a ser registrado
+     * @return Resposta com o status do registro
+     */
     @PostMapping("/register")
     @Operation(summary = "Registra um novo usuário",
             description = "Registra um novo usuário associado a uma pessoa existente. " +
                     "O ID da pessoa deve ser fornecido no corpo da requisição.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Usuário registrado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida")
+            @ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content()),
     })
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequest request) {
+        String username = request.getUsername();
+        String password = request.getPassword();
+        Long pessoaId = request.getPessoaId();
+
+        if (username == null || username.isEmpty() || password == null || password.isEmpty() || pessoaId == null) {
+            return ResponseEntity.badRequest().body("Dados inválidos para registro de usuário");
+        }
+
+
         Usuario novo = new Usuario();
-        novo.setUsername(request.getUsername());
-        novo.setPassword(request.getPassword());
+        novo.setUsername(username);
+        novo.setPassword(password);
 
         // Associa Pessoa “placeholder” com só o ID; o service buscará a pessoa real
         Pessoa pessoa = new Pessoa() {};
-        pessoa.setId(request.getPessoaId());
+        pessoa.setId(pessoaId);
         novo.setPessoa(pessoa);
 
-        Usuario usuarioSalvo = usuarioService.registrarUsuario(novo);
-        return ResponseEntity.ok(usuarioSalvo);
-    }
-
-    @Data
-    public static class LoginRequest {
-        private String username;
-        private String password;
+        try {
+            Usuario usuarioSalvo = usuarioService.registrarUsuario(novo);
+            UserResponseDTO response = new UserResponseDTO(usuarioSalvo);
+            return ResponseEntity.created(URI.create("/usuarios/" + usuarioSalvo.getId())).body(response);
+        } catch (Exception ex) {
+            log.error("Erro ao registrar usuário", ex);
+            return ResponseEntity.badRequest().body("Erro ao registrar usuário: " + ex.getMessage());
+        }
     }
 
     @PostMapping("/login")
@@ -85,7 +103,7 @@ public class AuthController {
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = AuthResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Credenciais inválidas")
+            @ApiResponse(responseCode = "401", description = "Credenciais inválidas", content = @Content())
     })
     public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
         try {
@@ -104,8 +122,20 @@ public class AuthController {
     }
 
     @Data
+    public static class LoginRequest {
+        private String username;
+        private String password;
+    }
+
+    @Data
+    public static class RegisterRequest {
+        private String username;
+        private String password;
+        private Long pessoaId;
+    }
+
+    @Data
     public static class AuthResponse {
-        private final String message = "Login bem-sucedido";
         private final String tipoToken = "Bearer";
         private final String token;
     }
