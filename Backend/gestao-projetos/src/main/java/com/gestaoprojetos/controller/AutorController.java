@@ -1,5 +1,6 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.controller.DTO.AutorLazyDTO;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
 import com.gestaoprojetos.model.Projeto;
@@ -39,11 +40,11 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de autores obtida com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Autor.class))),
+                            schema = @Schema(implementation = AutorLazyDTO.class))),
             @ApiResponse(responseCode = "204", description = "Nenhum autor encontrado", content = @Content),
     })
-    public ResponseEntity<List<Autor>> listarTodos() {
-        List<Autor> autores = autorService.findAll();
+    public ResponseEntity<List<AutorLazyDTO>> LazyListarTodos() {
+        List<AutorLazyDTO> autores = autorService.listarTodos();
         if (autores.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -66,10 +67,34 @@ public class AutorController {
                             schema = @Schema(implementation = Autor.class))),
             @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content),
     })
-
     public ResponseEntity<Autor> buscarPorId(@PathVariable Long id) {
         Autor autor = autorService.buscarPorId(id);
         return ResponseEntity.ok(autor);
+    }
+
+    /**
+     * Endpoint para obter um autor por ID.
+     *
+     * @param id ID do autor a ser buscado.
+     * @return ResponseEntity com o autor encontrado ou 404 se não existir.
+     */
+    // Buscar autor por ID
+    @GetMapping("/lazy/{id}")
+    @Operation(summary = "Buscar Autor por ID",
+            description = "Busca um autor pelo ID fornecido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Autor encontrado",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AutorLazyDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content),
+    })
+    public ResponseEntity<AutorLazyDTO> LazyBuscarPorId(@PathVariable Long id) {
+        try {
+            AutorLazyDTO autor = autorService.LazyBuscarPorId(id);
+            return ResponseEntity.ok(autor);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     /**
@@ -91,6 +116,29 @@ public class AutorController {
     public ResponseEntity<Autor> criarAutor(@RequestBody Autor autor) {
         Autor novoAutor = autorService.criarAutor(autor);
         return ResponseEntity.status(201).body(novoAutor);
+    }
+
+    /**
+     * Endpoint para associar um projeto a um autor.
+     *
+     * @param autorId ID do autor ao qual o projeto será associado.
+     * @param projeto Projeto a ser associado ao autor.
+     * @return ResponseEntity com o autor atualizado ou 404 se não existir.
+     */
+    // Associar projeto ao autor
+    @PostMapping("{autorId}/projetos")
+    @Operation(summary = "Associar Projeto ao Autor",
+            description = "Associa um projeto existente a um autor.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Projeto associado ao autor com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Autor.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida (ID do Projeto ausente/inválido)", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Autor ou Projeto não encontrado", content = @Content),
+    })
+    public ResponseEntity<Autor> adicionarProjetoAoAutor(@PathVariable Long autorId, @RequestBody Projeto projeto) {
+        Autor autorAtualizado = autorService.adicionarProjeto(autorId, projeto);
+        return ResponseEntity.ok(autorAtualizado);
     }
 
     /**
@@ -132,29 +180,6 @@ public class AutorController {
     public ResponseEntity<?> excluirAutor(@PathVariable Long id) {
         autorService.deletarPorId(id);
         return ResponseEntity.status(204).build();
-    }
-
-    /**
-     * Endpoint para associar um projeto a um autor.
-     *
-     * @param autorId ID do autor ao qual o projeto será associado.
-     * @param projeto Projeto a ser associado ao autor.
-     * @return ResponseEntity com o autor atualizado ou 404 se não existir.
-     */
-    // Associar projeto ao autor
-    @PostMapping("{autorId}/projetos")
-    @Operation(summary = "Associar Projeto ao Autor",
-            description = "Associa um projeto existente a um autor.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Projeto associado ao autor com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Autor.class))),
-            @ApiResponse(responseCode = "400", description = "Requisição inválida (ID do Projeto ausente/inválido)", content = @Content),
-            @ApiResponse(responseCode = "404", description = "Autor ou Projeto não encontrado", content = @Content),
-    })
-    public ResponseEntity<Autor> adicionarProjetoAoAutor(@PathVariable Long autorId, @RequestBody Projeto projeto) {
-        Autor autorAtualizado = autorService.adicionarProjeto(autorId, projeto);
-        return ResponseEntity.ok(autorAtualizado);
     }
 
     /**

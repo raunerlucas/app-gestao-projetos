@@ -1,5 +1,6 @@
 package com.gestaoprojetos.service;
 
+import com.gestaoprojetos.controller.DTO.AutorLazyDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
@@ -88,13 +89,25 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
                 );
     }
 
+    public AutorLazyDTO LazyBuscarPorId(Long id) {
+        Autor autor = buscarPorId(id);
+        return new AutorLazyDTO(autor.getId(), autor.getNome(), autor.getTelefone(), autor.getEmail());
+    }
+
     /**
      * Retorna todos os Autores cadastrados.
      *
      * @return lista de Autor (pode vir vazia).
      */
-    public List<Autor> listarTodos() {
-        return findAll();
+    public List<AutorLazyDTO> listarTodos() {
+        return findAll().stream().map(
+                autor -> new AutorLazyDTO(
+                        autor.getId(),
+                        autor.getNome(),
+                        autor.getTelefone(),
+                        autor.getEmail()
+                )
+        ).toList();
     }
 
     /**
