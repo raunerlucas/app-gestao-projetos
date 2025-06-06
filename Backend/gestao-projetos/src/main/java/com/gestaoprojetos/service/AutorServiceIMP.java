@@ -1,6 +1,7 @@
 package com.gestaoprojetos.service;
 
-import com.gestaoprojetos.controller.DTO.AutorLazyDTO;
+import com.gestaoprojetos.controller.DTO.AutorDTO.AutorRequestDTO;
+import com.gestaoprojetos.controller.DTO.AutorDTO.AutorResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
@@ -30,10 +31,7 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
      * - AutorRepository é passado para BasicRepositoryIMP.
      * - ProjetoRepository é usado para validar existência de Projetos.
      */
-    public AutorServiceIMP(
-            AutorRepository autorRepository,
-            ProjetoRepository projetoRepository
-    ) {
+    public AutorServiceIMP(AutorRepository autorRepository, ProjetoRepository projetoRepository) {
         super(autorRepository);
         this.projetoRepository = projetoRepository;
     }
@@ -41,11 +39,22 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
     /**
      * Cria um novo Autor.
      *
-     * @param autor Objeto preenchido (nome, cpf, email, telefone).
+     * @param autorReqt Objeto preenchido (nome, cpf, email, telefone).
      * @return Autor persistido (com ID gerado).
      * @throws BadRequestException se campos obrigatórios (nome, cpf, email, telefone) estiverem ausentes ou inválidos.
      */
-    public Autor criarAutor(Autor autor) {
+    public Autor criarAutor(AutorRequestDTO autorReqt) throws BadRequestException {
+        if (autorReqt == null) {
+            throw new BadRequestException("Objeto Autor não pode ser nulo.");
+        }
+        Autor autor = new Autor(
+                null, // ID será gerado automaticamente
+                autorReqt.getNome(),
+                autorReqt.getCPF(),
+                autorReqt.getEmail(),
+                autorReqt.getTelefone(),
+                null // projetos serão inicializados no construtor da entidade
+        );
         validarCamposBasicos(autor);
         return save(autor);
     }
@@ -59,7 +68,7 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
      * @throws ResourceNotFoundException se não houver Autor com esse ID.
      * @throws BadRequestException       se campos obrigatórios estiverem ausentes ou inválidos.
      */
-    public Autor atualizarAutor(Long id, Autor dadosNovos) {
+    public Autor atualizarAutor(Long id, Autor dadosNovos) throws ResourceNotFoundException {
         Autor existente = findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Autor não encontrado com ID: " + id)
@@ -82,16 +91,16 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
      * @return Autor encontrado.
      * @throws ResourceNotFoundException se não houver Autor com esse ID.
      */
-    public Autor buscarPorId(Long id) {
+    public Autor buscarPorId(Long id) throws ResourceNotFoundException {
         return findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Autor não encontrado com ID: " + id)
                 );
     }
 
-    public AutorLazyDTO LazyBuscarPorId(Long id) {
+    public AutorResponseDTO LazyBuscarPorId(Long id) {
         Autor autor = buscarPorId(id);
-        return new AutorLazyDTO(autor.getId(), autor.getNome(), autor.getTelefone(), autor.getEmail());
+        return new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getTelefone(), autor.getEmail());
     }
 
     /**
@@ -99,9 +108,9 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
      *
      * @return lista de Autor (pode vir vazia).
      */
-    public List<AutorLazyDTO> listarTodos() {
+    public List<AutorResponseDTO> listarTodos() {
         return findAll().stream().map(
-                autor -> new AutorLazyDTO(
+                autor -> new AutorResponseDTO(
                         autor.getId(),
                         autor.getNome(),
                         autor.getTelefone(),
@@ -213,7 +222,7 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
      * @param autor Objeto Autor a ser validado.
      * @throws BadRequestException se algum campo obrigatório estiver ausente ou vazio.
      */
-    private void validarCamposBasicos(Autor autor) {
+    private void validarCamposBasicos(Autor autor) throws BadRequestException {
         if (autor.getNome() == null || autor.getNome().trim().isEmpty()) {
             throw new BadRequestException("O campo 'nome' é obrigatório e não pode ficar vazio.");
         }
@@ -226,6 +235,5 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
         if (autor.getTelefone() == null || autor.getTelefone().trim().isEmpty()) {
             throw new BadRequestException("O campo 'telefone' é obrigatório e não pode ficar vazio.");
         }
-        // Aqui você pode adicionar regex para formato de CPF, e-mail, etc., se quiser.
     }
 }

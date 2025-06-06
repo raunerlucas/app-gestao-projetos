@@ -62,10 +62,13 @@ INSERT INTO _usuario (id, username, password, pessoa_id) VALUES (2, 'maria', '$2
 -- Carlos Pereira (Pessoa id=3) ganha login “carlos”
 INSERT INTO _usuario (id, username, password, pessoa_id) VALUES (3, 'carlos', '$2a$10$txSNiCqhNZ1XRnXCo4igMuB2Jzi/YBkkLv2ZAH2CHqAyQtbiaV6gW', 3);
 
--- Após inserir dados em _usuario, _autor, _avaliador, _projeto, etc.
+SELECT MAX(id)
+FROM _pessoa;
+
+-- Suponha que o maior id seja 3, ajuste a sequence para começar do 4
+ALTER SEQUENCE pessoa_seq RESTART WITH 5;
+-- Após inserir dados em _usuario, _projeto, etc.
 ALTER TABLE _usuario ALTER COLUMN id RESTART WITH 4;
-ALTER TABLE _autor ALTER COLUMN id RESTART WITH 5;
-ALTER TABLE _avaliador ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE _projeto ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE _avaliacao ALTER COLUMN id RESTART WITH 3;
 ALTER TABLE _status ALTER COLUMN id RESTART WITH 5;

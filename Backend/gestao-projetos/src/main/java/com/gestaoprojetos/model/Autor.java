@@ -22,4 +22,9 @@ public class Autor extends Pessoa implements Serializable {
 
     @ManyToMany(mappedBy = "autores")
     private List<Projeto> projetos = new ArrayList<>();
+
+    public Autor(Long id, String nome, String CPF, String email, String telefone, List<Projeto> projetos) {
+        super(id, nome, CPF, email, telefone);
+        this.projetos = projetos != null ? projetos : new ArrayList<>();
+    }
 }

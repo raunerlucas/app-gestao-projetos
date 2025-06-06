@@ -1,30 +1,33 @@
 package com.gestaoprojetos.controller;
 
-import com.gestaoprojetos.controller.DTO.AutorLazyDTO;
+import com.gestaoprojetos.controller.DTO.AutorDTO.AutorResponseDTO;
+import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
 import com.gestaoprojetos.model.Projeto;
 import com.gestaoprojetos.service.AutorServiceIMP;
-import com.gestaoprojetos.service.StatusServiceIMP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+
+import static com.gestaoprojetos.controller.DTO.AutorDTO.AutorRequestDTO;
 
 @RestController
 @RequestMapping("/autores")
-
 public class AutorController {
     private final AutorServiceIMP autorService;
 
     @Autowired
-    public AutorController(StatusServiceIMP statusService, AutorServiceIMP autorServiceIMP) {
+    public AutorController(AutorServiceIMP autorServiceIMP) {
         this.autorService = autorServiceIMP;
     }
 
@@ -40,11 +43,11 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de autores obtida com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AutorLazyDTO.class))),
+                            schema = @Schema(implementation = AutorResponseDTO.class))),
             @ApiResponse(responseCode = "204", description = "Nenhum autor encontrado", content = @Content),
     })
-    public ResponseEntity<List<AutorLazyDTO>> LazyListarTodos() {
-        List<AutorLazyDTO> autores = autorService.listarTodos();
+    public ResponseEntity<List<AutorResponseDTO>> LazyListarTodos() {
+        List<AutorResponseDTO> autores = autorService.listarTodos();
         if (autores.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -85,12 +88,12 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autor encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AutorLazyDTO.class))),
+                            schema = @Schema(implementation = AutorResponseDTO.class))),
             @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content),
     })
-    public ResponseEntity<AutorLazyDTO> LazyBuscarPorId(@PathVariable Long id) {
+    public ResponseEntity<AutorResponseDTO> LazyBuscarPorId(@PathVariable Long id) {
         try {
-            AutorLazyDTO autor = autorService.LazyBuscarPorId(id);
+            AutorResponseDTO autor = autorService.LazyBuscarPorId(id);
             return ResponseEntity.ok(autor);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -110,12 +113,15 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Autor criado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Autor.class))),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos para criação do autor", content = @Content),
-    })
-    public ResponseEntity<Autor> criarAutor(@RequestBody Autor autor) {
-        Autor novoAutor = autorService.criarAutor(autor);
-        return ResponseEntity.status(201).body(novoAutor);
+                            schema = @Schema(implementation = AutorResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para criação do autor", content = @Content)})
+    public ResponseEntity<?> criarAutor(@RequestBody @Valid AutorRequestDTO autor) {
+        try {
+            Autor novoAutor = autorService.criarAutor(autor);
+            return ResponseEntity.created(URI.create("/autores/" + novoAutor.getId())).body(novoAutor);
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body("Erro ao criar autor: " + e.getMessage());
+        }
     }
 
     /**

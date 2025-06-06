@@ -20,7 +20,12 @@ public abstract class Pessoa implements Serializable {
     //[] TODO: Colocar os Validações de cada campo
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(
+            name = "pessoa_seq",           // Nome do gerador
+            sequenceName = "pessoa_seq",   // Nome da sequência no banco
+            allocationSize = 1             // Incremento (ajuste conforme necessário)
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "pessoa_seq")
     private Long id;
 
     @Column(length = 150)
@@ -31,7 +36,7 @@ public abstract class Pessoa implements Serializable {
     private String cpf;
 
     @Pattern(regexp = "^(\\d{4,5})[-\\s]?(\\d{4})$",
-            message = "Telefone deve estar no formato XXXXX-XXXX")
+            message = "Telefone deve estar no formato XXXXX-XXXX ou XXXX-XXXX")
     private String telefone;
 
     @Pattern(regexp = "^[\\w-\\.]+@[\\w-]+\\.[a-zA-Z]{2,}$",
