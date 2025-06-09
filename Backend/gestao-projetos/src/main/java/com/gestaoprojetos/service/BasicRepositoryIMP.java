@@ -34,7 +34,7 @@ abstract class BasicRepositoryIMP<
 
     /**
      * Retorna o repositório injetado, caso você precise usá‐lo diretamente
-     * em algum método mais específico.
+     * em algum metodo mais específico.
      */
     protected T getRepository() {
         return repository;
