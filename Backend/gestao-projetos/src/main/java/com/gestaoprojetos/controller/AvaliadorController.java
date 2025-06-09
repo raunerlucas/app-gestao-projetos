@@ -165,4 +165,17 @@ public class AvaliadorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    //Remover uma avaliação do avaliador
+    @DeleteMapping("/{avaliadorId}/avaliacoes/{avaliacaoId}")
+    @Operation(summary = "Remover Avaliação do Avaliador",
+            description = "Remove uma avaliação associada a um avaliador.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Avaliação removida do avaliador com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Avaliador ou Avaliação não encontrado", content = @Content),
+    })
+    public ResponseEntity<Avaliador> removerAvaliacaoDoAvaliador(@PathVariable Long avaliadorId, @PathVariable Long avaliacaoId) {
+        Avaliador avaliadorAtualizado = avaliadorService.removerAvaliacao(avaliadorId, avaliacaoId);
+        return ResponseEntity.ok(avaliadorAtualizado);
+    }
 }

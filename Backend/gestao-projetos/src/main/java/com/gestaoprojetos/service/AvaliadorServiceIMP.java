@@ -134,7 +134,7 @@ public class AvaliadorServiceIMP extends
      * Atribui uma avaliação (Avaliacao) a este Avaliador.
      *
      * @param idAvaliador ID do Avaliador que fará a avaliação.
-     * @param avaliacao   Objeto Avaliacao que será associado.
+     * @param idAvaliacao Objeto Avaliacao que será associado.
      * @return Avaliador com a lista de avaliações atualizada.
      * @throws ResourceNotFoundException se o Avaliador não for encontrado.
      * @throws BadRequestException       se o objeto Avaliacao for nulo.
@@ -175,5 +175,34 @@ public class AvaliadorServiceIMP extends
         if (avaliador.getEmail() == null || avaliador.getEmail().trim().isEmpty()) {
             throw new BadRequestException("O campo 'email' é obrigatório.");
         }
+    }
+
+    /**
+     * Remove uma Avaliação da lista de avaliações do Avaliador.
+     *
+     * @param idAvaliador ID do Avaliador.
+     * @param idAvaliacao ID da Avaliação a ser removida.
+     * @return Avaliador atualizado (sem a Avaliação removida).
+     * @throws ResourceNotFoundException se o Avaliador ou Avaliação não existirem,
+     *                                   ou se a Avaliação não pertencer ao Avaliador.
+     */
+    public Avaliador removerAvaliacao(Long idAvaliador, Long idAvaliacao) {
+        Avaliador avaliador = buscarPorId(idAvaliador);
+
+        Avaliacao encontrado = avaliador.getAvaliacoes().stream()
+                .filter(a -> a.getId().equals(idAvaliacao))
+                .findFirst()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Avaliação não encontrada com ID: " + idAvaliacao
+                                        + " para o Avaliador ID: " + idAvaliador
+                        )
+                );
+
+        avaliador.getAvaliacoes().remove(encontrado);
+        // Atualiza bidirecional: remove avaliador de avaliacao.getAvaliador()
+        encontrado.setAvaliador(null);
+
+        return save(avaliador);
     }
 }
