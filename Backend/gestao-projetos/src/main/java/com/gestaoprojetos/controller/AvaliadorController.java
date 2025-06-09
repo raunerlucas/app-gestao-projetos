@@ -1,5 +1,6 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.controller.DTO.AssociacaoDTO;
 import com.gestaoprojetos.controller.DTO.PessoaDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
@@ -118,5 +119,50 @@ public class AvaliadorController {
     public ResponseEntity<Avaliador> atualizarAvaliador(@PathVariable Long id, @RequestBody Avaliador avaliador) {
         Avaliador novoAvaliador = avaliadorService.atualizarAvaliador(id, avaliador);
         return ResponseEntity.ok(novoAvaliador);
+    }
+
+    /**
+     * Endpoint para excluir um avaliador pelo ID.
+     *
+     * @param id ID do avaliador a ser excluído.
+     * @return ResponseEntity com status 204 No Content se excluído com sucesso ou 404 Not Found se não existir.
+     */
+    // Excluir um avaliador
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Excluir Avaliador",
+            description = "Exclui um avaliador do sistema pelo ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Avaliador excluído com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Avaliador não encontrado", content = @Content)
+    })
+    public ResponseEntity<?> excluirAvaliador(@PathVariable Long id) {
+        try {
+            avaliadorService.deletarPorId(id);
+            return ResponseEntity.noContent().build();
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    //atribuir uma avaliação ao avaliador
+    @PostMapping("/{avaliadorId}/avaliacoes")
+    @Operation(summary = "Atribuir Avaliação ao Avaliador",
+            description = "Associa uma avaliação existente a um avaliador.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Avaliação atribuída ao avaliador com sucesso",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Avaliador.class))),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida (ID da Avaliação ausente/inválido)", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Avaliador ou Avaliação não encontrado", content = @Content),
+    })
+    public ResponseEntity<?> associarAvaliacao(
+            @PathVariable Long avaliadorId,
+            @RequestBody @Valid AssociacaoDTO request) {
+        try {
+            Avaliador avaliadorAtualizado = avaliadorService.atribuirAvaliacao(avaliadorId, request.getAvaliacaoId());
+            return ResponseEntity.ok(avaliadorAtualizado);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

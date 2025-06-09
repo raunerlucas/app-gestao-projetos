@@ -142,7 +142,7 @@ public class AutorController {
             @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização do autor", content = @Content),
     })
-    public ResponseEntity<Autor> atualizarAutor(@PathVariable Long id, @RequestBody Autor autor)    {
+    public ResponseEntity<Autor> atualizarAutor(@PathVariable Long id, @RequestBody Autor autor)     {
         Autor novoAutor = autorService.atualizarAutor(id, autor);
         return ResponseEntity.ok(novoAutor);
     }
