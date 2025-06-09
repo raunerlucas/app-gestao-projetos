@@ -1,6 +1,7 @@
 package com.gestaoprojetos.controller;
 
-import com.gestaoprojetos.controller.DTO.AutorDTO.AutorResponseDTO;
+import com.gestaoprojetos.controller.DTO.PessoaDTO;
+import com.gestaoprojetos.controller.DTO.PessoaDTO.PessoaResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
@@ -18,8 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-
-import static com.gestaoprojetos.controller.DTO.AutorDTO.AutorRequestDTO;
 
 @RestController
 @RequestMapping("/autores")
@@ -43,38 +42,16 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de autores obtida com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AutorResponseDTO.class))),
+                            schema = @Schema(implementation = PessoaResponseDTO.class))),
             @ApiResponse(responseCode = "204", description = "Nenhum autor encontrado", content = @Content),
     })
-    public ResponseEntity<List<AutorResponseDTO>> LazyListarTodos() {
-        List<AutorResponseDTO> autores = autorService.listarTodos();
+    public ResponseEntity<List<PessoaResponseDTO>> LazyListPorIDarTodos() {
+        List<PessoaResponseDTO> autores = autorService.listarTodos();
         if (autores.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(autores);
     }
-
-    /**
-     * Endpoint para obter um autor por ID.
-     *
-     * @param id ID do autor a ser buscado.
-     * @return ResponseEntity com o autor encontrado ou 404 se não existir.
-     */
-    // Buscar autor por ID
-    @GetMapping("/{id}")
-    @Operation(summary = "Buscar Autor por ID",
-            description = "Busca um autor pelo ID fornecido.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Autor encontrado",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Autor.class))),
-            @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content),
-    })
-    public ResponseEntity<Autor> buscarPorId(@PathVariable Long id) {
-        Autor autor = autorService.buscarPorId(id);
-        return ResponseEntity.ok(autor);
-    }
-
     /**
      * Endpoint para obter um autor por ID.
      *
@@ -88,12 +65,12 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Autor encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AutorResponseDTO.class))),
+                            schema = @Schema(implementation = PessoaResponseDTO.class))),
             @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content),
     })
-    public ResponseEntity<AutorResponseDTO> LazyBuscarPorId(@PathVariable Long id) {
+    public ResponseEntity<PessoaResponseDTO> LazyBuscarPorId(@PathVariable Long id) {
         try {
-            AutorResponseDTO autor = autorService.LazyBuscarPorId(id);
+            PessoaResponseDTO autor = autorService.LazyBuscarPorId(id);
             return ResponseEntity.ok(autor);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
@@ -113,9 +90,9 @@ public class AutorController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Autor criado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AutorResponseDTO.class))),
+                            schema = @Schema(implementation = PessoaResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para criação do autor", content = @Content)})
-    public ResponseEntity<?> criarAutor(@RequestBody @Valid AutorRequestDTO autor) {
+    public ResponseEntity<?> criarAutor(@RequestBody @Valid PessoaDTO.PessoaRequestDTO autor) {
         try {
             Autor novoAutor = autorService.criarAutor(autor);
             return ResponseEntity.created(URI.create("/autores/" + novoAutor.getId())).body(novoAutor);
@@ -165,7 +142,7 @@ public class AutorController {
             @ApiResponse(responseCode = "404", description = "Autor não encontrado", content = @Content),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização do autor", content = @Content),
     })
-    public ResponseEntity<Autor> atualizarAutor(@PathVariable Long id, @RequestBody Autor autor) {
+    public ResponseEntity<Autor> atualizarAutor(@PathVariable Long id, @RequestBody Autor autor)    {
         Autor novoAutor = autorService.atualizarAutor(id, autor);
         return ResponseEntity.ok(novoAutor);
     }

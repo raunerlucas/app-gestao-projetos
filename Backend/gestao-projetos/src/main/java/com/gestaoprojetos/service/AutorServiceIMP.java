@@ -1,7 +1,7 @@
 package com.gestaoprojetos.service;
 
-import com.gestaoprojetos.controller.DTO.AutorDTO.AutorRequestDTO;
-import com.gestaoprojetos.controller.DTO.AutorDTO.AutorResponseDTO;
+import com.gestaoprojetos.controller.DTO.PessoaDTO.PessoaRequestDTO;
+import com.gestaoprojetos.controller.DTO.PessoaDTO.PessoaResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
@@ -43,7 +43,7 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
      * @return Autor persistido (com ID gerado).
      * @throws BadRequestException se campos obrigatórios (nome, cpf, email, telefone) estiverem ausentes ou inválidos.
      */
-    public Autor criarAutor(AutorRequestDTO autorReqt) throws BadRequestException {
+    public Autor criarAutor(PessoaRequestDTO autorReqt) throws BadRequestException {
         if (autorReqt == null) {
             throw new BadRequestException("Objeto Autor não pode ser nulo.");
         }
@@ -98,9 +98,9 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
                 );
     }
 
-    public AutorResponseDTO LazyBuscarPorId(Long id) {
+    public PessoaResponseDTO LazyBuscarPorId(Long id) {
         Autor autor = buscarPorId(id);
-        return new AutorResponseDTO(autor.getId(), autor.getNome(), autor.getTelefone(), autor.getEmail());
+        return new PessoaResponseDTO(autor.getId(), autor.getNome(), autor.getTelefone(), autor.getEmail());
     }
 
     /**
@@ -108,9 +108,9 @@ public class AutorServiceIMP extends BasicRepositoryIMP<
      *
      * @return lista de Autor (pode vir vazia).
      */
-    public List<AutorResponseDTO> listarTodos() {
+    public List<PessoaResponseDTO> listarTodos() {
         return findAll().stream().map(
-                autor -> new AutorResponseDTO(
+                autor -> new PessoaResponseDTO(
                         autor.getId(),
                         autor.getNome(),
                         autor.getTelefone(),

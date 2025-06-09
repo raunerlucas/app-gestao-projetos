@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class AutorDTO {
+public class PessoaDTO {
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class AutorResponseDTO {
+    public static class PessoaResponseDTO {
         private Long id;
         private String nome;
         private String telefone;
@@ -19,7 +19,7 @@ public class AutorDTO {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class AutorRequestDTO {
+    public static class PessoaRequestDTO {
         private String nome;
         private String CPF;
         private String email;
