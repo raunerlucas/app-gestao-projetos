@@ -18,12 +18,6 @@ public class Avaliador extends Pessoa implements Serializable {
 
     //[] TODO: Colocar os Validações de cada campo
 
-    private String parecer;
-
-    private Double nota;
-
-    private Date dataAvaliacao;
-
     /**
      * Um Avaliador faz várias Avaliações.
      * O atributo mappedBy="avaliador" indica que a FK (avaliador_id) está na entidade Avaliacao.
@@ -31,4 +25,10 @@ public class Avaliador extends Pessoa implements Serializable {
      */
     @OneToMany(mappedBy = "avaliador", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Avaliacao> avaliacoes = new ArrayList<>();
+
+    public Avaliador(Long id, String nome, String cpf, String email, String telefone, List<Avaliacao> avaliacoes) {
+        super(id, nome, cpf, email, telefone);
+        this.avaliacoes = avaliacoes != null ? avaliacoes : new ArrayList<>();
+    }
+
 }

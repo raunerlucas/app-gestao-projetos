@@ -1,7 +1,9 @@
 package com.gestaoprojetos.service;
 
+import com.gestaoprojetos.controller.DTO.PessoaDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
+import com.gestaoprojetos.model.Autor;
 import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.model.Avaliador;
 import com.gestaoprojetos.repository.AvaliadorRepository;
@@ -26,18 +28,25 @@ public class AvaliadorServiceIMP extends
     }
 
     /**
-     * Cria um novo Avaliador.
+     * Cria um novo Avaliador a partir de um DTO.
      *
-     * @param avaliador Dados do avaliador a ser criado (deve ter nome, cpf, email, etc.).
-     * @return Avaliador salvo no banco.
-     * @throws BadRequestException se algum dado obrigatório estiver ausente.
+     * @param avaliadorReqt Objeto DTO preenchido com os dados do avaliador.
+     * @return Avaliador persistido (com ID gerado).
+     * @throws BadRequestException se campos obrigatórios estiverem ausentes ou inválidos.
      */
-    public Avaliador criarAvaliador(Avaliador avaliador) {
-        validarCamposObrigatorios(avaliador);
-//         Garante que não haja CPF duplicado, por exemplo:
-        if (getRepository().existsByCpf(avaliador.getCpf())) {
-            throw new BadRequestException("CPF já cadastrado: " + avaliador.getCpf());
+    public Avaliador criarAvaliador(PessoaDTO.PessoaRequestDTO avaliadorReqt) throws BadRequestException {
+        if (avaliadorReqt == null) {
+            throw new BadRequestException("Objeto Avaliador não pode ser nulo.");
         }
+        Avaliador avaliador = new Avaliador(
+                null,
+                avaliadorReqt.getNome(),
+                avaliadorReqt.getCPF(),
+                avaliadorReqt.getEmail(),
+                avaliadorReqt.getTelefone(),
+                null
+        );
+        validarCamposObrigatorios(avaliador);
         return save(avaliador);
     }
 
@@ -69,16 +78,21 @@ public class AvaliadorServiceIMP extends
     }
 
     /**
-     * Busca um Avaliador por ID, ou lança exceção se não existir.
+     * Busca um Avaliador por ID ou lança ResourceNotFoundException.
      *
-     * @param id ID do avaliador.
+     * @param id ID do avaliador a ser buscado.
      * @return Avaliador encontrado.
-     * @throws ResourceNotFoundException se não for encontrado.
+     * @throws ResourceNotFoundException se nenhum Avaliador for encontrado com esse ID.
      */
-    public Avaliador buscarPorId(Long id) {
+    public Avaliador buscarPorId(Long id) throws ResourceNotFoundException {
         return findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Avaliador não encontrado com ID: " + id));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Avaliador não encontrado com ID: " + id)
+                );
+    }
+    public PessoaDTO.PessoaResponseDTO LazyBuscarPorId(Long id) {
+        Avaliador avaliador = buscarPorId(id);
+        return new PessoaDTO.PessoaResponseDTO(avaliador.getId(), avaliador.getNome(), avaliador.getTelefone(), avaliador.getEmail());
     }
 
     /**
@@ -87,8 +101,15 @@ public class AvaliadorServiceIMP extends
      * @return Lista de Avaliadores.
      * Se não houver nenhum, retorna lista vazia.
      */
-    public List<Avaliador> listarTodos() {
-        return findAll();
+    public List<PessoaDTO.PessoaResponseDTO> listarTodos() {
+        return findAll().stream().map(
+                avaliador -> new PessoaDTO.PessoaResponseDTO(
+                        avaliador.getId(),
+                        avaliador.getNome(),
+                        avaliador.getTelefone(),
+                        avaliador.getEmail()
+                )
+        ).toList();
     }
 
     /**
