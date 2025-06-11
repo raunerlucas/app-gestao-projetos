@@ -98,7 +98,7 @@ public class AvaliadorController {
                             schema = @Schema(implementation = PessoaDTO.PessoaResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para criação do avaliador.", content = @Content)})
     public ResponseEntity<?> criarAAvaliador(@RequestBody @Valid PessoaDTO.PessoaRequestDTO avaliador) {
-        try {
+        try{
             Avaliador novoAvaliador = avaliadorService.criarAvaliador(avaliador);
             return ResponseEntity.created(URI.create("/avaliadores/" + novoAvaliador.getId())).body(novoAvaliador);
         } catch (BadRequestException e) {
