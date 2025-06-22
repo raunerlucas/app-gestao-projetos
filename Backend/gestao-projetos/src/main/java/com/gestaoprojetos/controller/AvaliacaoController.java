@@ -1,5 +1,6 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.service.AutorServiceIMP;
 import com.gestaoprojetos.service.AvaliacaoServiceIMP;
@@ -24,6 +25,7 @@ public class AvaliacaoController {
     public AvaliacaoController(AvaliacaoServiceIMP avaliacaoService) {
         this.avaliacaoService = avaliacaoService;
     }
+
     /**
      * Endpoint para criar uma nova avaliação.
      *
@@ -44,6 +46,7 @@ public class AvaliacaoController {
         Avaliacao novaAvaliacao = avaliacaoService.criarAvaliacao(avaliacao);
         return ResponseEntity.created(URI.create("/avaliacoes/" + novaAvaliacao.getId())).body(novaAvaliacao);
     }
+
     /**
      * Endpoint para obter uma avaliação por ID.
      *
@@ -67,6 +70,12 @@ public class AvaliacaoController {
         return ResponseEntity.ok(avaliacoes);
     }
 
+    /**
+     * Endpoint para atualizar uma avaliação existente.
+     *
+     * @param id ID da avaliação a ser atualizada.
+     * @return ResponseEntity com a avaliação atualizada ou 404 se não existir.
+     */
     //buscar avaliação por ID
     @GetMapping("/avaliacoes/{id}")
     @Operation(summary = "Buscar Avaliação por ID",
@@ -86,4 +95,49 @@ public class AvaliacaoController {
         }
     }
 
+    /**
+     * Endpoint para atualizar uma avaliação existente.
+     *
+     * @param avaliadorId ID da avaliação a ser atualizada.
+     * @return ResponseEntity com a avaliação atualizada ou 404 se não existir.
+     */
+    // Buscar avaliações por avaliador
+    @GetMapping("/avaliador/{avaliadorId}")
+    @Operation(summary = "Listar Avaliações por Avaliador", description = "Lista todas as avaliações feitas por um avaliador.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de avaliações do avaliador encontrada", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Avaliador não encontrado", content = @Content),
+    })
+    public ResponseEntity<List<Avaliacao>> listarPorAvaliador(@PathVariable Long avaliadorId) {
+        try {
+            List<Avaliacao> lista = avaliacaoService.listarPorAvaliador(avaliadorId);
+            if (lista.isEmpty()) return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(lista);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    /**
+     * Endpoint para listar avaliações por projeto.
+     *
+     * @param projetoId ID do projeto cujas avaliações serão listadas.
+     * @return ResponseEntity com a lista de avaliações do projeto ou 404 se o projeto não existir.
+     */
+    // Listar avaliações por projeto
+    @GetMapping("/projeto/{projetoId}")
+    @Operation(summary = "Listar Avaliações por Projeto", description = "Retorna todas as avaliações de um projeto.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de avaliações do projeto obtida com sucesso", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Projeto não encontrado", content = @Content),
+    })
+    public ResponseEntity<List<Avaliacao>> listarPorProjeto(@PathVariable Long projetoId) {
+        try {
+            List<Avaliacao> lista = avaliacaoService.listarPorProjeto(projetoId);
+            if (lista.isEmpty()) return ResponseEntity.noContent().build();
+            return ResponseEntity.ok(lista);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

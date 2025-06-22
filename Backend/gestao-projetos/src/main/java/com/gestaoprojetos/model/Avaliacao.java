@@ -8,11 +8,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
+
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
+@NoArgsConstructor
 @Data
 @Entity(name = "_avaliacao")
 public class Avaliacao implements Serializable {
