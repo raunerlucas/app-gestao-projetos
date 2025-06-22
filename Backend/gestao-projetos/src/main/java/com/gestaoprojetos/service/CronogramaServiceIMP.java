@@ -154,7 +154,7 @@ public class CronogramaServiceIMP extends
 
         // Tentar localizar o prêmio na lista
         Premio premioEncontrado = cronograma.getPremios().stream()
-                .filter(p -> p.getId().equals(idPremio))
+                .filter(premio -> premio.getId().equals(idPremio))
                 .findFirst()
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Prêmio não encontrado com ID: " + idPremio
