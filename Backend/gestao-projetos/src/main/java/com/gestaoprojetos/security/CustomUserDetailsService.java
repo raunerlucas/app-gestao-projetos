@@ -2,7 +2,7 @@ package com.gestaoprojetos.security;
 
 
 import com.gestaoprojetos.model.Usuario;
-import com.gestaoprojetos.service.UsuarioServiceImpl;
+import com.gestaoprojetos.service.UsuarioServiceIMP;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UsuarioServiceImpl usuarioService;
+    private final UsuarioServiceIMP usuarioService;
 
-    public CustomUserDetailsService(UsuarioServiceImpl usuarioService) {
+    public CustomUserDetailsService(UsuarioServiceIMP usuarioService) {
         this.usuarioService = usuarioService;
     }
 

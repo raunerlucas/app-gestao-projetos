@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UsuarioServiceImpl
+public class UsuarioServiceIMP
         extends BasicRepositoryIMP<UsuarioRepository, Usuario, Long> {
 
     private final PasswordEncoder passwordEncoder;
 
-    public UsuarioServiceImpl(
+    public UsuarioServiceIMP(
             UsuarioRepository repository,
             PasswordEncoder passwordEncoder
     ) {
@@ -40,30 +40,6 @@ public class UsuarioServiceImpl
         }
         String senhaHash = passwordEncoder.encode(usuario.getPassword().trim());
         usuario.setPassword(senhaHash);
-        return save(usuario);
-    }
-
-    /**
-     * Atualiza um usuário existente no sistema.
-     * Valida o usuário e verifica se já existe um usuário com o mesmo username e pessoa.
-     * Se existir, atualiza a senha (se fornecida) e salva as alterações.
-     *
-     * @param usuario O usuário a ser atualizado
-     * @return O usuário atualizado
-     */
-    public Usuario atualizarUsuario(Usuario usuario) {
-        validaUser(usuario);
-
-        if (!validaExistencia(usuario)) {
-            throw new BadRequestException("Usuario não encontrado " + usuario.getUsername());
-        }
-
-        if (usuario.getPassword() != null && !usuario.getPassword().trim().isEmpty()) {
-            String senhaHash = passwordEncoder.encode(usuario.getPassword().trim());
-            usuario.setPassword(senhaHash);
-        } else {
-            usuario.setPassword(null);
-        }
         return save(usuario);
     }
 

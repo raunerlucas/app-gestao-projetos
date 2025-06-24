@@ -1,10 +1,10 @@
 package com.gestaoprojetos.controller;
 
-import com.gestaoprojetos.controller.DTO.UserResponseDTO;
+import com.gestaoprojetos.controller.DTO.UsuarioDTO.UsuarioResponseDTO;
 import com.gestaoprojetos.model.Pessoa;
 import com.gestaoprojetos.model.Usuario;
 import com.gestaoprojetos.security.JwtUtil;
-import com.gestaoprojetos.service.UsuarioServiceImpl;
+import com.gestaoprojetos.service.UsuarioServiceIMP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,13 +33,13 @@ import java.net.URI;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UsuarioServiceImpl usuarioService;
+    private final UsuarioServiceIMP usuarioService;
     private final JwtUtil jwtUtil;
 
     @Autowired
     public AuthController(
             AuthenticationManager authenticationManager,
-            UsuarioServiceImpl usuarioService,
+            UsuarioServiceIMP usuarioService,
             JwtUtil jwtUtil
     ) {
         this.authenticationManager = authenticationManager;
@@ -63,7 +63,7 @@ public class AuthController {
             @ApiResponse(responseCode = "201", description = "Usuário registrado com sucesso",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = UserResponseDTO.class))),
+                            schema = @Schema(implementation = UsuarioResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Requisição inválida", content = @Content()),
     })
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequest request) {
@@ -87,7 +87,7 @@ public class AuthController {
 
         try {
             Usuario usuarioSalvo = usuarioService.registrarUsuario(novo);
-            UserResponseDTO response = new UserResponseDTO(usuarioSalvo);
+            var response = new UsuarioResponseDTO(usuarioSalvo);
             return ResponseEntity.created(URI.create("/usuarios/" + usuarioSalvo.getId())).body(response);
         } catch (Exception ex) {
             log.error("Erro ao registrar usuário", ex);
