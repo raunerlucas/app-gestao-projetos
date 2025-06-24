@@ -7,6 +7,7 @@ import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
 import com.gestaoprojetos.model.Projeto;
 import com.gestaoprojetos.repository.AutorRepository;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import com.gestaoprojetos.repository.ProjetoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

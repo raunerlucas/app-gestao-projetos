@@ -1,4 +1,4 @@
-package com.gestaoprojetos.service;
+package com.gestaoprojetos.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,7 +13,7 @@ import java.util.Optional;
  * @param <E>  tipo da entidade (por exemplo, Cliente, Produto, etc.)
  * @param <ID> tipo do identificador da entidade (por exemplo, Long, Integer, String)
  */
-abstract class BasicRepositoryIMP<
+public abstract class BasicRepositoryIMP<
         T extends JpaRepository<E, ID>,
         E,
         ID

@@ -3,6 +3,7 @@ package com.gestaoprojetos.service;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Usuario;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import com.gestaoprojetos.repository.UsuarioRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

@@ -3,11 +3,11 @@ package com.gestaoprojetos.service;
 import com.gestaoprojetos.controller.DTO.PessoaDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
-import com.gestaoprojetos.model.Autor;
 import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.model.Avaliador;
 import com.gestaoprojetos.repository.AvaliacaoRepository;
 import com.gestaoprojetos.repository.AvaliadorRepository;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

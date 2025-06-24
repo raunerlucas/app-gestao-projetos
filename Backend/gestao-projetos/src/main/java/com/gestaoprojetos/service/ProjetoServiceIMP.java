@@ -11,6 +11,7 @@ import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.model.Projeto;
 import com.gestaoprojetos.repository.AutorRepository;
 import com.gestaoprojetos.repository.AvaliacaoRepository;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import com.gestaoprojetos.repository.ProjetoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

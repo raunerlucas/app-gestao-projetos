@@ -4,6 +4,7 @@ import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Cronograma;
 import com.gestaoprojetos.model.Premio;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import com.gestaoprojetos.repository.CronogramaRepository;
 import com.gestaoprojetos.repository.PremioRepository;
 import org.springframework.stereotype.Service;
