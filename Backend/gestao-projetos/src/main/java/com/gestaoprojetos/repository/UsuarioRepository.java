@@ -15,5 +15,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
      * O retorno Optional facilita tratar “não encontrado” em camadas superiores.
      */
     Optional<Usuario> findByUsername(String username);
+
+    Optional<Usuario> findByUsernameAndPessoaId(String trim, Long id);
 }
 

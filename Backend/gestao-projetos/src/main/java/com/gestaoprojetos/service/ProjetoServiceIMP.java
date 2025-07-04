@@ -1,5 +1,9 @@
 package com.gestaoprojetos.service;
 
+import com.gestaoprojetos.controller.DTO.AutorResumoDTO;
+import com.gestaoprojetos.controller.DTO.AvaliacaoResumoDTO;
+import com.gestaoprojetos.controller.DTO.ProjetoRequestDTO;
+import com.gestaoprojetos.controller.DTO.ProjetoResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
@@ -7,11 +11,13 @@ import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.model.Projeto;
 import com.gestaoprojetos.repository.AutorRepository;
 import com.gestaoprojetos.repository.AvaliacaoRepository;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import com.gestaoprojetos.repository.ProjetoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,41 +52,51 @@ public class ProjetoServiceIMP extends
     /**
      * Cria um novo Projeto.
      *
-     * @param projeto Objeto preenchido (titulo, resumo, dataEnvio, areaTematica).
      * @return Projeto salvo (com ID gerado).
      * @throws BadRequestException se campos obrigatórios estiverem ausentes ou dataEnvio for futura.
      */
+    public Projeto criarProjeto(ProjetoRequestDTO dto) {
+        if (dto == null) throw new BadRequestException("ProjetoRequestDTO não pode ser nulo.");
+        Projeto projeto = new Projeto(
+                null,
+                dto.getTitulo(),
+                dto.getResumo(),
+                dto.getDataEnvio(),
+                dto.getAreaTematica(),
+                new ArrayList<>(),
+                new ArrayList<>()
+        );
+        return criarProjeto(projeto); // Chama o método antigo
+    }
+
+    // Mantém o antigo para compatibilidade interna:
     public Projeto criarProjeto(Projeto projeto) {
         validarCamposBasicos(projeto);
         validarDataEnvio(projeto.getDataEnvio());
-        // Listas (avaliacoes e autores) já vêm inicializadas no construtor da entidade
         return save(projeto);
     }
+
 
     /**
      * Atualiza um Projeto existente.
      *
      * @param id         ID do Projeto a ser atualizado.
-     * @param dadosNovos Objeto com novos dados (titulo, resumo, dataEnvio, areaTematica).
+     * @param dto com novos dados (titulo, resumo, dataEnvio, areaTematica).
      * @return Projeto atualizado.
      * @throws ResourceNotFoundException se não existir projeto com esse ID.
      * @throws BadRequestException       se campos obrigatórios estiverem inválidos.
      */
-    public Projeto atualizarProjeto(Long id, Projeto dadosNovos) {
+    public Projeto atualizarProjeto(Long id, ProjetoRequestDTO dto) {
         Projeto existente = findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Projeto não encontrado com ID: " + id)
-                );
+                .orElseThrow(() -> new ResourceNotFoundException("Projeto não encontrado com ID: " + id));
 
-        validarCamposBasicos(dadosNovos);
-        validarDataEnvio(dadosNovos.getDataEnvio());
-
-        existente.setTitulo(dadosNovos.getTitulo());
-        existente.setResumo(dadosNovos.getResumo());
-        existente.setDataEnvio(dadosNovos.getDataEnvio());
-        existente.setAreaTematica(dadosNovos.getAreaTematica());
+         existente.setTitulo(dto.getTitulo());
+        existente.setResumo(dto.getResumo());
+        existente.setDataEnvio(dto.getDataEnvio());
+        existente.setAreaTematica(dto.getAreaTematica());
         // Note: não alteramos lista de avaliacoes/autores aqui; use métodos específicos abaixo
-
+        validarCamposBasicos(existente);
+        validarDataEnvio(existente.getDataEnvio());
         return save(existente);
     }
 
@@ -313,6 +329,26 @@ public class ProjetoServiceIMP extends
      */
     public List<Projeto> listarProjetosVencedoresPorNotaDesc() {
         return getRepository().findProjetosVencedoresOrderByNotaDesc();
+    }
+
+    public static ProjetoResponseDTO toProjetoResponseDTO(Projeto projeto) {
+        List<AutorResumoDTO> autores = projeto.getAutores() != null ? projeto.getAutores().stream()
+                .map(a -> new AutorResumoDTO(a.getId(), a.getNome()))
+                .toList() : List.of();
+
+        List<AvaliacaoResumoDTO> avaliacoes = projeto.getAvaliacoes() != null ? projeto.getAvaliacoes().stream()
+                .map(av -> new AvaliacaoResumoDTO(av.getId(), av.getNota(), av.getParecer()))
+                .toList() : List.of();
+
+        return new ProjetoResponseDTO(
+                projeto.getId(),
+                projeto.getTitulo(),
+                projeto.getResumo(),
+                projeto.getDataEnvio(),
+                projeto.getAreaTematica(),
+                autores,
+                avaliacoes
+        );
     }
 }
 

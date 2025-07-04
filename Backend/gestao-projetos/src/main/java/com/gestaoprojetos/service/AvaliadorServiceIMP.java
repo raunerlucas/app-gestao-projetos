@@ -1,13 +1,17 @@
 package com.gestaoprojetos.service;
 
+import com.gestaoprojetos.controller.DTO.PessoaDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.model.Avaliador;
+import com.gestaoprojetos.repository.AvaliacaoRepository;
 import com.gestaoprojetos.repository.AvaliadorRepository;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,23 +25,33 @@ import java.util.List;
 public class AvaliadorServiceIMP extends
         BasicRepositoryIMP<AvaliadorRepository, Avaliador, Long> {
 
-    public AvaliadorServiceIMP(AvaliadorRepository repository) {
+    private final AvaliacaoRepository avaliacaoRepository;
+
+    public AvaliadorServiceIMP(AvaliadorRepository repository, AvaliacaoRepository avaliacaoRepository) {
         super(repository);
+        this.avaliacaoRepository = avaliacaoRepository;
     }
 
     /**
-     * Cria um novo Avaliador.
+     * Cria um novo Avaliador a partir de um DTO.
      *
-     * @param avaliador Dados do avaliador a ser criado (deve ter nome, cpf, email, etc.).
-     * @return Avaliador salvo no banco.
-     * @throws BadRequestException se algum dado obrigatório estiver ausente.
+     * @param avaliadorReqt Objeto DTO preenchido com os dados do avaliador.
+     * @return Avaliador persistido (com ID gerado).
+     * @throws BadRequestException se campos obrigatórios estiverem ausentes ou inválidos.
      */
-    public Avaliador criarAvaliador(Avaliador avaliador) {
-        validarCamposObrigatorios(avaliador);
-//         Garante que não haja CPF duplicado, por exemplo:
-        if (getRepository().existsByCpf(avaliador.getCpf())) {
-            throw new BadRequestException("CPF já cadastrado: " + avaliador.getCpf());
+    public Avaliador criarAvaliador(PessoaDTO.PessoaRequestDTO avaliadorReqt) throws BadRequestException {
+        if (avaliadorReqt == null) {
+            throw new BadRequestException("Objeto Avaliador não pode ser nulo.");
         }
+        Avaliador avaliador = new Avaliador(
+                null,
+                avaliadorReqt.getNome(),
+                avaliadorReqt.getCPF(),
+                avaliadorReqt.getEmail(),
+                avaliadorReqt.getTelefone(),
+                null
+        );
+        validarCamposObrigatorios(avaliador);
         return save(avaliador);
     }
 
@@ -50,11 +64,10 @@ public class AvaliadorServiceIMP extends
      * @throws ResourceNotFoundException se nenhum Avaliador for encontrado com esse ID.
      * @throws BadRequestException       se campos obrigatórios estiverem ausentes.
      */
-    public Avaliador atualizarAvaliador(Long id, Avaliador dadosNovos) {
+    public Avaliador atualizarAvaliador(Long id, Avaliador dadosNovos) throws ResourceNotFoundException {
         // Verifica se existe no banco ou lança ResourceNotFoundException
         Avaliador existente = findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Avaliador não encontrado com ID: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Avaliador não encontrado com ID: " + id));
 
         // Validação básica de campos (nome, cpf, email, telefone)
         validarCamposObrigatorios(dadosNovos);
@@ -69,16 +82,22 @@ public class AvaliadorServiceIMP extends
     }
 
     /**
-     * Busca um Avaliador por ID, ou lança exceção se não existir.
+     * Busca um Avaliador por ID ou lança ResourceNotFoundException.
      *
-     * @param id ID do avaliador.
+     * @param id ID do avaliador a ser buscado.
      * @return Avaliador encontrado.
-     * @throws ResourceNotFoundException se não for encontrado.
+     * @throws ResourceNotFoundException se nenhum Avaliador for encontrado com esse ID.
      */
-    public Avaliador buscarPorId(Long id) {
+    public Avaliador buscarPorId(Long id) throws ResourceNotFoundException {
         return findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Avaliador não encontrado com ID: " + id));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Avaliador não encontrado com ID: " + id)
+                );
+    }
+
+    public PessoaDTO.PessoaResponseDTO LazyBuscarPorId(Long id) {
+        Avaliador avaliador = buscarPorId(id);
+        return new PessoaDTO.PessoaResponseDTO(avaliador.getId(), avaliador.getNome(), avaliador.getTelefone(), avaliador.getEmail());
     }
 
     /**
@@ -87,8 +106,15 @@ public class AvaliadorServiceIMP extends
      * @return Lista de Avaliadores.
      * Se não houver nenhum, retorna lista vazia.
      */
-    public List<Avaliador> listarTodos() {
-        return findAll();
+    public List<PessoaDTO.PessoaResponseDTO> listarTodos() {
+        return findAll().stream().map(
+                avaliador -> new PessoaDTO.PessoaResponseDTO(
+                        avaliador.getId(),
+                        avaliador.getNome(),
+                        avaliador.getTelefone(),
+                        avaliador.getEmail()
+                )
+        ).toList();
     }
 
     /**
@@ -108,25 +134,27 @@ public class AvaliadorServiceIMP extends
      * Atribui uma avaliação (Avaliacao) a este Avaliador.
      *
      * @param idAvaliador ID do Avaliador que fará a avaliação.
-     * @param avaliacao   Objeto Avaliacao que será associado.
+     * @param idAvaliacao Objeto Avaliacao que será associado.
      * @return Avaliador com a lista de avaliações atualizada.
      * @throws ResourceNotFoundException se o Avaliador não for encontrado.
      * @throws BadRequestException       se o objeto Avaliacao for nulo.
      */
-    public Avaliador atribuirAvaliacao(Long idAvaliador, Avaliacao avaliacao) {
-        if (avaliacao == null) {
-            throw new BadRequestException("Objeto Avaliacao não pode ser nulo.");
-        }
+    public Avaliador atribuirAvaliacao(Long idAvaliador, Long idAvaliacao) {
         Avaliador avaliador = buscarPorId(idAvaliador);
 
-        // Verifica se o avaliador já possui uma lista de avaliações
-        if (avaliador.getAvaliacoes() == null) {
-            avaliador.setAvaliacoes(new java.util.ArrayList<>());
-        }
-        avaliador.getAvaliacoes().add(avaliacao);
+        Avaliacao avaliacao = avaliacaoRepository.findById(idAvaliacao)
+                .orElseThrow(() -> new ResourceNotFoundException("Avaliação não encontrada com ID: " + idAvaliacao));
 
-        // Se Avaliacao tiver vínculo bidirecional, faça avaliacao.setAvaliador(avaliador);
-        avaliacao.setAvaliador(avaliador);
+        if (avaliador.getAvaliacoes() == null) {
+            avaliador.setAvaliacoes(new ArrayList<>());
+        }
+
+        // evita adicionar a mesma avaliação duas vezes
+        if (!avaliador.getAvaliacoes().contains(avaliacao)) {
+            avaliador.getAvaliacoes().add(avaliacao);
+            // Se for bidirecional, setar avaliador na avaliação
+            avaliacao.setAvaliador(avaliador);
+        }
 
         return save(avaliador);
     }
@@ -147,5 +175,34 @@ public class AvaliadorServiceIMP extends
         if (avaliador.getEmail() == null || avaliador.getEmail().trim().isEmpty()) {
             throw new BadRequestException("O campo 'email' é obrigatório.");
         }
+    }
+
+    /**
+     * Remove uma Avaliação da lista de avaliações do Avaliador.
+     *
+     * @param idAvaliador ID do Avaliador.
+     * @param idAvaliacao ID da Avaliação a ser removida.
+     * @return Avaliador atualizado (sem a Avaliação removida).
+     * @throws ResourceNotFoundException se o Avaliador ou Avaliação não existirem,
+     *                                   ou se a Avaliação não pertencer ao Avaliador.
+     */
+    public Avaliador removerAvaliacao(Long idAvaliador, Long idAvaliacao) {
+        Avaliador avaliador = buscarPorId(idAvaliador);
+
+        Avaliacao encontrado = avaliador.getAvaliacoes().stream()
+                .filter(a -> a.getId().equals(idAvaliacao))
+                .findFirst()
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Avaliação não encontrada com ID: " + idAvaliacao
+                                        + " para o Avaliador ID: " + idAvaliador
+                        )
+                );
+
+        avaliador.getAvaliacoes().remove(encontrado);
+        // Atualiza bidirecional: remove avaliador de avaliacao.getAvaliador()
+        encontrado.setAvaliador(null);
+
+        return save(avaliador);
     }
 }

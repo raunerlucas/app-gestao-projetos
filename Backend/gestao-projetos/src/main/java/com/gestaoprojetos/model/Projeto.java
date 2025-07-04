@@ -64,4 +64,21 @@ public class Projeto implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "autor_id")
     )
     private List<Autor> autores = new ArrayList<>();
+    public Projeto(
+            Long id,
+            String titulo,
+            String resumo,
+            LocalDate dataEnvio,
+            String areaTematica,
+            List<Autor> autores,
+            List<Avaliacao> avaliacoes
+    ) {
+        this.id = id;
+        this.titulo = titulo;
+        this.resumo = resumo;
+        this.dataEnvio = dataEnvio;
+        this.areaTematica = areaTematica;
+        this.autores = autores != null ? autores : new ArrayList<>();
+        this.avaliacoes = avaliacoes != null ? avaliacoes : new ArrayList<>();
+    }
 }

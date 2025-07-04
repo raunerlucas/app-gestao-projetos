@@ -6,10 +6,7 @@ import com.gestaoprojetos.model.Avaliacao;
 import com.gestaoprojetos.model.Avaliador;
 import com.gestaoprojetos.model.Projeto;
 import com.gestaoprojetos.model.Status;
-import com.gestaoprojetos.repository.AvaliacaoRepository;
-import com.gestaoprojetos.repository.AvaliadorRepository;
-import com.gestaoprojetos.repository.ProjetoRepository;
-import com.gestaoprojetos.repository.StatusRepository;
+import com.gestaoprojetos.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

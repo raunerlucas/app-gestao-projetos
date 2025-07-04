@@ -20,6 +20,13 @@ import java.io.Serializable;
 @Entity(name = "_usuario")
 public class Usuario implements Serializable {
 
+    /**
+     * TODO [ ]: Implementar as Rules, caso necessário.
+     *      Rules (User,Admin, etc) são entidades que definem permissões
+     * AlERTA: a posivel relação entre Usuario e Pessoa pode ser
+     *   problemática, pois ainda não está claro se um Autor pode ser um Avaliador e vice-versa.
+     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,6 +64,16 @@ public class Usuario implements Serializable {
         this.username = username;
         this.password = password;
         this.pessoa = pessoa;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", pessoa=" + pessoa +
+                '}';
     }
 }
 

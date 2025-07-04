@@ -4,6 +4,7 @@ import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Cronograma;
 import com.gestaoprojetos.model.Premio;
+import com.gestaoprojetos.repository.BasicRepositoryIMP;
 import com.gestaoprojetos.repository.CronogramaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -154,7 +155,7 @@ public class CronogramaServiceIMP extends
 
         // Tentar localizar o prêmio na lista
         Premio premioEncontrado = cronograma.getPremios().stream()
-                .filter(p -> p.getId().equals(idPremio))
+                .filter(premio -> premio.getId().equals(idPremio))
                 .findFirst()
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Prêmio não encontrado com ID: " + idPremio

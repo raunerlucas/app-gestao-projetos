@@ -7,13 +7,21 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
+@NoArgsConstructor
 @Data
 @Entity(name = "_avaliacao")
 public class Avaliacao implements Serializable {
+
+    public Avaliacao(String parecer, Double nota) {
+        this.parecer = parecer;
+        this.nota = nota;
+    }
+
 
     //[] TODO: Colocar os Validações de cada campo
 
