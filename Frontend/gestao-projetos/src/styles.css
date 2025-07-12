@@ -1,1 +1,79 @@
-/* You can add global styles to this file, and also import other style files */
+/* Variáveis globais */
+
+/* Tema claro */
+:root {
+  --primary-color: #3b82f6;
+  --primary-color-light: rgba(59, 130, 246, 0.2);
+  --primary-color-dark: #2563eb;
+  --error-color: #ef4444;
+  --error-color-dark: #dc2626;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --info-color: #3b82f6;
+
+  --bg-color: #ffffff;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --table-header-bg: #f9fafb;
+  --hover-bg: #f3f4f6;
+
+  --text-color: #111827;
+  --text-muted: #6b7280;
+
+  --border-color: #e5e7eb;
+
+  --sidebar-bg: #ffffff;
+}
+
+/* Tema escuro */
+.dark-theme {
+  --primary-color: #3b82f6;
+  --primary-color-light: rgba(59, 130, 246, 0.2);
+  --primary-color-dark: #2563eb;
+  --error-color: #ef4444;
+  --error-color-dark: #dc2626;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --info-color: #3b82f6;
+
+  --bg-color: #111827;
+  --card-bg: #1f2937;
+  --input-bg: #374151;
+  --table-header-bg: #1f2937;
+  --hover-bg: #374151;
+
+  --text-color: #f9fafb;
+  --text-muted: #9ca3af;
+
+  --border-color: #374151;
+
+  --sidebar-bg: #1f2937;
+}
+
+/* Reset e estilos base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+/* Utilitários */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
