@@ -1,7 +1,7 @@
 <!-- src/app/pages/home/home.component.html -->
 <header class="app-header">
   <div class="logo">
-    <img src="assets/logo.svg" alt="SGP Logo" />
+    <img src="assets/placeholder" alt="SGP Logo" />
     <h1>SGP</h1>
   </div>
   <nav class="nav-actions">
@@ -28,13 +28,14 @@
       </div>
     </div>
     <div class="hero-cards">
-      <a *ngFor="let card of cards"
-         [routerLink]="card.link"
-         class="card">
-        <i class="bi" [ngClass]="card.icon"></i>
-        <h3>{{ card.title }}</h3>
-        <p>{{ card.subtitle }}</p>
-      </a>
+      @for (card of cards; track card) {
+        <a [routerLink]="card.link"
+           class="card">
+          <i class="bi" [ngClass]="card.icon"></i>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.subtitle }}</p>
+        </a>
+      }
     </div>
   </section>
 </main>

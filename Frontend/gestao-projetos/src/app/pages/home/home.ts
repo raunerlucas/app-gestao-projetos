@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
+import {NgClass} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 interface Card {
   title: string;
@@ -9,7 +11,10 @@ interface Card {
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [
+    NgClass,
+    RouterLink
+  ],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
