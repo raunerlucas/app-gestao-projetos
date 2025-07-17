@@ -1,0 +1,27 @@
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Espaço entre ícone e texto */
+}
+
+.logo-icon {
+  background-color: #000;
+  color: #fff;
+  padding: 6px;
+  border-radius: 6px; /* Borda arredondada */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.logo-text {
+  font-size: 1.5rem; /* 24px */
+  font-weight: bold;
+  letter-spacing: -0.5px; /* Ajuste no espaçamento */
+  color: #000;
+}
