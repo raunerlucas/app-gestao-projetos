@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
+import {Logo} from '../../shared/logo/logo';
+import {Footer} from '../../shared/footer/footer';
 
 interface Card {
   title: string;
@@ -13,7 +15,9 @@ interface Card {
   selector: 'app-home',
   imports: [
     NgClass,
-    RouterLink
+    RouterLink,
+    Logo,
+    Footer
   ],
   templateUrl: './home.html',
   styleUrl: './home.css'
