@@ -8,7 +8,11 @@
       <!-- Use o ícone de lua/sol da sua biblioteca (ex: Bootstrap Icons) -->
       <i class="bi bi-moon"></i>
     </button>
-    <a routerLink="/login" class="btn" (click)="openLoginPage()">Entrar</a>
-    <a routerLink="/register" class="btn btn-primary">Cadastrar</a>
+    @if (btnLogin) {
+      <button routerLink="/login" class="btn">Entrar</button>
+    }
+    @if (btnRegister) {
+      <button routerLink="/register" class="btn btn-primary">Cadastrar</button>
+    }
   </nav>
 </header>
