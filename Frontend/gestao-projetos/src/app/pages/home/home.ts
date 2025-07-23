@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
-import {Logo} from '../../shared/logo/logo';
 import {Footer} from '../../shared/footer/footer';
 import {Navbar} from '../../shared/navbar/navbar';
 
@@ -17,7 +16,6 @@ interface Card {
   imports: [
     NgClass,
     RouterLink,
-    Logo,
     Footer,
     Navbar
   ],
