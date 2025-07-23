@@ -3,6 +3,7 @@ import {NgClass} from '@angular/common';
 import {RouterLink} from '@angular/router';
 import {Logo} from '../../shared/logo/logo';
 import {Footer} from '../../shared/footer/footer';
+import {Navbar} from '../../shared/navbar/navbar';
 
 interface Card {
   title: string;
@@ -17,7 +18,8 @@ interface Card {
     NgClass,
     RouterLink,
     Logo,
-    Footer
+    Footer,
+    Navbar
   ],
   templateUrl: './home.html',
   styleUrl: './home.css'
@@ -51,8 +53,5 @@ export class Home {
     },
   ];
 
-  toggleTheme() {
-    // implementar troca de tema claro/escuro
-  }
 }
 
