@@ -1,8 +1,11 @@
 import {Component} from '@angular/core';
+import {Navbar} from '../../shared/navbar/navbar';
 
 @Component({
   selector: 'app-register',
-  imports: [],
+  imports: [
+    Navbar
+  ],
   templateUrl: './register.html',
   styleUrl: './register.css'
 })
