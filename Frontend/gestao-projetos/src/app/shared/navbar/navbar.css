@@ -1,0 +1,53 @@
+/* ---- Header ---- */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header .logo {
+  display: flex;
+  align-items: center;
+}
+
+.app-header .logo img {
+  width: 2rem;
+  margin-right: 0.5rem;
+}
+
+.app-header .logo h1 {
+  font-size: 1.5rem;
+  color: #000000;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.btn-link {
+  color: #000000;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: #000000;
+  color: #ffffff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  cursor: pointer;
+}
