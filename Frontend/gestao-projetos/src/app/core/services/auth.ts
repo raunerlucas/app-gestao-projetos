@@ -14,6 +14,7 @@ export class Auth {
     const userToken = this.http?.post(`${environment.apiUrl}/auth/login`, {username, password})
       .subscribe({
         next: (response: any) => {
+          // [] TODO: Remolve this console log in production
           console.log("Token received:", response.token);
           localStorage.setItem('userToken', response.token);
           return true;
