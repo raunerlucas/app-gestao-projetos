@@ -12,6 +12,6 @@ export const routes: Routes = [
   {path: 'register', component: Register},
   {path: 'dashboard', component: Dashboard, canActivate: [authGuard]},
 
-  // Redireciona para a página de login se a rota não for encontrada
+  // Redireciona para a página de home se a rota não for encontrada
   {path: '', redirectTo: '/home', pathMatch: 'full'}
 ];
