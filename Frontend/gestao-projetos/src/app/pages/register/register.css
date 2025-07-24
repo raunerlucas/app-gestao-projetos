@@ -1,0 +1,54 @@
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60em;
+  background-color: #f9f9f9;
+}
+
+.register-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+}
+
+.register-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.register-subtitle {
+  font-size: 14px;
+  color: #6c757d;
+  margin-bottom: 30px;
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.btn-block {
+  width: 100%;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.signin-text {
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.form-check-label {
+  font-size: 14px;
+}
