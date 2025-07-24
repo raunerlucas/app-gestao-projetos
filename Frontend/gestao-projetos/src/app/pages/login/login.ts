@@ -1,16 +1,32 @@
 import {Component} from '@angular/core';
 import {Navbar} from '../../shared/navbar/navbar';
 import {RouterLink} from '@angular/router';
+import {FormsModule} from '@angular/forms';
+import {Auth} from '../../core/services/auth';
 
 @Component({
   selector: 'app-login',
   imports: [
     Navbar,
-    RouterLink
+    RouterLink,
+    FormsModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
 export class Login {
+  email: string | undefined;
+  senha: string | undefined;
 
+  constructor(private auth: Auth) {}
+
+  onLogin() {
+    if (this.email && this.senha) {
+      this.auth.login(this.email, this.senha) ?
+        console.log('Login bem-sucedido!') :
+        console.error('Falha no login. Verifique suas credenciais.');
+    } else {
+      console.error('Por favor, preencha todos os campos.');
+    }
+  }
 }
