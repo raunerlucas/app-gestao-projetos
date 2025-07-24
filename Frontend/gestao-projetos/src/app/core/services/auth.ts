@@ -49,4 +49,9 @@ export class Auth {
       }
     );
   }
+
+  isAuthenticated() {
+    // [ ] TODO Implement isAuthenticated functionality in the backend end modify the logic to check if the user is authenticated
+    return true
+  }
 }
