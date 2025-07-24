@@ -12,12 +12,16 @@ import {RouterLink} from '@angular/router';
   styleUrl: './navbar.css'
 })
 export class Navbar {
-  @Input() btnLogin: Boolean;
-  @Input() btnRegister: Boolean;
+  @Input() btnLogin: boolean;
+  @Input() btnRegister: boolean;
+  @Input() showLogo: boolean;
+  @Input() userMenu: boolean;
 
   constructor() {
     this.btnLogin = true
     this.btnRegister = true
+    this.showLogo = true;
+    this.userMenu = false;
   }
 
   toggleTheme() {

@@ -1,8 +1,10 @@
 <header class="app-header">
-  <div class="logo">
+  @if (showLogo) {
+    <div class="logo">
 
-    <app-logo></app-logo>
-  </div>
+      <app-logo></app-logo>
+    </div>
+  }
   <nav class="nav-actions">
     <button class="btn-icon" (click)="toggleTheme()">
       <!-- Use o ícone de lua/sol da sua biblioteca (ex: Bootstrap Icons) -->

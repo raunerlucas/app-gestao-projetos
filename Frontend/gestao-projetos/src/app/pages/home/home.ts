@@ -24,30 +24,32 @@ interface Card {
 })
 export class Home {
 
+  link = '/dashboard';
+
   cards: Card[] = [
     {
       title: 'Submissão de Projetos',
       subtitle: 'Submeta seus projetos de forma simples e organizada.',
       icon: 'bi-file-earmark-text',
-      link: '/projetos/submissao',
+      link: this.link,
     },
     {
       title: 'Avaliação',
       subtitle: 'Processo de avaliação transparente e eficiente.',
       icon: 'bi-check-circle',
-      link: '/avaliacoes',
+      link: this.link,
     },
     {
       title: 'Gestão de Pessoas',
       subtitle: 'Gerencie autores e avaliadores em um só lugar.',
       icon: 'bi-people',
-      link: '/pessoas',
+      link: this.link,
     },
     {
       title: 'Premiação',
       subtitle: 'Reconheça os melhores projetos com prêmios personalizados.',
       icon: 'bi-award',
-      link: '/premios',
+      link: this.link,
     },
   ];
 
