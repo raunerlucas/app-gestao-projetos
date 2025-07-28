@@ -15,18 +15,27 @@ import {Auth} from '../../core/services/auth';
   styleUrl: './login.css'
 })
 export class Login {
-  email: string | undefined;
-  senha: string | undefined;
+  email: string;
+  senha: string;
 
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private auth: Auth, private router: Router) {
+    this.email = '';
+    this.senha = '';
+  }
 
   onLogin() {
-    if (this.email && this.senha) {
-      this.auth.login(this.email, this.senha) ?
-        this.router.navigate(['/dashboard']) :
-        console.error('Falha no login. Verifique suas credenciais.');
-    } else {
+    if (!this.email || !this.senha) {
       console.error('Por favor, preencha todos os campos.');
+      return;
     }
+    this.auth.login(this.email, this.senha).subscribe(
+      success => {
+        if (success) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          console.error('Falha no login. Verifique suas credenciais.');
+        }
+      }
+    );
   }
 }
