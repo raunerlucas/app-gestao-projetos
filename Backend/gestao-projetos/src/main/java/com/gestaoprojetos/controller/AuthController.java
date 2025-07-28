@@ -121,6 +121,61 @@ public class AuthController {
         }
     }
 
+    /**
+     * Endpoint para validar o token JWT.
+     * Retorna uma mensagem de sucesso se o token for válido.
+     *
+     * @param token Token JWT a ser validado
+     * @return Resposta com o status da validação
+     */
+    @PostMapping("/validate")
+    @Operation(summary = "Valida o token JWT",
+            description = "Valida o token JWT fornecido e retorna uma mensagem de sucesso se o token for válido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Token válido",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Token Invalido", content = @Content())
+    })
+    public ResponseEntity<?> validateToken(@RequestBody String token, @RequestBody String Username) {
+        if (token == null || token.isEmpty()) {
+            return ResponseEntity.status(401).body("Token inválido ou ausente");
+        }
+        if (!jwtUtil.validateToken(token, Username)) {
+            return ResponseEntity.status(401).body("Token inválido");
+        }
+        return ResponseEntity.ok("Token válido");
+    }
+
+    @PostMapping("/refresh")
+    @Operation(summary = "Atualiza um token JWT",
+            description = "Recebe um token JWT e, se válido, gera um novo token com período de validade renovado.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Token atualizado com sucesso",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = AuthResponse.class))),
+            @ApiResponse(responseCode = "401", description = "Token inválido", content = @Content())
+    })
+    public ResponseEntity<?> refreshToken(@RequestBody String token) {
+        try {
+            if (token == null || token.isEmpty()) {
+                return ResponseEntity.status(401).body("Token inválido ou ausente");
+            }
+
+            String username = jwtUtil.getUsernameFromToken(token);
+            if (username == null) {
+                return ResponseEntity.status(401).body("Token inválido");
+            }
+
+            String newToken = jwtUtil.generateToken(username);
+            return ResponseEntity.ok(new AuthResponse(newToken));
+        } catch (Exception ex) {
+            log.error("Erro ao atualizar token", ex);
+            return ResponseEntity.status(401).body("Erro ao atualizar token: " + ex.getMessage());
+        }
+    }
     @Data
     public static class LoginRequest {
         private String username;
