@@ -41,35 +41,33 @@ export class Auth {
   }
 
   logout() {
-    // [ ] TODO Implement logout functionality in the backend
-    return this.http.post(`${environment.apiUrl}/auth/logout`, {}).subscribe(
-      () => {
-        localStorage.removeItem('userToken');
-        console.log('Logout successful');
-      },
-      (error) => {
-        console.error('Logout failed', error);
-      }
-    );
+    sessionStorage.removeItem(this.USER_SESSION_KEY);
+    console.log('User logged out');
   }
 
   isAuthenticated(): boolean {
-    let ss = sessionStorage.getItem(this.USER_SESSION_KEY);
-    if (!ss) {
-      return false
+    try {
+      const ss = sessionStorage.getItem(this.USER_SESSION_KEY);
+      if (!ss) {
+        console.error('Nenhuma sessão encontrada');
+        return false;
+      }
+
+      const sessionData = JSON.parse(ss);
+      const now = new Date();
+      const expiresAt = new Date(sessionData.expiresAt);
+
+
+      if (now > expiresAt) {
+        console.error('Sessão expirada');
+        this.logout();
+        return false;
+      }
+
+      return true;
+    } catch (e) {
+      console.error('Erro ao verificar autenticação:', e);
+      return false;
     }
-    let token: string = JSON.parse(ss).token;
-    const tokenValid = this.http?.post(`${environment.apiUrl}/auth/validate`, {token})
-      .subscribe({
-        next: (response: any) => {
-          console.log('Token is valid', response);
-          return true;
-        },
-        error: (error) => {
-          console.error('Login failed', error);
-          return false;
-        }
-      });
-    return !!tokenValid;
   }
 }
