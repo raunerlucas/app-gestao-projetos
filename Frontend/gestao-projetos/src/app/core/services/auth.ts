@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
+import {catchError, map} from 'rxjs/operators';
+import {of} from 'rxjs';
 
-interface SessionData {
+interface SessionDataModel {
   token: string;
   username: string;
   expiresAt: Date;
@@ -13,28 +15,29 @@ interface SessionData {
   providedIn: 'root'
 })
 export class Auth {
+  USER_SESSION_KEY = 'userSession';
 
   constructor(private http: HttpClient) {
   }
 
-   login(username: string, password: string): boolean {
-    const userToken = this.http?.post(`${environment.apiUrl}/auth/login`, {username, password})
-      .subscribe({
-        next: (response: any) => {
-          let sessionData: SessionData = {
+  login(username: string, password: string) {
+    return this.http.post<any>(`${environment.apiUrl}/auth/login`, {username, password})
+      .pipe(
+        map(response => {
+          const sessionData: SessionDataModel = {
             token: response.token,
             username: username,
-            expiresAt: new Date(new Date().getTime() + 2)
+            // Define expiração para 2 horas (em milissegundos)
+            expiresAt: new Date(new Date().getTime() + 2 * 60 * 60 * 1000)
           };
-          sessionStorage.setItem('userSession', JSON.stringify(sessionData));
+          sessionStorage.setItem(this.USER_SESSION_KEY, JSON.stringify(sessionData));
           return true;
-        },
-        error: (error) => {
+        }),
+        catchError(error => {
           console.error('Login failed', error);
-          return false;
-        }
-      });
-    return !!userToken;
+          return of(false);
+        })
+      );
   }
 
   logout() {
@@ -50,8 +53,23 @@ export class Auth {
     );
   }
 
-  isAuthenticated() {
-    // [ ] TODO Implement isAuthenticated functionality in the backend end modify the logic to check if the user is authenticated
-    return true
+  isAuthenticated(): boolean {
+    let ss = sessionStorage.getItem(this.USER_SESSION_KEY);
+    if (!ss) {
+      return false
+    }
+    let token: string = JSON.parse(ss).token;
+    const tokenValid = this.http?.post(`${environment.apiUrl}/auth/validate`, {token})
+      .subscribe({
+        next: (response: any) => {
+          console.log('Token is valid', response);
+          return true;
+        },
+        error: (error) => {
+          console.error('Login failed', error);
+          return false;
+        }
+      });
+    return !!tokenValid;
   }
 }
