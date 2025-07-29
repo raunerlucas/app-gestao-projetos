@@ -20,9 +20,9 @@
   <div class="user-info p-3 border-top d-flex align-items-center">
     <span class="material-symbols-outlined me-2">account_circle</span>
     <div>
-      <div>João Silva</div>
-      <small class="text-muted">Admin</small>
+      <div>{{ userNameSesion }}</div>
     </div>
-    <span class="material-symbols-outlined ms-auto">logout</span>
+    <span
+      (click)="logout()" class="material-symbols-outlined ms-auto" style="cursor: pointer;">logout</span>
   </div>
 </div>
