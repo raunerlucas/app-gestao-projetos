@@ -66,7 +66,7 @@ export class Auth {
 
       return true;
     } catch (e) {
-      console.error('Erro ao verificar autenticação:', e);
+      // console.error('Erro ao verificar autenticação:', e);
       return false;
     }
   }
