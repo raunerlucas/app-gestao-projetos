@@ -3,12 +3,7 @@ import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {of} from 'rxjs';
-
-interface SessionDataModel {
-  token: string;
-  username: string;
-  expiresAt: Date;
-}
+import {SessionDataModel} from "../../models/UserSessionModel";
 
 
 @Injectable({

@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
-import {Navbar} from '../../shared/navbar/navbar';
 import {Sidebar} from '../../shared/sidebar/sidebar';
+import {Header} from '../../shared/header/header';
 
 @Component({
   selector: 'app-dashboard',
   imports: [
-    Navbar,
-    Sidebar
+    Sidebar,
+    Header
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css'
