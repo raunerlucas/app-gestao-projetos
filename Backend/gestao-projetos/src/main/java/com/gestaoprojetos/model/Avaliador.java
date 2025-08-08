@@ -1,5 +1,6 @@
 package com.gestaoprojetos.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -27,6 +28,7 @@ public class Avaliador extends Pessoa implements Serializable {
      * Portanto não usamos @JoinColumn aqui.
      */
     @OneToMany(mappedBy = "avaliador", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Avaliacao> avaliacoes = new ArrayList<>();
 
     public Avaliador(Long id, String nome, String cpf, String email, String telefone, List<Avaliacao> avaliacoes) {
