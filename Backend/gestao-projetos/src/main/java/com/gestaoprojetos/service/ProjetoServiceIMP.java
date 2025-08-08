@@ -63,10 +63,24 @@ public class ProjetoServiceIMP extends
                 dto.getResumo(),
                 dto.getDataEnvio(),
                 dto.getAreaTematica(),
-                new ArrayList<>(),
+                getAutoresByID(dto.getAutoresId()),
                 new ArrayList<>()
         );
         return criarProjeto(projeto); // Chama o método antigo
+    }
+
+    private List<Autor> getAutoresByID(List<Long> autoresId) {
+        if (autoresId == null || autoresId.isEmpty()) {
+            return new ArrayList<>(); // Retorna lista vazia se não houver IDs
+        }
+
+        List<Autor> autores = new ArrayList<>();
+        for (Long id : autoresId) {
+            Autor autor = autorRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Autor não encontrado com ID: " + id));
+            autores.add(autor);
+        }
+        return autores;
     }
 
     // Mantém o antigo para compatibilidade interna:
@@ -75,7 +89,6 @@ public class ProjetoServiceIMP extends
         validarDataEnvio(projeto.getDataEnvio());
         return save(projeto);
     }
-
 
     /**
      * Atualiza um Projeto existente.
