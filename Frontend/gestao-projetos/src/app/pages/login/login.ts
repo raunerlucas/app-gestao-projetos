@@ -33,6 +33,7 @@ export class Login {
         if (success) {
           this.router.navigate(['/dashboard']);
         } else {
+          this.router.navigate(['/dashboard']); // TODO: Apenas para teste, remover depois
           console.error('Falha no login. Verifique suas credenciais.');
         }
       }

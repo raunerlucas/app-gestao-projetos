@@ -16,6 +16,8 @@ export class Auth {
   }
 
   login(username: string, password: string) {
+    this.forceloginteste(username); //TODO: Apenas para teste, remover depois
+
     return this.http.post<any>(`${environment.apiUrl}/auth/login`, {username, password})
       .pipe(
         map(response => {
@@ -64,5 +66,15 @@ export class Auth {
       // console.error('Erro ao verificar autenticação:', e);
       return false;
     }
+  }
+
+  private forceloginteste(username: string) {
+    const sessionData: SessionDataModel = {
+      token: "ESTE É UM TOKEN TESTE",
+      username: username,
+      // Define expiração para 2 horas (em milissegundos)
+      expiresAt: new Date(new Date().getTime() + 2 * 60 * 60 * 1000)
+    };
+    sessionStorage.setItem(this.USER_SESSION_KEY, JSON.stringify(sessionData));
   }
 }
