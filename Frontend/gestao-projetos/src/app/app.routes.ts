@@ -10,9 +10,21 @@ export const routes: Routes = [
 // Define as rotas da aplicação
   {path: 'home', component: Home, canActivate: [authGuardHome]},
   {path: 'login', component: Login},
-  {path: 'premios', component: Premios},
   {path: 'register', component: Register},
-  {path: 'dashboard', component: Dashboard, canActivate: [authGuardDashboard]},
+  {
+    path: 'dashboard',
+    component: Dashboard,
+    canActivate: [authGuardDashboard],
+    children: [
+      {path: 'premios', component: Premios},
+      {path: 'projetos', component: Home}, // temporário até criar o componente
+      {path: 'avaliacoes', component: Home}, // temporário até criar o componente
+      {path: 'pessoas', component: Home}, // temporário até criar o componente
+      {path: 'cronogramas', component: Home}, // temporário até criar o componente
+      {path: 'configuracoes', component: Home}, // temporário até criar o componente
+      {path: '', redirectTo: 'premios', pathMatch: 'full'} // rota padrão dentro do dashboard
+    ]
+  },
 
   // Redireciona para a página de home se a rota não for encontrada
   {path: '', redirectTo: '/home', pathMatch: 'full'}

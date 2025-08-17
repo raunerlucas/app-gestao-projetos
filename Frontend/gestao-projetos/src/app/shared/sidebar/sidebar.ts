@@ -3,14 +3,15 @@ import {isPlatformBrowser} from '@angular/common';
 import {Logo} from '../logo/logo';
 import {SessionDataModel} from '../../models/UserSessionModel';
 import {Auth} from '../../core/services/auth/auth';
-import {Router, RouterLink} from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.html',
   imports: [
     Logo,
-    RouterLink
+    RouterLink,
+    RouterLinkActive
   ],
   styleUrls: ['./sidebar.css']
 })

@@ -1,6 +1,8 @@
-<!-- Mudar o pra false o showLogo depois de cria o userMenu -->
+
 <app-header></app-header>
-<div id="centro-tela">
-  <router-outlet></router-outlet>
+<div class="dashboard-layout">
+  <app-sidebar></app-sidebar>
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
 </div>
-<app-sidebar></app-sidebar>
