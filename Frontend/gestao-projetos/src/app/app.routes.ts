@@ -19,11 +19,11 @@ export const routes: Routes = [
     children: [
       {path: 'dashboard', component: Dashboard}, // componente de dashboard temporário
       {path: 'premios', component: Premios},
-      {path: 'projetos', component: Home}, // temporário até criar o componente
-      {path: 'avaliacoes', component: Home}, // temporário até criar o componente
-      {path: 'pessoas', component: Home}, // temporário até criar o componente
-      {path: 'cronogramas', component: Home}, // temporário até criar o componente
-      {path: 'configuracoes', component: Home}, // temporário até criar o componente
+      {path: 'projetos', component: Dashboard}, // temporário até criar o componente
+      {path: 'avaliacoes', component: Dashboard}, // temporário até criar o componente
+      {path: 'pessoas', component: Dashboard}, // temporário até criar o componente
+      {path: 'cronogramas', component: Dashboard}, // temporário até criar o componente
+      {path: 'configuracoes', component: Dashboard}, // temporário até criar o componente
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'} // rota padrão
     ]
   },
