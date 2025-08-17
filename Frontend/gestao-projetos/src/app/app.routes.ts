@@ -1,11 +1,16 @@
 import {Routes} from '@angular/router';
 import {Login} from './pages/login/login';
-import {Dashboard} from './pages/dashboard/dashboard';
+import {Dashboard} from './pages/home/dashboard/dashboard';
 import {Home} from './pages/home/home';
 import {Register} from './pages/register/register';
 import {authGuardDashboard, authGuardFirtsPage} from './core/guards/auth-guard-dashboard';
-import {Premios} from './pages/premios/premios';
+import {Premios} from './pages/home/premios/premios';
 import {First} from './pages/first/first';
+import {Projetos} from './pages/home/projetos/projetos';
+import {Avaliacoes} from './pages/home/avaliacoes/avaliacoes';
+import {Pessoas} from './pages/home/pessoas/pessoas';
+import {Cronogramas} from './pages/home/cronogramas/cronogramas';
+import {Configuracoes} from './pages/home/configuracoes/configuracoes';
 
 export const routes: Routes = [
 // Define as rotas da aplicação
@@ -17,13 +22,13 @@ export const routes: Routes = [
     component: Home,
     canActivate: [authGuardDashboard],
     children: [
-      {path: 'dashboard', component: Dashboard}, // componente de dashboard temporário
+      {path: 'dashboard', component: Dashboard},
       {path: 'premios', component: Premios},
-      {path: 'projetos', component: Dashboard}, // temporário até criar o componente
-      {path: 'avaliacoes', component: Dashboard}, // temporário até criar o componente
-      {path: 'pessoas', component: Dashboard}, // temporário até criar o componente
-      {path: 'cronogramas', component: Dashboard}, // temporário até criar o componente
-      {path: 'configuracoes', component: Dashboard}, // temporário até criar o componente
+      {path: 'projetos', component: Projetos},
+      {path: 'avaliacoes', component: Avaliacoes},
+      {path: 'pessoas', component: Pessoas},
+      {path: 'cronogramas', component: Cronogramas},
+      {path: 'configuracoes', component: Configuracoes},
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'} // rota padrão
     ]
   },
