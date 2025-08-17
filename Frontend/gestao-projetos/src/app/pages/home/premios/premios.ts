@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {FormsPremio} from './forms-premio/forms-premio';
 
 @Component({
   selector: 'app-premios',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsPremio],
   templateUrl: './premios.html',
   styleUrl: './premios.css'
 })

@@ -44,3 +44,8 @@
     </div>
   </div>
 </div>
+
+<!-- Modal para novo prêmio -->
+@if (exibirModalNovoPremio) {
+  <app-forms-premio (fecharModal)="toggleModalNovoPremio()"></app-forms-premio>
+}
