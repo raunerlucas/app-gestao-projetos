@@ -3,12 +3,13 @@ import {Login} from './pages/login/login';
 import {Dashboard} from './pages/dashboard/dashboard';
 import {Home} from './pages/home/home';
 import {Register} from './pages/register/register';
-import {authGuardDashboard, authGuardHome} from './core/guards/auth-guard-dashboard';
+import {authGuardDashboard, authGuardFirtsPage} from './core/guards/auth-guard-dashboard';
 import {Premios} from './pages/premios/premios';
+import {First} from './pages/first/first';
 
 export const routes: Routes = [
 // Define as rotas da aplicação
-  {path: 'home', component: Home, canActivate: [authGuardHome]},
+  {path: 'first', component: First, canActivate: [authGuardFirtsPage]},
   {path: 'login', component: Login},
   {path: 'register', component: Register},
   {
@@ -27,5 +28,5 @@ export const routes: Routes = [
   },
 
   // Redireciona para a página de home se a rota não for encontrada
-  {path: '', redirectTo: '/home', pathMatch: 'full'}
+  {path: '', redirectTo: '/first', pathMatch: 'full'}
 ];

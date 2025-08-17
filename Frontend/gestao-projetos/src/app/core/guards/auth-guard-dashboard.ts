@@ -17,7 +17,7 @@ export const authGuardDashboard: CanActivateFn = (route, state) => {
   return false;
 };
 
-export const authGuardHome: CanActivateFn = (route, state) => {
+export const authGuardFirtsPage: CanActivateFn = (route, state) => {
   const authService = inject(Auth);
   const router = inject(Router);
 
