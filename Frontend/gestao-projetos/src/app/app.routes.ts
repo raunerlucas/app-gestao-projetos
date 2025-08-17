@@ -14,17 +14,17 @@ export const routes: Routes = [
   {path: 'register', component: Register},
   {
     path: 'home',
-    component: Dashboard,
+    component: Home,
     canActivate: [authGuardDashboard],
     children: [
-      {path: 'dashboard', component: Home}, // componente de dashboard temporário
+      {path: 'dashboard', component: Dashboard}, // componente de dashboard temporário
       {path: 'premios', component: Premios},
       {path: 'projetos', component: Home}, // temporário até criar o componente
       {path: 'avaliacoes', component: Home}, // temporário até criar o componente
       {path: 'pessoas', component: Home}, // temporário até criar o componente
       {path: 'cronogramas', component: Home}, // temporário até criar o componente
       {path: 'configuracoes', component: Home}, // temporário até criar o componente
-      {path: '', redirectTo: 'premios', pathMatch: 'full'} // rota padrão dentro do dashboard
+      {path: '', redirectTo: 'dashboard', pathMatch: 'full'} // rota padrão
     ]
   },
 

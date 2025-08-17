@@ -1,83 +1,11 @@
-/* src/app/pages/home/home.component.css */
-
-/* ---- Main / Hero ---- */
-.home-main {
-  padding: 2rem;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.hero {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  align-items: start;
-}
-
-.hero-text h2 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.hero-text p {
-  font-size: 1.125rem;
-  margin-bottom: 1.5rem;
-  color: #555555;
-}
-
-.hero-cta {
+.dashboard-layout {
   display: flex;
-  gap: 1rem;
+  height: calc(100vh - 60px); /* Ajuste conforme a altura do header */
 }
 
-.hero-cta .btn-primary {
-  background: #000000;
-  color: #ffffff;
-}
-
-.hero-cta .btn-outline {
-  background: transparent;
-  color: #000000;
-  border: 2px solid #000000;
-}
-
-/* ---- Cards ---- */
-.hero-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-  background: #ffffff;
-  border: 1px solid #eeeeee;
-  border-radius: 0.5rem;
-  text-decoration: none;
-  color: inherit;
-  transition: box-shadow 0.2s;
-}
-
-.card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card i {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.card h3 {
-  margin: 0 0 0.5rem;
-  font-size: 1.125rem;
-}
-
-.card p {
-  font-size: 0.95rem;
-  color: #666666;
+.main-content {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f8f9fa;
 }

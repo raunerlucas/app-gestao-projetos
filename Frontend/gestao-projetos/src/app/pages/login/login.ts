@@ -31,9 +31,9 @@ export class Login {
     this.auth.login(this.email, this.senha).subscribe(
       success => {
         if (success) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/home/dashboard']);
         } else {
-          this.router.navigate(['/dashboard']); // TODO: Apenas para teste, remover depois
+          this.router.navigate(['/home/dashboard']); // TODO: Apenas para teste, remover depois
           console.error('Falha no login. Verifique suas credenciais.');
         }
       }
