@@ -1,0 +1,27 @@
+<app-navbar></app-navbar>
+<main class="home-main">
+  <section class="hero container">
+    <div class="hero-text">
+      <h2>Sistema de Gestão de Projetos</h2>
+      <p>
+        Plataforma completa para gerenciamento de projetos, avaliações e
+        premiações. Simplifique o processo de submissão e avaliação de projetos.
+      </p>
+      <div class="hero-cta">
+        <a routerLink="/register" class="btn btn-primary">Começar agora</a>
+        <a routerLink="/login" class="btn btn-outline">Já tenho uma conta</a>
+      </div>
+    </div>
+    <div class="hero-cards">
+      @for (card of cards; track card) {
+        <a [routerLink]="card.link"
+           class="card">
+          <i class="bi" [ngClass]="card.icon"></i>
+          <h3>{{ card.title }}</h3>
+          <p>{{ card.subtitle }}</p>
+        </a>
+      }
+    </div>
+  </section>
+</main>
+<app-footer></app-footer>
