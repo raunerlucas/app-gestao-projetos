@@ -15,6 +15,9 @@ import java.util.List;
 @Repository
 public interface ProjetoRepository extends JpaRepository<Projeto, Long> {
 
+    @Query("SELECT p FROM _projeto p JOIN FETCH p.avaliacoes a WHERE a IS NOT NULL")
+    List<Projeto> findProjetosComAvaliacao();
+
     @Query("SELECT p FROM _projeto p LEFT JOIN FETCH p.autores WHERE p.avaliacoes IS EMPTY")
     List<Projeto> findProjetosSemAvaliacao();
 
