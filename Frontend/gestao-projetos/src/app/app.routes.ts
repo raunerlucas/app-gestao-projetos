@@ -13,10 +13,11 @@ export const routes: Routes = [
   {path: 'login', component: Login},
   {path: 'register', component: Register},
   {
-    path: 'dashboard',
+    path: 'home',
     component: Dashboard,
     canActivate: [authGuardDashboard],
     children: [
+      {path: 'dashboard', component: Home}, // componente de dashboard temporário
       {path: 'premios', component: Premios},
       {path: 'projetos', component: Home}, // temporário até criar o componente
       {path: 'avaliacoes', component: Home}, // temporário até criar o componente

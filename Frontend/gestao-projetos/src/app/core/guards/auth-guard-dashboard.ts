@@ -22,7 +22,7 @@ export const authGuardFirtsPage: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   if (authService.isAuthenticated()) {
-    router.navigate(['/dashboard']);
+    router.navigate(['/home']);
     return false;
   }
   return true;
