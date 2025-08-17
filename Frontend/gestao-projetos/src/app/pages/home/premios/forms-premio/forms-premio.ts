@@ -14,4 +14,6 @@ export class FormsPremio {
   cancelar() {
     this.fecharModal.emit();
   }
+
+  // todo : Implementar lógica para salvar o prêmio
 }

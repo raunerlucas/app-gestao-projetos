@@ -19,4 +19,6 @@ export class Premios {
   toggleModalNovoPremio() {
     this.exibirModalNovoPremio = !this.exibirModalNovoPremio;
   }
+
+  // Todo: Implementar lógica para manipular os prêmios
 }
