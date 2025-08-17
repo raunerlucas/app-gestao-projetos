@@ -1,0 +1,35 @@
+<div class="modal-overlay">
+  <div class="card modal-card">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="card-title fw-bold">Novo Prêmio</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="cancelar()"></button>
+      </div>
+
+      <form>
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="nome">
+        </div>
+        <div class="mb-3">
+          <label for="descricao" class="form-label">Descrição</label>
+          <textarea class="form-control" id="descricao" rows="3"></textarea>
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="ano" class="form-label">Ano/Edição</label>
+            <input type="text" class="form-control" id="ano">
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="cronograma" class="form-label">Cronograma</label>
+            <input type="text" class="form-control" id="cronograma">
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2" (click)="cancelar()">Cancelar</button>
+          <button type="submit" class="btn btn-dark">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
