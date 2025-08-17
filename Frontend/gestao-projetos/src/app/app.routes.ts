@@ -4,11 +4,13 @@ import {Dashboard} from './pages/dashboard/dashboard';
 import {Home} from './pages/home/home';
 import {Register} from './pages/register/register';
 import {authGuardDashboard, authGuardHome} from './core/guards/auth-guard-dashboard';
+import {Premios} from './pages/premios/premios';
 
 export const routes: Routes = [
 // Define as rotas da aplicação
   {path: 'home', component: Home, canActivate: [authGuardHome]},
   {path: 'login', component: Login},
+  {path: 'premios', component: Premios},
   {path: 'register', component: Register},
   {path: 'dashboard', component: Dashboard, canActivate: [authGuardDashboard]},
 
