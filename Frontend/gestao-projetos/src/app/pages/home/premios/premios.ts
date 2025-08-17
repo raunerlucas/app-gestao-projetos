@@ -9,24 +9,13 @@ import {CommonModule} from '@angular/common';
 })
 
 export class Premios {
-  premios = [
-    {
-      nome: 'Prêmio Inovação Tecnológica',
-      descricao: 'Reconhecimento para projetos inovadores na área de tecnologia',
-      ano: 2023,
-      cronograma: 'Submissão de Projetos (01/05/2023 - 30/06/2023)'
-    },
-    {
-      nome: 'Prêmio Sustentabilidade',
-      descricao: 'Reconhecimento para projetos com foco em sustentabilidade e meio ambiente',
-      ano: 2023,
-      cronograma: 'Submissão de Projetos (01/05/2023 - 30/06/2023)'
-    },
-    {
-      nome: 'Prêmio Impacto Social',
-      descricao: 'Reconhecimento para projetos com impacto social significativo',
-      ano: 2023,
-      cronograma: 'Submissão de Projetos (01/05/2023 - 30/06/2023)'
-    }
+  exibirModalNovoPremio = false;
+  premios: any[] = [ // Dados de exemplo
+    { nome: 'Prêmio Inovação', descricao: 'Reconhecimento de projetos inovadores.', ano: '2024', cronograma: 'Q3' },
+    { nome: 'Melhor Design', descricao: 'Prêmio para o melhor design de interface.', ano: '2024', cronograma: 'Q4' }
   ];
+
+  toggleModalNovoPremio() {
+    this.exibirModalNovoPremio = !this.exibirModalNovoPremio;
+  }
 }
