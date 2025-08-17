@@ -1,27 +1,34 @@
-import {Component} from '@angular/core';
+import {Component, Inject, PLATFORM_ID} from '@angular/core';
+import {isPlatformBrowser} from '@angular/common';
 import {Logo} from '../logo/logo';
 import {SessionDataModel} from '../../models/UserSessionModel';
-import {Auth} from '../../core/services/auth';
-import {Router} from '@angular/router';
+import {Auth} from '../../core/services/auth/auth';
+import {Router, RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.html',
   imports: [
-    Logo
+    Logo,
+    RouterLink
   ],
   styleUrls: ['./sidebar.css']
 })
 export class Sidebar {
-  session: string | null;
-  userNameSesion: string;
-  constructor(private auth: Auth, private routes: Router) {
-    this.session = sessionStorage.getItem('userSession');
-    if (this.session) {
-      const sessionData: SessionDataModel = JSON.parse(this.session);
-      this.userNameSesion = sessionData.username;
-    } else {
-      this.userNameSesion = 'No User';
+  session: string | null = null;
+  userNameSesion: string = 'No User';
+
+  constructor(
+    private auth: Auth,
+    private routes: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.session = sessionStorage.getItem('userSession');
+      if (this.session) {
+        const sessionData: SessionDataModel = JSON.parse(this.session);
+        this.userNameSesion = sessionData.username;
+      }
     }
   }
 
