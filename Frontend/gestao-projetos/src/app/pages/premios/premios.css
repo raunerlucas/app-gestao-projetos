@@ -1,0 +1,16 @@
+.card {
+  border-radius: 0.5rem;
+}
+
+.table th {
+  font-weight: 600;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.btn-dark {
+  border-radius: 0.4rem;
+  font-weight: 500;
+}
