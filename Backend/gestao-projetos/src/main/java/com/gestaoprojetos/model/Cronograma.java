@@ -61,4 +61,16 @@ public class Cronograma implements Serializable {
         ATRASADO,
         CANCELADO
     }
+
+    public void setStatusById(Long id) {
+        if (id == null) {
+            this.status = null;
+        } else {
+            try {
+                this.status = StatusCronograma.values()[(int) (id - 1)];
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new IllegalArgumentException("ID de status inválido: " + id);
+            }
+        }
+    }
 }

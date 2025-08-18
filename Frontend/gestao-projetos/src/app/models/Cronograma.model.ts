@@ -1,13 +1,13 @@
-import {StatusModel} from './Status.model';
+import {StatusCronograma} from './StatusCronograma';
 
 export interface CronogramaModel {
   id: number | null;
-  // 10.10.2023
+  // 2023-10-15
   dataInicio: string;
-  // 15.10.2023
+  // 2023-12-31
   dataFim: string;
   // Exp.: "Cronograma de Inovação"
   descricao: string;
-  status: StatusModel;
+  status: StatusCronograma;
   premiosId: number[];
 }

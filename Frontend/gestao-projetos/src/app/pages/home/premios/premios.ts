@@ -36,7 +36,6 @@ export class Premios {
   }
 
   constructor(private premioService: PremioService) {
-    // Inicializa a lista de prêmios ao carregar o componente
     this.findAllPremios();
   }
 }

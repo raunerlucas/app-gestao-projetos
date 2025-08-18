@@ -1,5 +1,7 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.controller.DTO.PremioDTO;
+import com.gestaoprojetos.controller.DTO.PremioDTO.PremioResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Premio;
@@ -61,17 +63,18 @@ public class PremioController {
     @Operation(summary = "Listar Prêmios", description = "Retorna todos os prêmios cadastrados.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de prêmios obtida com sucesso",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Premio.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = PremioResponseDTO.class))),
             @ApiResponse(responseCode = "204", description = "Nenhum prêmio encontrado", content = @Content)
     })
-    public ResponseEntity<List<Premio>> listarPremios() {
-        List<Premio> premios = premioService.listarTodos();
+    public ResponseEntity<List<PremioResponseDTO>> listarPremios() {
+        List<PremioResponseDTO> premios = premioService.listarTodos().stream().map(premio -> new PremioDTO().toPremioResponseDTO(premio)).toList();
         if (premios.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
         return ResponseEntity.ok(premios);
     }
+
 
     /**
      * Endpoint para buscar um prêmio por ID.
