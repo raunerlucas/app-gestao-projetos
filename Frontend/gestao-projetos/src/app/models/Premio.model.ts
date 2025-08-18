@@ -1,3 +1,5 @@
+import {CronogramaModel} from './Cronograma.model';
+
 export interface PremioModel{
   id: number | null;
   // Exp.: "Prêmio de Inovação"
@@ -6,5 +8,5 @@ export interface PremioModel{
   descricao: string;
   // Exp.: 2022; 2026
   anoEdicao: number;
-  cronogramaId: number;
+  cronograma: CronogramaModel;
 }

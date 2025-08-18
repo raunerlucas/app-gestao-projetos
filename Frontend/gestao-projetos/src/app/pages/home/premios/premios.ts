@@ -13,17 +13,12 @@ import {PremioModel} from '../../../models/Premio.model';
 
 export class Premios {
   exibirModalNovoPremio = false;
-  premios: any[] = [ // Dados de exemplo
-    { nome: 'Prêmio Inovação', descricao: 'Reconhecimento de projetos inovadores.', ano: '2024', cronograma: 'Q3' },
-    { nome: 'Melhor Design', descricao: 'Prêmio para o melhor design de interface.', ano: '2024', cronograma: 'Q4' }
-  ];
-
-  premioServer: PremioModel[] | undefined;
+  premios: PremioModel[] = [];
 
   private findAllPremios() {
     return this.premioService.listarPremios().subscribe(
-      (data) => {
-        console.log(data)
+      (data: PremioModel[]) => {
+        this.premios = data;
         },
       (error) => {
         console.error('Erro ao buscar prêmios:', error);
