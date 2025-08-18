@@ -4,7 +4,7 @@ import {environment} from '../../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map} from 'rxjs/operators';
 import {of} from 'rxjs';
-import {SessionDataModel} from "../../../models/UserSessionModel";
+import {SessionDataModel} from "../../../models/UserSession.model";
 
 @Injectable({
   providedIn: 'root'

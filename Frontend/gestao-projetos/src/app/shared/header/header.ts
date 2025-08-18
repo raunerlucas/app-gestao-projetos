@@ -1,5 +1,5 @@
 import {Component, Inject, PLATFORM_ID} from '@angular/core';
-import {SessionDataModel} from '../../models/UserSessionModel';
+import {SessionDataModel} from '../../models/UserSession.model';
 import {isPlatformBrowser} from '@angular/common';
 
 @Component({

@@ -1,7 +1,7 @@
 import {Component, Inject, PLATFORM_ID} from '@angular/core';
 import {isPlatformBrowser} from '@angular/common';
 import {Logo} from '../logo/logo';
-import {SessionDataModel} from '../../models/UserSessionModel';
+import {SessionDataModel} from '../../models/UserSession.model';
 import {Auth} from '../../core/services/auth/auth';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 
