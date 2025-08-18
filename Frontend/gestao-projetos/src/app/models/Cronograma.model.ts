@@ -1,4 +1,4 @@
-import {StatusCronograma} from './StatusCronograma';
+import {StatusCronogramaModel} from './StatusCronograma.model';
 
 export interface CronogramaModel {
   id: number | null;
@@ -8,6 +8,6 @@ export interface CronogramaModel {
   dataFim: string;
   // Exp.: "Cronograma de Inovação"
   descricao: string;
-  status: StatusCronograma;
+  status: StatusCronogramaModel;
   premiosId: number[];
 }

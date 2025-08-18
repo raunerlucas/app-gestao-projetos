@@ -27,13 +27,11 @@ INSERT INTO _autor (id, nome, cpf, telefone, email) VALUES (4, 'Rauner Lucas', '
 
 
 -- CRONOGRAMA: um ciclo de submissão para projetos
-INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma)
-VALUES (1, '2025-06-01', '2025-06-30', 'Cronograma de Junho 2025', 'NAO_INICIADO');
+INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma) VALUES (1, '2025-06-01', '2025-06-30', 'Cronograma de Junho 2025', 'NAO_INICIADO');
 
 
 -- PREMIO: vinculado ao cronograma acima
-INSERT INTO _premio (id, nome, descricao, ano_edicao, cronograma_id)
-VALUES (1, 'Prêmio Inovação 2025', 'Premiação de melhores projetos', 2025, 1);
+INSERT INTO _premio (id, nome, descricao, ano_edicao, cronograma_id) VALUES (1, 'Prêmio Inovação 2025', 'Premiação de melhores projetos', 2025, 1);
 
 
 -- PROJETO: submetido por Autor (João Silva)
