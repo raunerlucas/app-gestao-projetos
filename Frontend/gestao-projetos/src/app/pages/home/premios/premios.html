@@ -27,14 +27,15 @@
           </tr>
           </thead>
           <tbody>
-            @for (premio of premios; track premio) {
+            @for (premio of premios; track premio.id) {
               <tr>
                 <td class="fw-semibold">{{ premio.nome }}</td>
                 <td>{{ premio.descricao }}</td>
                 <td>{{ premio.anoEdicao }}</td>
                 <td>{{ premio.cronograma.status }}</td>
                 <td class="text-end">
-                  <a href="#" class="text-decoration-none fw-semibold">Editar</a>
+                  <!-- Menu de ações específico para este prêmio -->
+                  <app-float-menu [config]="getMenuConfigForPremio(premio)"></app-float-menu>
                 </td>
               </tr>
             }

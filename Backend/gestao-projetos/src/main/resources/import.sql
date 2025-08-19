@@ -32,6 +32,8 @@ INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma
 
 -- PREMIO: vinculado ao cronograma acima
 INSERT INTO _premio (id, nome, descricao, ano_edicao, cronograma_id) VALUES (1, 'Prêmio Inovação 2025', 'Premiação de melhores projetos', 2025, 1);
+INSERT INTO _premio (id, nome, descricao, ano_edicao, cronograma_id) VALUES (2, 'Prêmio Inovação 2026', 'Premiação de melhores projetos', 2026, 1);
+INSERT INTO _premio (id, nome, descricao, ano_edicao, cronograma_id) VALUES (3, 'Prêmio Inovação 2027', 'Premiação de melhores projetos', 2027, 1);
 
 
 -- PROJETO: submetido por Autor (João Silva)

@@ -1,1 +1,33 @@
-<p>float-menu works!</p>
+<div [class]="getMenuClasses()">
+  <!-- Botão principal do menu flutuante -->
+  <button
+    class="float-menu-toggle"
+    (click)="toggleMenu()"
+    [class.active]="isOpen">
+    <span class="material-symbols-outlined">
+      {{ isOpen ? 'close' : 'add' }}
+    </span>
+  </button>
+
+  <!-- Lista de ações do menu -->
+  <div class="float-menu-actions" [class.open]="isOpen">
+    <button
+      *ngFor="let action of getVisibleActions(); let i = index"
+      class="float-menu-action"
+      [class]="'btn-' + (action.color || 'primary')"
+      [disabled]="action.disabled"
+      (click)="executeAction(action)"
+      [style.animation-delay]="(i * 0.1) + 's'"
+      [title]="action.label">
+      <span class="material-symbols-outlined">{{ action.icon }}</span>
+      <span class="action-label">{{ action.label }}</span>
+    </button>
+  </div>
+
+  <!-- Overlay para fechar o menu -->
+  <div
+    class="float-menu-overlay"
+    [class.visible]="isOpen"
+    (click)="toggleMenu()">
+  </div>
+</div>

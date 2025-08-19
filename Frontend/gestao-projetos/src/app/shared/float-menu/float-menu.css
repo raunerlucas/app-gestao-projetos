@@ -1,0 +1,260 @@
+.float-menu-container {
+  position: fixed;
+  z-index: 1000;
+}
+
+
+/* Botão principal */
+.float-menu-toggle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: #007bff;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1001;
+}
+
+.float-menu-toggle:hover {
+  background: #0056b3;
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+}
+
+.float-menu-toggle.active {
+  transform: rotate(45deg);
+}
+
+/* Tamanhos */
+.float-menu-container.small .float-menu-toggle {
+  width: 48px;
+  height: 48px;
+}
+
+.float-menu-container.large .float-menu-toggle {
+  width: 64px;
+  height: 64px;
+}
+
+/* Container das ações */
+.float-menu-actions {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px);
+  transition: all 0.3s ease;
+}
+
+.float-menu-actions.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* Ajustes de posição para as ações */
+.float-menu-container.top-right .float-menu-actions,
+.float-menu-container.top-left .float-menu-actions {
+  bottom: auto;
+  top: 70px;
+}
+
+.float-menu-container.bottom-left .float-menu-actions,
+.float-menu-container.top-left .float-menu-actions {
+  right: auto;
+  left: 0;
+}
+
+/* Botões de ação */
+.float-menu-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  min-width: 120px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateX(20px);
+  animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Cores dos botões */
+.float-menu-action.btn-primary {
+  background: #007bff;
+  color: white;
+}
+
+.float-menu-action.btn-success {
+  background: #28a745;
+  color: white;
+}
+
+.float-menu-action.btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.float-menu-action.btn-warning {
+  background: #ffc107;
+  color: #212529;
+}
+
+.float-menu-action.btn-info {
+  background: #17a2b8;
+  color: white;
+}
+
+.float-menu-action.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+/* Hover dos botões */
+.float-menu-action:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.float-menu-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Ícones */
+.float-menu-action .material-symbols-outlined {
+  font-size: 20px;
+}
+
+.float-menu-toggle .material-symbols-outlined {
+  font-size: 24px;
+  transition: transform 0.3s ease;
+}
+
+/* Label das ações */
+.action-label {
+  white-space: nowrap;
+}
+
+/* Overlay */
+.float-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.float-menu-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Ajustes para uso em tabelas */
+.table .float-menu-container {
+  position: relative;
+  display: inline-block;
+}
+
+.table .float-menu-container.bottom-left .float-menu-actions,
+.table .float-menu-container.bottom-right .float-menu-actions {
+  bottom: auto;
+  top: 100%;
+  margin-top: 5px;
+}
+
+.table .float-menu-container.top-left .float-menu-actions,
+.table .float-menu-container.top-right .float-menu-actions {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: 5px;
+}
+
+/* Botão menor para tabelas */
+.table .float-menu-toggle {
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+}
+
+.table .float-menu-toggle .material-symbols-outlined {
+  font-size: 18px;
+}
+
+/* Ações mais compactas para tabelas */
+.table .float-menu-action {
+  min-width: 100px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.table .float-menu-action .material-symbols-outlined {
+  font-size: 16px;
+}
+
+/* Z-index maior para aparecer sobre outros elementos da tabela */
+.table .float-menu-container {
+  z-index: 1050;
+}
+
+.table .float-menu-actions {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  background: white;
+  padding: 5px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .float-menu-container {
+    bottom: 15px;
+    right: 15px;
+  }
+
+  .float-menu-action {
+    min-width: 100px;
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .action-label {
+    display: none;
+  }
+
+  .float-menu-action {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    justify-content: center;
+    min-width: auto;
+  }
+}
