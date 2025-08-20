@@ -9,5 +9,5 @@ export interface CronogramaModel {
   // Exp.: "Cronograma de Inovação"
   descricao: string;
   status: StatusCronogramaModel;
-  premiosId: number[];
+  premiosId?: number[];
 }

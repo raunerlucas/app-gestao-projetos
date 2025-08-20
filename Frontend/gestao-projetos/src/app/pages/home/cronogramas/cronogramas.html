@@ -1,1 +1,73 @@
-<p>cronogramas works!</p>
+<div class="cronogramas-container">
+  <!-- Header da seção -->
+  <div class="header-section">
+    <div class="header-content">
+      <h1 class="titulo-principal">Cronogramas</h1>
+      <p class="subtitulo">Gerencie os cronogramas do sistema</p>
+    </div>
+    <button class="btn-novo-cronograma" (click)="novoCronograma()">
+      <span class="icone-plus">+</span>
+      Novo Cronograma
+    </button>
+  </div>
+
+  <!-- Container principal -->
+  <div class="container-principal">
+    <h2 class="titulo-lista">Lista de Cronogramas</h2>
+
+    <div class="table-container">
+      <table class="cronogramas-table">
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Data Início</th>
+            <th>Data Fim</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cronograma of cronogramas; track cronograma.id) {
+            <tr>
+              <td>{{ cronograma.descricao }}</td>
+              <td>{{ formatDate(cronograma.dataInicio) }}</td>
+              <td>{{ formatDate(cronograma.dataFim) }}</td>
+              <td>
+                <span class="status-badge" [class]="getStatusClass(cronograma.status)">
+                  {{ getStatusLabel(cronograma.status) }}
+                </span>
+              </td>
+              <td>
+                <app-float-menu [config]="getMenuConfigForCrono(cronograma)"></app-float-menu>
+              </td>
+            </tr>
+          }
+          @empty {
+            <tr>
+              <td colspan="5" class="texto-vazio">Nenhum cronograma encontrado.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para novo cronograma -->
+@if (exibirModalNovoCronograma) {
+  <div class="modal-overlay" (click)="toggleModalNovoCronograma()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Novo Cronograma</h3>
+        <button class="btn-fechar" (click)="toggleModalNovoCronograma()">×</button>
+      </div>
+      <div class="modal-body">
+        <p>Formulário de criação de cronograma será implementado aqui.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-cancelar" (click)="toggleModalNovoCronograma()">Cancelar</button>
+        <button class="btn-salvar">Salvar</button>
+      </div>
+    </div>
+  </div>
+}
