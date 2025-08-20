@@ -1,0 +1,69 @@
+<div class="searchable-select" [class.disabled]="disabled">
+  <!-- Campo de seleção -->
+  <div class="select-field" (click)="toggleDropdown()">
+    <div class="selected-value">
+      <span *ngIf="selectedOption; else placeholderTemplate">
+        {{ selectedOption.label }}
+      </span>
+      <ng-template #placeholderTemplate>
+        <span class="placeholder">{{ placeholder }}</span>
+      </ng-template>
+    </div>
+
+    <div class="select-actions">
+      <button
+        *ngIf="clearable && selectedOption && !disabled"
+        type="button"
+        class="clear-btn"
+        (click)="clearSelection(); $event.stopPropagation()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+
+      <span class="material-symbols-outlined dropdown-icon" [class.open]="isOpen">
+        keyboard_arrow_down
+      </span>
+    </div>
+  </div>
+
+  <!-- Dropdown -->
+  <div class="dropdown" [class.show]="isOpen" [style.max-height]="maxHeight">
+    <!-- Campo de busca -->
+    <div *ngIf="searchable" class="search-container">
+      <div class="search-field">
+        <span class="material-symbols-outlined search-icon">search</span>
+        <input
+          type="text"
+          class="search-input"
+          [placeholder]="searchPlaceholder"
+          [value]="searchTerm"
+          (input)="onSearchInput($event)"
+          (click)="$event.stopPropagation()">
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading-container">
+      <span class="material-symbols-outlined spinning">refresh</span>
+      <span>Carregando...</span>
+    </div>
+
+    <!-- Opções -->
+    <div *ngIf="!loading" class="options-container">
+      <div
+        *ngFor="let option of filteredOptions; trackBy: trackByValue"
+        class="option"
+        [class.selected]="selectedOption?.value === option.value"
+        (click)="selectOption(option)">
+        {{ option.label }}
+      </div>
+
+      <!-- Sem resultados -->
+      <div *ngIf="filteredOptions.length === 0" class="no-results">
+        {{ noResultsText }}
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div *ngIf="isOpen" class="overlay" (click)="closeDropdown()"></div>
+</div>
