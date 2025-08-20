@@ -1,77 +1,82 @@
-<div class="cronogramas-container">
-  <!-- Header da seção -->
-  <div class="header-section">
-    <div class="header-content">
-      <h1 class="titulo-principal">Cronogramas</h1>
-      <p class="subtitulo">Gerencie os cronogramas do sistema</p>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="fw-bold">Cronogramas</h2>
+      <p class="text-muted">Gerencie os cronogramas do sistema</p>
     </div>
-    <button class="btn-novo-cronograma" (click)="novoCronograma()">
-      <span class="icone-plus">+</span>
+    <button class="btn btn-dark" (click)="toggleModalNovoCronograma()">
+      <span class="material-symbols-outlined">add</span>
       Novo Cronograma
     </button>
   </div>
 
-  <!-- Container principal -->
-  <div class="container-principal">
-    <h2 class="titulo-lista">Lista de Cronogramas</h2>
+  <!-- Card com tabela -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title fw-bold mb-3">Lista de Cronogramas</h5>
 
-    <div class="table-container">
-      <table class="cronogramas-table">
-        <thead>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
           <tr>
             <th>Descrição</th>
             <th>Data Início</th>
             <th>Data Fim</th>
             <th>Status</th>
-            <th>Ações</th>
+            <th class="text-end">Ações</th>
           </tr>
-        </thead>
-        <tbody>
-          @for (cronograma of cronogramas; track cronograma.id) {
-            <tr>
-              <td>{{ cronograma.descricao }}</td>
-              <td>{{ formatDate(cronograma.dataInicio) }}</td>
-              <td>{{ formatDate(cronograma.dataFim) }}</td>
-              <td>
-                <!-- Debug: Mostrar valor bruto do status -->
-                <!-- Status: {{ cronograma.status }} | Tipo: {{ cronograma.status | json }} -->
-                <span class="status-badge"
-                      [ngClass]="getStatusClass(cronograma.status)"
-                      [attr.data-status]="cronograma.status">
-                  {{ getStatusLabel(cronograma.status) }}
-                </span>
-              </td>
-              <td>
-                <app-float-menu [config]="getMenuConfigForCronograma(cronograma)"></app-float-menu>
-              </td>
-            </tr>
-          }
-          @empty {
-            <tr>
-              <td colspan="5" class="texto-vazio">Nenhum cronograma encontrado.</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (cronograma of cronogramas; track cronograma.id) {
+              <tr>
+                <td class="fw-semibold">{{ cronograma.descricao }}</td>
+                <td>{{ formatDate(cronograma.dataInicio) }}</td>
+                <td>{{ formatDate(cronograma.dataFim) }}</td>
+                <td>
+                  <span class="badge"
+                        [ngClass]="getStatusClass(cronograma.status)">
+                    {{ getStatusLabel(cronograma.status) }}
+                  </span>
+                </td>
+                <td class="text-end">
+                  <!-- Menu de ações específico para este cronograma -->
+                  <app-float-menu [config]="getMenuConfigForCronograma(cronograma)"></app-float-menu>
+                </td>
+              </tr>
+            }
+            @empty {
+              <tr>
+                <td colspan="5" class="text-center text-muted py-4">
+                  <span class="material-symbols-outlined fs-1 text-muted mb-2 d-block">event_busy</span>
+                  Nenhum cronograma encontrado.
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Modal para novo cronograma -->
 @if (exibirModalNovoCronograma) {
-  <div class="modal-overlay" (click)="toggleModalNovoCronograma()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Novo Cronograma</h3>
-        <button class="btn-fechar" (click)="toggleModalNovoCronograma()">×</button>
-      </div>
-      <div class="modal-body">
-        <p>Formulário de criação de cronograma será implementado aqui.</p>
-      </div>
-      <div class="modal-footer">
-        <button class="btn-cancelar" (click)="toggleModalNovoCronograma()">Cancelar</button>
-        <button class="btn-salvar">Salvar</button>
+  <div class="modal fade show" style="display: block;" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Novo Cronograma</h5>
+          <button type="button" class="btn-close" (click)="toggleModalNovoCronograma()"></button>
+        </div>
+        <div class="modal-body">
+          <p>Formulário de criação de cronograma será implementado aqui.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="toggleModalNovoCronograma()">Cancelar</button>
+          <button type="button" class="btn btn-primary">Salvar</button>
+        </div>
       </div>
     </div>
   </div>
+  <div class="modal-backdrop fade show"></div>
 }
