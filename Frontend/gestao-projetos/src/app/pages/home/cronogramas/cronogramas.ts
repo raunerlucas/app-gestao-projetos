@@ -69,35 +69,35 @@ export class Cronogramas implements OnInit, OnDestroy {
         descricao: 'Submissão de Projetos',
         dataInicio: '2023-05-01',
         dataFim: '2023-06-30',
-        status: StatusCronogramaModel.EM_AVALIACAO
+        status: StatusCronogramaModel.EM_ANDAMENTO
       },
       {
         id: 2,
         descricao: 'Período de Avaliação',
         dataInicio: '2023-07-01',
         dataFim: '2023-07-31',
-        status: StatusCronogramaModel.PENDENTE
+        status: StatusCronogramaModel.NAO_INICIADO
       },
       {
         id: 3,
         descricao: 'Divulgação de Resultados',
         dataInicio: '2023-08-15',
         dataFim: '2023-08-15',
-        status: StatusCronogramaModel.PENDENTE
+        status: StatusCronogramaModel.NAO_INICIADO
       },
       {
         id: 4,
         descricao: 'Submissão de Recursos',
         dataInicio: '2023-08-16',
         dataFim: '2023-08-20',
-        status: StatusCronogramaModel.PENDENTE
+        status: StatusCronogramaModel.NAO_INICIADO
       },
       {
         id: 5,
         descricao: 'Resultado Final',
         dataInicio: '2023-08-25',
         dataFim: '2023-08-25',
-        status: StatusCronogramaModel.PENDENTE
+        status: StatusCronogramaModel.NAO_INICIADO
       }
     ];
   }
@@ -225,12 +225,14 @@ export class Cronogramas implements OnInit, OnDestroy {
 
   getStatusClass(status: StatusCronogramaModel): string {
     switch (status) {
-      case StatusCronogramaModel.EM_AVALIACAO:
+      case StatusCronogramaModel.NAO_INICIADO:
+        return 'status-nao-iniciado';
+      case StatusCronogramaModel.EM_ANDAMENTO:
         return 'status-em-andamento';
-      case StatusCronogramaModel.PENDENTE:
-        return 'status-pendente';
-      case StatusCronogramaModel.AVALIADO:
+      case StatusCronogramaModel.CONCLUIDO:
         return 'status-concluido';
+      case StatusCronogramaModel.ATRASADO:
+        return 'status-atrasado';
       case StatusCronogramaModel.CANCELADO:
         return 'status-cancelado';
       default:

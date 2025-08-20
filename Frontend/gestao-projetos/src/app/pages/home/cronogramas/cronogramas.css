@@ -127,19 +127,29 @@
   white-space: nowrap;
 }
 
+.status-nao-iniciado {
+  background-color: #f1f5f9;
+  color: #64748b;
+}
+
 .status-em-andamento {
   background-color: #e0e7ff;
   color: #2563eb;
 }
 
-.status-pendente {
+.status-concluido {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-atrasado {
   background-color: #fef3c7;
   color: #d97706;
 }
 
-.status-concluido {
-  background-color: #d1fae5;
-  color: #065f46;
+.status-cancelado {
+  background-color: #fee2e2;
+  color: #dc2626;
 }
 
 /* Link Editar */

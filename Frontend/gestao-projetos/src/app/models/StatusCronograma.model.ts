@@ -1,13 +1,15 @@
 export enum StatusCronogramaModel {
-  PENDENTE = 1,
-  AVALIADO = 2,
-  EM_AVALIACAO = 3,
-  CANCELADO = 4
+  NAO_INICIADO = 1,
+  EM_ANDAMENTO = 2,
+  CONCLUIDO = 3,
+  ATRASADO = 4,
+  CANCELADO = 5
 }
 
 export const STATUS_CRONOGRAMA_DESC = {
-  [StatusCronogramaModel.PENDENTE]: 'Pendente',
-  [StatusCronogramaModel.AVALIADO]: 'Avaliado',
-  [StatusCronogramaModel.EM_AVALIACAO]: 'Em Avaliação',
+  [StatusCronogramaModel.NAO_INICIADO]: 'Não Iniciado',
+  [StatusCronogramaModel.EM_ANDAMENTO]: 'Em Andamento',
+  [StatusCronogramaModel.CONCLUIDO]: 'Concluído',
+  [StatusCronogramaModel.ATRASADO]: 'Atrasado',
   [StatusCronogramaModel.CANCELADO]: 'Cancelado'
 };
