@@ -1,5 +1,7 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.controller.DTO.CronogramaDTO;
+import com.gestaoprojetos.controller.DTO.CronogramaDTO.CronogramaResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Cronograma;
@@ -63,11 +65,14 @@ public class CronogramaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de cronogramas obtida com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Cronograma.class))),
+                            schema = @Schema(implementation = CronogramaResponseDTO.class))),
             @ApiResponse(responseCode = "204", description = "Nenhum cronograma encontrado", content = @Content)
     })
-    public ResponseEntity<List<Cronograma>> listarCronogramas() {
-        List<Cronograma> lista = cronogramaService.listarTodos();
+    public ResponseEntity<List<CronogramaResponseDTO>> listarCronogramas() {
+        List<CronogramaResponseDTO> lista = cronogramaService.listarTodos()
+                .stream()
+                .map(new CronogramaDTO()::toCronogramaResponseDTO)
+                .toList();
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -87,12 +92,15 @@ public class CronogramaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cronograma encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Cronograma.class))),
+                            schema = @Schema(implementation = CronogramaResponseDTO.class))),
             @ApiResponse(responseCode = "404", description = "Cronograma não encontrado", content = @Content)
     })
     public ResponseEntity<?> buscarCronogramaPorId(@PathVariable Long id) {
         try {
-            Cronograma cronograma = cronogramaService.buscarPorId(id);
+            CronogramaResponseDTO cronograma =new CronogramaDTO().toCronogramaResponseDTO(cronogramaService.buscarPorId(id));
+            if (cronograma == null) {
+                return ResponseEntity.status(404).body("Cronograma não encontrado");
+            }
             return ResponseEntity.ok(cronograma);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());

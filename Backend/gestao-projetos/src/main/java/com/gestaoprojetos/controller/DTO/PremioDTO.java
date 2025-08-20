@@ -50,7 +50,8 @@ public class PremioDTO {
                         premio.getCronograma().getDataInicio().toString(),
                         premio.getCronograma().getDataFim().toString(),
                         premio.getCronograma().getDescricao(),
-                        premio.getCronograma().getStatus()
+                        premio.getCronograma().getStatus(),
+                        null
                 )
         );
     }
