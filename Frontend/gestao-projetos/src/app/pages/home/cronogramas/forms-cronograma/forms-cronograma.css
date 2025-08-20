@@ -1,0 +1,29 @@
+.titulo {
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.subtitulo {
+  color: #6c757d;
+  margin-bottom: 1.5rem;
+}
+
+.form-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-label {
+  font-weight: 500;
+}
+
+button {
+  min-width: 120px;
+}
+
+.invalid-feedback {
+  display: block;
+  font-size: 0.875rem;
+}
