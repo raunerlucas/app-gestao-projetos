@@ -1,33 +1,34 @@
-<div [class]="getMenuClasses()">
-  <!-- Botão principal do menu flutuante -->
+<div class="dropdown">
+  <!-- Botão trigger do dropdown -->
   <button
-    class="float-menu-toggle"
-    (click)="toggleMenu()"
+    class="dropdown-trigger"
+    (click)="toggleMenu(); $event.stopPropagation()"
     [class.active]="isOpen">
-    <span class="material-symbols-outlined">
-      {{ isOpen ? 'close' : 'add' }}
-    </span>
+    <span class="material-symbols-outlined">more_horiz</span>
   </button>
 
-  <!-- Lista de ações do menu -->
-  <div class="float-menu-actions" [class.open]="isOpen">
+  <!-- Menu dropdown -->
+  <div
+    class="dropdown-menu"
+    [class.show]="isOpen"
+    (click)="$event.stopPropagation()">
     <button
-      *ngFor="let action of getVisibleActions(); let i = index"
-      class="float-menu-action"
-      [class]="'btn-' + (action.color || 'primary')"
+      *ngFor="let action of getVisibleActions()"
+      class="dropdown-item"
+      [class]="getItemClass(action)"
       [disabled]="action.disabled"
-      (click)="executeAction(action)"
-      [style.animation-delay]="(i * 0.1) + 's'"
+      (click)="executeAction(action); $event.stopPropagation()"
       [title]="action.label">
       <span class="material-symbols-outlined">{{ action.icon }}</span>
-      <span class="action-label">{{ action.label }}</span>
+      <span class="item-label">{{ action.label }}</span>
     </button>
   </div>
 
   <!-- Overlay para fechar o menu -->
   <div
-    class="float-menu-overlay"
+    class="dropdown-overlay"
     [class.visible]="isOpen"
-    (click)="toggleMenu()">
+    (click)="closeMenu()"
+    *ngIf="isOpen">
   </div>
 </div>

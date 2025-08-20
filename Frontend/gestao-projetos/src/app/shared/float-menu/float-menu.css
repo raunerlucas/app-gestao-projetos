@@ -1,297 +1,161 @@
-.float-menu-container {
-  position: fixed;
-  z-index: 1000;
+/* CSS Variables para consistência com o tema */
+:root {
+  --text-muted: #6c757d;
+  --hover-bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --border-color: #dee2e6;
+  --text-color: #212529;
+  --error-color: #dc3545;
 }
 
+/* Container do dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
 
-/* Botão principal */
-.float-menu-toggle {
-  bottom: 1.6em;
-  left: 1.6em;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
+/* Botão trigger */
+.dropdown-trigger {
+  background: none;
   border: none;
-  background: #007bff;
-  color: white;
   cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  color: var(--text-muted);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1001;
+  width: 32px;
+  height: 32px;
 }
 
-.float-menu-toggle:hover {
-  background: #0056b3;
-  transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+.dropdown-trigger:hover {
+  background-color: var(--hover-bg);
+  color: var(--text-color);
 }
 
-.float-menu-toggle.active {
-  transform: rotate(45deg);
+.dropdown-trigger.active {
+  background-color: var(--hover-bg);
+  color: var(--text-color);
 }
 
-/* Tamanhos */
-.float-menu-container.small .float-menu-toggle {
-  width: 48px;
-  height: 48px;
+.dropdown-trigger .material-symbols-outlined {
+  font-size: 18px;
 }
 
-.float-menu-container.large .float-menu-toggle {
-  width: 64px;
-  height: 64px;
-}
-
-/* Container das ações */
-.float-menu-actions {
+/* Menu dropdown */
+.dropdown-menu {
   position: absolute;
-  bottom: 70px;
   right: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  top: 100%;
+  margin-top: 0.25rem;
+  min-width: 10rem;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 1050;
   opacity: 0;
   visibility: hidden;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
+  transform: translateY(-10px);
+  transition: all 0.2s ease;
+  padding: 0.25rem 0;
 }
 
-.float-menu-actions.open {
+.dropdown-menu.show {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-/* Ajustes de posição para as ações */
-.float-menu-container.top-right .float-menu-actions,
-.float-menu-container.top-left .float-menu-actions {
-  bottom: auto;
-  top: 70px;
-}
-
-.float-menu-container.bottom-left .float-menu-actions,
-.float-menu-container.top-left .float-menu-actions {
-  right: auto;
-  left: 0;
-}
-
-/* Botões de aç��o */
-.float-menu-action {
+/* Itens do dropdown */
+.dropdown-item {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 25px;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: var(--text-color);
+  text-decoration: none;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  min-width: 120px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transform: translateX(20px);
-  animation: slideIn 0.3s ease forwards;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.15s ease;
 }
 
-@keyframes slideIn {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.dropdown-item:hover:not(:disabled) {
+  background-color: var(--hover-bg);
 }
 
-/* Cores dos botões */
-.float-menu-action.btn-primary {
-  background: #007bff;
-  color: white;
-}
-
-.float-menu-action.btn-success {
-  background: #28a745;
-  color: white;
-}
-
-.float-menu-action.btn-danger {
-  background: #dc3545;
-  color: white;
-}
-
-.float-menu-action.btn-warning {
-  background: #ffc107;
-  color: #212529;
-}
-
-.float-menu-action.btn-info {
-  background: #17a2b8;
-  color: white;
-}
-
-.float-menu-action.btn-secondary {
-  background: #6c757d;
-  color: white;
-}
-
-/* Hover dos botões */
-.float-menu-action:hover:not(:disabled) {
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.float-menu-action:disabled {
+.dropdown-item:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  color: var(--text-muted);
 }
 
-/* Ícones */
-.float-menu-action .material-symbols-outlined {
-  font-size: 20px;
+.dropdown-item.delete {
+  color: var(--error-color);
 }
 
-.float-menu-toggle .material-symbols-outlined {
-  font-size: 24px;
-  transition: transform 0.3s ease;
+.dropdown-item.delete:hover:not(:disabled) {
+  background-color: rgba(220, 53, 69, 0.1);
 }
 
-/* Label das ações */
-.action-label {
+.dropdown-item .material-symbols-outlined {
+  width: 1rem;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-label {
   white-space: nowrap;
 }
 
 /* Overlay */
-.float-menu-overlay {
+.dropdown-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background: transparent;
-  z-index: 999;
+  z-index: 1040;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
 }
 
-.float-menu-overlay.visible {
+.dropdown-overlay.visible {
   opacity: 1;
   visibility: visible;
 }
 
-/* Ajustes para uso em tabelas */
-.table .float-menu-container {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  min-height: 48px;
-}
-
-/* Posicionamento LATERAL ESQUERDO para tabelas */
-.table .float-menu-container .float-menu-actions {
-  position: absolute;
-  top: 0;
-  right: calc(100% + 8px);
-  bottom: 0;
-  transform: none;
-  margin: 0;
-  left: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Sobrescrever posicionamentos específicos quando em tabela */
-.table .float-menu-container.bottom-left .float-menu-actions,
-.table .float-menu-container.bottom-right .float-menu-actions,
-.table .float-menu-container.top-left .float-menu-actions,
-.table .float-menu-container.top-right .float-menu-actions {
-  top: 0;
-  right: calc(100% + 8px);
-  bottom: 0;
-  transform: none;
-  left: auto;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-/* Animação lateral para tabelas */
-.table .float-menu-actions {
-  transform: translateX(20px);
-  transition: all 0.3s ease;
-}
-
-.table .float-menu-actions.open {
-  transform: translateX(0);
-}
-
-/* Seta indicadora para mostrar de onde vem o menu - agora à direita apontando para o botão */
-.table .float-menu-actions::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  right: -6px;
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-  border-left: 6px solid white;
-  filter: drop-shadow(1px 0 1px rgba(0, 0, 0, 0.1));
-}
-
-/* Ajustar as células da tabela para centralizar o conteúdo */
-.table td {
-  vertical-align: middle !important;
-  padding: 12px 8px;
-}
-
-.table th {
-  vertical-align: middle !important;
-}
-
-/* Centralizar especificamente a coluna de ações */
-.table .text-end {
-  text-align: center !important;
-  vertical-align: middle !important;
-}
-
-/* Garantir que o container ocupe toda a altura da célula */
-.table td .float-menu-container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Adaptação para modo escuro */
+[data-bs-theme="dark"] {
+  --text-muted: #adb5bd;
+  --hover-bg: #343a40;
+  --card-bg: #212529;
+  --border-color: #495057;
+  --text-color: #f8f9fa;
+  --error-color: #ea868f;
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
-  .float-menu-container {
-    bottom: 15px;
-    right: 15px;
+  .dropdown-menu {
+    min-width: 8rem;
+    font-size: 0.8rem;
   }
 
-  .float-menu-action {
-    min-width: 100px;
-    padding: 8px 12px;
-    font-size: 13px;
+  .dropdown-item {
+    padding: 0.4rem 0.8rem;
   }
 
-  .action-label {
-    display: none;
-  }
-
-  .float-menu-action {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    justify-content: center;
-    min-width: auto;
+  .item-label {
+    font-size: 0.8rem;
   }
 }

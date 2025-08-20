@@ -42,12 +42,6 @@ export class Premios implements OnInit {
       size: 'small',
       actions: [
         {
-          label: 'Visualizar',
-          icon: 'visibility',
-          color: 'info',
-          action: () => this.visualizarPremio(premio)
-        },
-        {
           label: 'Editar',
           icon: 'edit',
           color: 'primary',
@@ -86,8 +80,8 @@ export class Premios implements OnInit {
     // Pode abrir modal de edição ou navegar para página de edição
   }
 
-  // Método para deletar prêmio específico
   deletarPremio(id: number): void {
+    console.log('Deletando prêmio com ID:', id);
     if (confirm('Tem certeza que deseja deletar este prêmio?')) {
       this.premioService.deletarPremio(id).subscribe(
         () => {

@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-float-menu',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './float-menu.html',
   styleUrl: './float-menu.css'
@@ -23,14 +24,6 @@ export class FloatMenu implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Configuração padrão se não fornecida
-    if (!this.config.position) {
-      this.config.position = 'bottom-right';
-    }
-    if (!this.config.size) {
-      this.config.size = 'medium';
-    }
-
     // Inscrever-se para fechar este menu quando outro for aberto
     this.subscription = this.floatMenuService.closeAllMenus$.subscribe(
       (exceptMenuId: string) => {
@@ -53,6 +46,10 @@ export class FloatMenu implements OnInit, OnDestroy {
     this.isOpen = !this.isOpen;
   }
 
+  closeMenu(): void {
+    this.isOpen = false;
+  }
+
   executeAction(action: FloatMenuAction): void {
     if (!action.disabled && action.action) {
       action.action();
@@ -64,9 +61,11 @@ export class FloatMenu implements OnInit, OnDestroy {
     return this.config.actions.filter(action => action.visible !== false);
   }
 
-  getMenuClasses(): string {
-    const position = this.config.position || 'bottom-right';
-    const size = this.config.size || 'medium';
-    return `float-menu-container ${position} ${size}`;
+  getItemClass(action: FloatMenuAction): string {
+    let classes = '';
+    if (action.color === 'danger') {
+      classes += ' delete';
+    }
+    return classes;
   }
 }
