@@ -219,12 +219,74 @@ export class Cronogramas implements OnInit, OnDestroy {
     this.erro = null; // Limpar erro ao fechar modal
   }
 
-  getStatusLabel(status: StatusCronogramaModel): string {
-    return STATUS_CRONOGRAMA_DESC[status];
+  getStatusLabel(status: StatusCronogramaModel | string): string {
+    console.log('Status recebido:', status, 'Tipo:', typeof status);
+
+    // Converter string para enum se necessário
+    let enumStatus: StatusCronogramaModel;
+
+    if (typeof status === 'string') {
+      switch (status) {
+        case 'NAO_INICIADO':
+          enumStatus = StatusCronogramaModel.NAO_INICIADO;
+          break;
+        case 'EM_ANDAMENTO':
+          enumStatus = StatusCronogramaModel.EM_ANDAMENTO;
+          break;
+        case 'CONCLUIDO':
+          enumStatus = StatusCronogramaModel.CONCLUIDO;
+          break;
+        case 'ATRASADO':
+          enumStatus = StatusCronogramaModel.ATRASADO;
+          break;
+        case 'CANCELADO':
+          enumStatus = StatusCronogramaModel.CANCELADO;
+          break;
+        default:
+          console.warn('Status string não reconhecido:', status);
+          return 'Status Desconhecido';
+      }
+    } else {
+      enumStatus = status;
+    }
+
+    const label = STATUS_CRONOGRAMA_DESC[enumStatus];
+    console.log('Label retornado:', label);
+    return label || 'Status Desconhecido';
   }
 
-  getStatusClass(status: StatusCronogramaModel): string {
-    switch (status) {
+  getStatusClass(status: StatusCronogramaModel | string): string {
+    console.log('Classe para status:', status);
+
+    // Converter string para enum se necessário
+    let enumStatus: StatusCronogramaModel;
+
+    if (typeof status === 'string') {
+      switch (status) {
+        case 'NAO_INICIADO':
+          enumStatus = StatusCronogramaModel.NAO_INICIADO;
+          break;
+        case 'EM_ANDAMENTO':
+          enumStatus = StatusCronogramaModel.EM_ANDAMENTO;
+          break;
+        case 'CONCLUIDO':
+          enumStatus = StatusCronogramaModel.CONCLUIDO;
+          break;
+        case 'ATRASADO':
+          enumStatus = StatusCronogramaModel.ATRASADO;
+          break;
+        case 'CANCELADO':
+          enumStatus = StatusCronogramaModel.CANCELADO;
+          break;
+        default:
+          console.warn('Status string não reconhecido:', status);
+          return 'status-nao-iniciado';
+      }
+    } else {
+      enumStatus = status;
+    }
+
+    switch (enumStatus) {
       case StatusCronogramaModel.NAO_INICIADO:
         return 'status-nao-iniciado';
       case StatusCronogramaModel.EM_ANDAMENTO:
@@ -236,7 +298,8 @@ export class Cronogramas implements OnInit, OnDestroy {
       case StatusCronogramaModel.CANCELADO:
         return 'status-cancelado';
       default:
-        return '';
+        console.warn('Status não reconhecido:', enumStatus);
+        return 'status-nao-iniciado';
     }
   }
 

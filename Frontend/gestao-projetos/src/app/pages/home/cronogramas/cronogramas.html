@@ -33,7 +33,11 @@
               <td>{{ formatDate(cronograma.dataInicio) }}</td>
               <td>{{ formatDate(cronograma.dataFim) }}</td>
               <td>
-                <span class="status-badge" [class]="getStatusClass(cronograma.status)">
+                <!-- Debug: Mostrar valor bruto do status -->
+                <!-- Status: {{ cronograma.status }} | Tipo: {{ cronograma.status | json }} -->
+                <span class="status-badge"
+                      [ngClass]="getStatusClass(cronograma.status)"
+                      [attr.data-status]="cronograma.status">
                   {{ getStatusLabel(cronograma.status) }}
                 </span>
               </td>
