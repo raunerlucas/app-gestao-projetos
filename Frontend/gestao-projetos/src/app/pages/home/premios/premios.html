@@ -60,5 +60,8 @@
 
 <!-- Modal para novo prêmio -->
 @if (exibirModalNovoPremio) {
-  <app-forms-premio (fecharModal)="toggleModalNovoPremio()"></app-forms-premio>
+  <app-forms-premio
+    (fecharModal)="toggleModalNovoPremio()"
+    (premioSalvo)="onPremioSalvo($event)">
+  </app-forms-premio>
 }

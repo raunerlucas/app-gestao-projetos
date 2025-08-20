@@ -1,6 +1,7 @@
 package com.gestaoprojetos.controller;
 
 import com.gestaoprojetos.controller.DTO.PremioDTO;
+import com.gestaoprojetos.controller.DTO.PremioDTO.PremioRequestDTO;
 import com.gestaoprojetos.controller.DTO.PremioDTO.PremioResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
@@ -41,13 +42,14 @@ public class PremioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Prêmio criado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Premio.class))),
+                            schema = @Schema(implementation = PremioRequestDTO.class))),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para criação do prêmio", content = @Content)
     })
-    public ResponseEntity<?> criarPremio(@RequestBody @Valid Premio premio) {
+    public ResponseEntity<?> criarPremio(@RequestBody @Valid PremioRequestDTO premioDTO) {
         try {
-            Premio novoPremio = premioService.criarPremio(premio);
-            return ResponseEntity.created(URI.create("/premios/" + novoPremio.getId())).body(novoPremio);
+            Premio novoPremio = premioService.criarPremio(PremioDTO.toPremio(premioDTO));
+            PremioResponseDTO response = PremioDTO.toPremioResponseDTO(novoPremio);
+            return ResponseEntity.created(URI.create("/premios/" + novoPremio.getId())).body(response);
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body("Erro ao criar prêmio: " + e.getMessage());
         } catch (ResourceNotFoundException e) {
@@ -67,7 +69,9 @@ public class PremioController {
             @ApiResponse(responseCode = "204", description = "Nenhum prêmio encontrado", content = @Content)
     })
     public ResponseEntity<List<PremioResponseDTO>> listarPremios() {
-        List<PremioResponseDTO> premios = premioService.listarTodos().stream().map(premio -> new PremioDTO().toPremioResponseDTO(premio)).toList();
+        List<PremioResponseDTO> premios = premioService.listarTodos().stream()
+                .map(PremioDTO::toPremioResponseDTO)
+                .toList();
         if (premios.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -92,7 +96,8 @@ public class PremioController {
     public ResponseEntity<?> buscarPremioPorId(@PathVariable Long id) {
         try {
             Premio premio = premioService.buscarPorId(id);
-            return ResponseEntity.ok(premio);
+            PremioResponseDTO response = PremioDTO.toPremioResponseDTO(premio);
+            return ResponseEntity.ok(response);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }
@@ -109,14 +114,16 @@ public class PremioController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Prêmio atualizado com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Premio.class))),
+                            schema = @Schema(implementation = PremioResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização", content = @Content),
             @ApiResponse(responseCode = "404", description = "Prêmio não encontrado", content = @Content)
     })
-    public ResponseEntity<?> atualizarPremio(@PathVariable Long id, @RequestBody @Valid Premio premio) {
+    public ResponseEntity<?> atualizarPremio(@PathVariable Long id, @RequestBody @Valid PremioRequestDTO premioDTO) {
         try {
-            Premio atualizado = premioService.atualizarPremio(id, premio);
-            return ResponseEntity.ok(atualizado);
+            Premio premioAtualizado = PremioDTO.toPremio(premioDTO);
+            Premio atualizado = premioService.atualizarPremio(id, premioAtualizado);
+            PremioResponseDTO response = PremioDTO.toPremioResponseDTO(atualizado);
+            return ResponseEntity.ok(response);
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body("Erro ao atualizar prêmio: " + e.getMessage());
         } catch (ResourceNotFoundException e) {

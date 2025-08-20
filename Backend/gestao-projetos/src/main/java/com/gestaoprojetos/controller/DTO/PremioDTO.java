@@ -7,7 +7,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class PremioDTO {
+public final class PremioDTO {
+
+    // Construtor privado para impedir instanciação (classe utilitária)
+    private PremioDTO() {
+        throw new UnsupportedOperationException("Esta é uma classe utilitária e não deve ser instanciada");
+    }
 
     @Data
     @AllArgsConstructor
@@ -30,30 +35,58 @@ public class PremioDTO {
         private Long cronogramaId;
     }
 
-    public Premio toPremio(PremioRequestDTO premioRequestDTO, Cronograma cronograma) {
+    /**
+     * Converte PremioRequestDTO para entidade Premio.
+     * Note que o cronograma deve ser definido posteriormente com o objeto completo.
+     *
+     * @param premioRequestDTO DTO com os dados da requisição
+     * @return Premio com dados básicos (cronograma será null e deve ser definido no service)
+     */
+    public static Premio toPremio(PremioRequestDTO premioRequestDTO) {
+        if (premioRequestDTO == null) {
+            return null;
+        }
+
         Premio premio = new Premio();
         premio.setNome(premioRequestDTO.getNome());
         premio.setDescricao(premioRequestDTO.getDescricao());
         premio.setAnoEdicao(premioRequestDTO.getAnoEdicao());
-        premio.setCronograma(cronograma);
+
+        // Criar um objeto Cronograma temporário apenas com o ID
+        // O service será responsável por buscar e definir o cronograma completo
+        if (premioRequestDTO.getCronogramaId() != null) {
+            Cronograma cronograma = new Cronograma();
+            cronograma.setId(premioRequestDTO.getCronogramaId());
+            premio.setCronograma(cronograma);
+        }
+
         return premio;
     }
 
-    public PremioResponseDTO toPremioResponseDTO(Premio premio) {
+    /**
+     * Converte entidade Premio para PremioResponseDTO.
+     *
+     * @param premio Entidade Premio completa
+     * @return DTO para resposta da API
+     */
+    public static PremioResponseDTO toPremioResponseDTO(Premio premio) {
+        if (premio == null) {
+            return null;
+        }
+
         return new PremioResponseDTO(
                 premio.getId(),
                 premio.getNome(),
                 premio.getDescricao(),
                 premio.getAnoEdicao(),
-                new CronogramaResponseDTO(
+                premio.getCronograma() != null ? new CronogramaResponseDTO(
                         premio.getCronograma().getId(),
                         premio.getCronograma().getDataInicio().toString(),
                         premio.getCronograma().getDataFim().toString(),
                         premio.getCronograma().getDescricao(),
                         premio.getCronograma().getStatus(),
                         null
-                )
+                ) : null
         );
     }
 }
-
