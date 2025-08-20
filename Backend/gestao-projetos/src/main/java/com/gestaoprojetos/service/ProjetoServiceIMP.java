@@ -1,9 +1,9 @@
 package com.gestaoprojetos.service;
 
-import com.gestaoprojetos.controller.DTO.AutorResumoDTO;
-import com.gestaoprojetos.controller.DTO.AvaliacaoResumoDTO;
-import com.gestaoprojetos.controller.DTO.ProjetoRequestDTO;
-import com.gestaoprojetos.controller.DTO.ProjetoResponseDTO;
+import com.gestaoprojetos.controller.DTO.AutorDTO.AutorResumoDTO;
+import com.gestaoprojetos.controller.DTO.AvaliacaoDTO.AvaliacaoResumoDTO;
+import com.gestaoprojetos.controller.DTO.ProjetoDTO.ProjetoRequestDTO;
+import com.gestaoprojetos.controller.DTO.ProjetoDTO.ProjetoResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Autor;
@@ -298,7 +298,7 @@ public class ProjetoServiceIMP extends
     }
 
     /**
-     * Verifica se a data de envio não está no futuro.
+     * Verifica se a data de envio não est�� no futuro.
      *
      * @param dataEnvio LocalDate informado.
      * @throws BadRequestException se dataEnvio for posterior a hoje.
@@ -364,5 +364,3 @@ public class ProjetoServiceIMP extends
         );
     }
 }
-
-
