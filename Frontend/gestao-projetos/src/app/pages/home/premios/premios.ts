@@ -5,10 +5,11 @@ import {PremioService} from '../../../core/services/premio/premio-service';
 import {PremioModel} from '../../../models/Premio.model';
 import {FloatMenu} from '../../../shared/float-menu/float-menu';
 import {FloatMenuConfig} from '../../../models/FloatMenuAction.model';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-premios',
-  imports: [CommonModule, FormsPremio, FloatMenu],
+  imports: [CommonModule, FormsPremio, FloatMenu, RouterLink],
   templateUrl: './premios.html',
   styleUrl: './premios.css'
 })
