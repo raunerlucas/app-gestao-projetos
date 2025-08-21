@@ -1,36 +1,24 @@
 export interface AutorModel {
-  id?: number;
+  id: number;
   nome: string;
   cpf: string;
-  email: string;
   telefone: string;
-  endereco?: string;
-  instituicao?: string;
-  lattes?: string;
-  biografia?: string;
-  dataCadastro?: Date;
-  ativo?: boolean;
+  email: string;
+  projetosIds: number[];
 }
 
 export interface AutorCreateRequest {
   nome: string;
   cpf: string;
-  email: string;
   telefone: string;
-  endereco?: string;
-  instituicao?: string;
-  lattes?: string;
-  biografia?: string;
+  email: string;
+  projetosIds: number[];
 }
 
 export interface AutorUpdateRequest {
   nome?: string;
   cpf?: string;
-  email?: string;
   telefone?: string;
-  endereco?: string;
-  instituicao?: string;
-  lattes?: string;
-  biografia?: string;
-  ativo?: boolean;
+  email?: string;
+  projetosIds?: number[];
 }

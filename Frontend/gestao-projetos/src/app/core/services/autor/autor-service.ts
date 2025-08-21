@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {AutorCreateRequest, AutorModel, AutorUpdateRequest} from '../../../models/Autor.model';
@@ -93,55 +93,14 @@ export class AutorService {
   }
 
   /**
-   * Busca autores por critérios específicos
-   * GET /autores/buscar
-   */
-  buscarAutores(filtros: {
-    nome?: string;
-    email?: string;
-    cpf?: string;
-    instituicao?: string;
-    ativo?: boolean;
-  }): Observable<AutorModel[]> {
-    let params = new HttpParams();
-
-    Object.entries(filtros).forEach(([key, value]) => {
-      if (value !== undefined && value !== null && value !== '') {
-        params = params.set(key, value.toString());
-      }
-    });
-
-    return this.http.get<AutorModel[]>(`${this.apiUrl}/buscar`, {
-      ...this.httpOptions,
-      params
-    }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-  /**
-   * Ativa/desativa autor
-   * PATCH /autores/{id}/status
-   */
-  alterarStatusAutor(id: number, ativo: boolean): Observable<AutorModel> {
-    if (!id || id <= 0) {
-      return throwError(() => new Error('ID do autor é obrigatório e deve ser maior que zero'));
-    }
-
-    return this.http.patch<AutorModel>(`${this.apiUrl}/${id}/status`, { ativo }, this.httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
-  }
-
-  /**
    * Valida dados básicos do autor
    */
   private validateAutorData(autor: AutorCreateRequest): boolean {
     return !!(autor.nome?.trim() &&
-              autor.email?.trim() &&
               autor.cpf?.trim() &&
-              autor.telefone?.trim());
+              autor.telefone?.trim() &&
+              autor.email?.trim() &&
+              Array.isArray(autor.projetosIds));
   }
 
   /**
@@ -155,28 +114,7 @@ export class AutorService {
       errorMessage = `Erro: ${error.error.message}`;
     } else {
       // Erro do lado do servidor
-      switch (error.status) {
-        case 400:
-          errorMessage = 'Dados inválidos fornecidos';
-          break;
-        case 401:
-          errorMessage = 'Não autorizado';
-          break;
-        case 403:
-          errorMessage = 'Acesso negado';
-          break;
-        case 404:
-          errorMessage = 'Autor não encontrado';
-          break;
-        case 409:
-          errorMessage = 'Conflito - Autor já existe';
-          break;
-        case 500:
-          errorMessage = 'Erro interno do servidor';
-          break;
-        default:
-          errorMessage = `Erro ${error.status}: ${error.message}`;
-      }
+      errorMessage = `Erro ${error.status}: ${error.message}`;
     }
 
     console.error('Erro no AutorService:', errorMessage, error);
