@@ -1,0 +1,291 @@
+/* Estilos customizados para o componente de projetos */
+
+.container {
+  font-family: 'Inter', 'Roboto', sans-serif;
+  background-color: #ffffff;
+}
+
+/* Cabeçalho da Página */
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.page-description {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+
+/* Barra de Ações */
+.actions-bar {
+  margin-bottom: 24px;
+}
+
+/* Campo de busca */
+.search-container {
+  flex: 1;
+  max-width: 400px;
+}
+
+.search-input {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  padding: 10px 12px 10px 40px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.search-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #9ca3af;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Filtro de status */
+.filter-container {
+  min-width: 150px;
+}
+
+.status-filter {
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  padding: 10px 12px;
+  font-size: 14px;
+  color: #374151;
+}
+
+.status-filter:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Botão Novo Projeto */
+.btn-new-project {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.btn-new-project:hover {
+  background-color: #1a1a1a;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-new-project .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* Card da Tabela */
+.projects-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Tabela de Projetos */
+.projects-table {
+  margin-bottom: 0;
+}
+
+.projects-table thead th {
+  background-color: #ffffff;
+  color: #374151;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  border-top: none;
+}
+
+.projects-table tbody td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  font-size: 14px;
+  color: #374151;
+}
+
+.projects-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.project-row {
+  transition: background-color 0.2s ease;
+}
+
+.project-row:hover {
+  background-color: #f9fafb;
+}
+
+/* Células específicas */
+.project-title {
+  font-weight: 500;
+  color: #111827;
+}
+
+.project-area {
+  color: #6b7280;
+}
+
+.project-date {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.project-authors {
+  color: #374151;
+}
+
+.project-status .badge {
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.project-status .bg-warning {
+  background-color: #fef3c7 !important;
+  color: #d97706 !important;
+}
+
+.project-status .bg-info {
+  background-color: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+.project-status .bg-success {
+  background-color: #d1fae5 !important;
+  color: #059669 !important;
+}
+
+/* Estado vazio */
+.empty-state {
+  border-bottom: none !important;
+}
+
+.empty-icon {
+  font-size: 3rem !important;
+  color: #9ca3af !important;
+}
+
+/* Material Icons */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Modal */
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 20px 24px;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  border-top: 1px solid #e5e7eb;
+  padding: 16px 24px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 15px;
+  }
+
+  .page-title {
+    font-size: 20px;
+  }
+
+  .page-description {
+    font-size: 14px;
+  }
+
+  .actions-bar .d-flex {
+    flex-direction: column;
+    gap: 12px !important;
+  }
+
+  .search-container {
+    max-width: 100%;
+  }
+
+  .filter-container {
+    min-width: 100%;
+  }
+
+  .btn-new-project {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .projects-table thead th,
+  .projects-table tbody td {
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .project-authors {
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .projects-table {
+    font-size: 12px;
+  }
+
+  .projects-table thead th,
+  .projects-table tbody td {
+    padding: 8px 12px;
+  }
+
+  .page-title {
+    font-size: 18px;
+  }
+
+  .btn-new-project {
+    font-size: 13px;
+    padding: 8px 12px;
+  }
+}
