@@ -1,8 +1,8 @@
 <div class="container mt-4">
-  <!-- Header da seção -->
-  <div class="mb-4">
-    <h1 class="fw-bold text-black" style="font-size: 24px;">Dashboard</h1>
-    <p class="text-muted" style="font-size: 16px;">Bem-vindo ao Sistema de Gestão de Projetos. Visualize estatísticas e informações importantes.</p>
+  <!-- Cabeçalho -->
+  <div class="dashboard-header mb-4">
+    <h1 class="dashboard-title">Dashboard</h1>
+    <p class="dashboard-subtitle">Bem-vindo ao Sistema de Gestão de Projetos. Visualize estatísticas e informações importantes.</p>
   </div>
 
   <!-- Loading state -->
@@ -31,233 +31,191 @@
 
   <!-- Dashboard content -->
   @if (!loading) {
-    <!-- Cards de Métricas -->
-    <section class="row g-4 mb-5">
-      <!-- Total de Projetos -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card metric-card h-100">
-          <div class="card-body d-flex align-items-center">
-            <div class="metric-icon bg-primary">
-              <span class="material-symbols-outlined text-white">folder</span>
+    <!-- Cards de Estatísticas (linha superior) -->
+    <section class="stats-cards mb-4">
+      <div class="row g-3">
+        <!-- Card de Projetos -->
+        <div class="col-md-6 col-lg-3">
+          <div class="stats-card">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">description</span>
             </div>
-            <div class="ms-3">
-              <h5 class="metric-value mb-1">{{ metrics.totalProjetos }}</h5>
-              <p class="metric-title text-muted mb-1">Total de Projetos</p>
-              <small class="metric-desc text-muted">
-                {{ metrics.projetosAvaliados }} avaliados, {{ metrics.projetosPendentes }} pendentes
-              </small>
+            <div class="card-content">
+              <h3 class="metric-title">Total de Projetos</h3>
+              <div class="metric-value">{{ metrics.totalProjetos }}</div>
+              <p class="metric-detail">{{ metrics.projetosAvaliados }} avaliados, {{ metrics.projetosPendentes }} pendentes</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Avaliações -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card metric-card h-100">
-          <div class="card-body d-flex align-items-center">
-            <div class="metric-icon bg-success">
-              <span class="material-symbols-outlined text-white">rate_review</span>
+        <!-- Card de Avaliações -->
+        <div class="col-md-6 col-lg-3">
+          <div class="stats-card">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">task_alt</span>
             </div>
-            <div class="ms-3">
-              <h5 class="metric-value mb-1">{{ metrics.totalAvaliacoes }}</h5>
-              <p class="metric-title text-muted mb-1">Avaliações</p>
-              <small class="metric-desc text-muted">
-                {{ metrics.avaliacoesPendentes }} pendentes
-              </small>
+            <div class="card-content">
+              <h3 class="metric-title">Avaliações</h3>
+              <div class="metric-value">{{ metrics.totalAvaliacoes }}</div>
+              <p class="metric-detail">{{ metrics.avaliacoesPendentes }} avaliações pendentes</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Pessoas -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card metric-card h-100">
-          <div class="card-body d-flex align-items-center">
-            <div class="metric-icon bg-info">
-              <span class="material-symbols-outlined text-white">people</span>
+        <!-- Card de Pessoas -->
+        <div class="col-md-6 col-lg-3">
+          <div class="stats-card">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">people</span>
             </div>
-            <div class="ms-3">
-              <h5 class="metric-value mb-1">{{ metrics.totalPessoas }}</h5>
-              <p class="metric-title text-muted mb-1">Pessoas</p>
-              <small class="metric-desc text-muted">
-                {{ metrics.autores }} autores, {{ metrics.avaliadores }} avaliadores
-              </small>
+            <div class="card-content">
+              <h3 class="metric-title">Pessoas</h3>
+              <div class="metric-value">{{ metrics.totalPessoas }}</div>
+              <p class="metric-detail">Autores e avaliadores cadastrados</p>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Link para ações rápidas -->
-      <div class="col-md-6 col-lg-3">
-        <div class="card metric-card h-100 border-primary">
-          <div class="card-body d-flex align-items-center">
-            <div class="metric-icon bg-primary">
-              <span class="material-symbols-outlined text-white">add_circle</span>
+        <!-- Card de Prazos -->
+        <div class="col-md-6 col-lg-3">
+          <div class="stats-card">
+            <div class="card-icon">
+              <span class="material-symbols-outlined">schedule</span>
             </div>
-            <div class="ms-3">
-              <h6 class="metric-title mb-2">Ações Rápidas</h6>
-              <button class="btn btn-sm btn-primary" routerLink="/home/projetos">
-                <span class="material-symbols-outlined me-1" style="font-size: 16px;">add</span>
-                Novo Projeto
-              </button>
+            <div class="card-content">
+              <h3 class="metric-title">Próximo Prazo</h3>
+              <div class="metric-value">30/06/2025</div>
+              <p class="metric-detail">Fim do período de submissão</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Navegação por abas -->
-    <nav class="dashboard-tabs mb-4">
-      <ul class="nav nav-pills">
-        <li class="nav-item">
-          <button
-            class="nav-link"
-            [ngClass]="{'active': selectedTab === 'projetos'}"
-            (click)="setTab('projetos')">
-            <span class="material-symbols-outlined me-2">folder</span>
-            Projetos Recentes
-          </button>
-        </li>
-        <li class="nav-item">
-          <button
-            class="nav-link"
-            [ngClass]="{'active': selectedTab === 'avaliacoes'}"
-            (click)="setTab('avaliacoes')">
-            <span class="material-symbols-outlined me-2">pending_actions</span>
-            Avaliações Pendentes
-          </button>
-        </li>
-        <li class="nav-item">
-          <button
-            class="nav-link"
-            [ngClass]="{'active': selectedTab === 'destaque'}"
-            (click)="setTab('destaque')">
-            <span class="material-symbols-outlined me-2">star</span>
-            Projetos Destaque
-          </button>
-        </li>
-      </ul>
+    <!-- Abas de Navegação -->
+    <nav class="tab-navigation mb-4">
+      <div class="nav-tabs-custom">
+        <button
+          class="nav-tab"
+          [ngClass]="{'active': selectedTab === 'projetos'}"
+          (click)="setTab('projetos')">
+          Projetos Recentes
+        </button>
+        <button
+          class="nav-tab"
+          [ngClass]="{'active': selectedTab === 'avaliacoes'}"
+          (click)="setTab('avaliacoes')">
+          Avaliações Pendentes
+        </button>
+        <button
+          class="nav-tab"
+          [ngClass]="{'active': selectedTab === 'cronograma'}"
+          (click)="setTab('cronograma')">
+          Cronograma
+        </button>
+      </div>
     </nav>
 
-    <!-- Conteúdo das abas -->
-    <section class="tab-content">
+    <!-- Seção - Conteúdo da Aba Ativa -->
+    <section class="tab-content-section">
       <!-- Aba Projetos Recentes -->
       @if (selectedTab === 'projetos') {
-        <div class="card shadow-sm">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">Projetos Recentes</h5>
-            <button class="btn btn-primary btn-sm" routerLink="/home/projetos">
-              <span class="material-symbols-outlined me-1" style="font-size: 16px;">visibility</span>
-              Ver Todos
-            </button>
-          </div>
-          <div class="card-body p-0">
-            @if (projetosRecentes.length > 0) {
-              <div class="row g-0">
-                @for (projeto of projetosRecentes; track projeto.id) {
-                  <div class="col-md-6 col-lg-4">
-                    <div class="project-card-dashboard">
-                      <div class="project-header">
-                        <h6 class="project-title">{{ projeto.titulo }}</h6>
-                        <span [ngClass]="getProjetoStatusClass(projeto)" class="project-status">
-                          {{ getProjetoStatus(projeto) }}
-                        </span>
-                      </div>
-                      <p class="project-area">{{ projeto.areaTematica }}</p>
-                      <small class="project-date">{{ formatDate(projeto.dataEnvio) }}</small>
-                      <div class="project-authors">
-                        <small class="text-muted">{{ formatAuthors(projeto.autores) }}</small>
-                      </div>
-                    </div>
-                  </div>
-                }
-              </div>
-            } @else {
-              <div class="text-center py-4">
-                <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
-                  folder_open
-                </span>
-                <p class="text-muted">Nenhum projeto encontrado.</p>
+        <div class="section-header mb-4">
+          <h2 class="section-title">Projetos Recentes</h2>
+          <button class="btn-new-project" routerLink="/home/projetos">
+            <span class="material-symbols-outlined">add</span>
+            Novo Projeto
+          </button>
+        </div>
+
+        <!-- Cards de Projetos -->
+        <div class="projects-grid">
+          @if (projetosRecentes.length > 0) {
+            @for (projeto of projetosRecentes; track projeto.id) {
+              <div class="project-card">
+                <div class="project-header">
+                  <h4 class="project-title">{{ projeto.titulo }}</h4>
+                  <span class="project-status" [ngClass]="getProjetoStatusClass(projeto)">
+                    {{ getProjetoStatus(projeto) }}
+                  </span>
+                </div>
+                <p class="project-date">Enviado em {{ formatDate(projeto.dataEnvio) }}</p>
+                <p class="project-description">{{ projeto.areaTematica }}</p>
+                <p class="project-authors">{{ formatAuthors(projeto.autores) }}</p>
+                <button class="btn-details">Ver detalhes</button>
               </div>
             }
-          </div>
+          } @else {
+            <div class="empty-state">
+              <span class="material-symbols-outlined">folder_open</span>
+              <p>Nenhum projeto encontrado.</p>
+            </div>
+          }
         </div>
       }
 
       <!-- Aba Avaliações Pendentes -->
       @if (selectedTab === 'avaliacoes') {
-        <div class="card shadow-sm">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">Avaliações Pendentes</h5>
-            <button class="btn btn-primary btn-sm" routerLink="/home/avaliacoes">
-              <span class="material-symbols-outlined me-1" style="font-size: 16px;">visibility</span>
-              Ver Todas
-            </button>
-          </div>
-          <div class="card-body">
-            @if (avaliacoesPendentes.length > 0) {
-              <div class="list-group list-group-flush">
-                @for (avaliacao of avaliacoesPendentes; track avaliacao.id) {
-                  <div class="list-group-item border-0 px-0">
-                    <div class="d-flex justify-content-between align-items-start">
-                      <div>
-                        <h6 class="mb-1">{{ avaliacao.projeto.titulo }}</h6>
-                        <p class="mb-1 text-muted">{{ avaliacao.projeto.areaTematica }}</p>
-                        <small class="text-muted">Avaliador: {{ avaliacao.avaliador.nome }}</small>
-                      </div>
-                      <span class="badge bg-warning text-dark">
-                        {{ avaliacao.status.description }}
-                      </span>
-                    </div>
-                  </div>
-                }
-              </div>
-            } @else {
-              <div class="text-center py-4">
-                <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
-                  check_circle
-                </span>
-                <p class="text-muted">Nenhuma avaliação pendente.</p>
+        <div class="section-header mb-4">
+          <h2 class="section-title">Avaliações Pendentes</h2>
+          <button class="btn-new-project" routerLink="/home/avaliacoes">
+            <span class="material-symbols-outlined">visibility</span>
+            Ver Todas
+          </button>
+        </div>
+
+        <div class="evaluations-list">
+          @if (avaliacoesPendentes.length > 0) {
+            @for (avaliacao of avaliacoesPendentes; track avaliacao.id) {
+              <div class="evaluation-item">
+                <div class="evaluation-content">
+                  <h4 class="evaluation-title">{{ avaliacao.projeto.titulo }}</h4>
+                  <p class="evaluation-area">{{ avaliacao.projeto.areaTematica }}</p>
+                  <p class="evaluation-evaluator">Avaliador: {{ avaliacao.avaliador.nome }}</p>
+                </div>
+                <span class="evaluation-status">{{ avaliacao.status.description }}</span>
               </div>
             }
-          </div>
+          } @else {
+            <div class="empty-state">
+              <span class="material-symbols-outlined">check_circle</span>
+              <p>Nenhuma avaliação pendente.</p>
+            </div>
+          }
         </div>
       }
 
-      <!-- Aba Projetos Destaque -->
-      @if (selectedTab === 'destaque') {
-        <div class="card shadow-sm">
-          <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-bold">Projetos em Destaque</h5>
-            <small class="text-muted">Melhores avaliações</small>
+      <!-- Aba Cronograma -->
+      @if (selectedTab === 'cronograma') {
+        <div class="section-header mb-4">
+          <h2 class="section-title">Cronograma</h2>
+          <button class="btn-new-project" routerLink="/home/cronogramas">
+            <span class="material-symbols-outlined">calendar_month</span>
+            Ver Cronograma
+          </button>
+        </div>
+
+        <div class="timeline-preview">
+          <div class="timeline-item">
+            <div class="timeline-date">15 Set 2025</div>
+            <div class="timeline-content">
+              <h4>Início das Submissões</h4>
+              <p>Período de envio de projetos aberto</p>
+            </div>
           </div>
-          <div class="card-body p-0">
-            @if (projetosDestaque.length > 0) {
-              <div class="row g-0">
-                @for (projeto of projetosDestaque; track projeto.id) {
-                  <div class="col-md-4">
-                    <div class="destaque-card">
-                      <div class="destaque-header">
-                        <span class="material-symbols-outlined text-warning">star</span>
-                        <h6 class="mb-0">{{ projeto.titulo }}</h6>
-                      </div>
-                      <p class="text-muted mb-2">{{ projeto.areaTematica }}</p>
-                      <div class="destaque-status">
-                        {{ getProjetoStatus(projeto) }}
-                      </div>
-                      <small class="text-muted">{{ formatAuthors(projeto.autores) }}</small>
-                    </div>
-                  </div>
-                }
-              </div>
-            } @else {
-              <div class="text-center py-4">
-                <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
-                  star_border
-                </span>
-                <p class="text-muted">Nenhum projeto avaliado ainda.</p>
-              </div>
-            }
+          <div class="timeline-item">
+            <div class="timeline-date">30 Jun 2025</div>
+            <div class="timeline-content">
+              <h4>Fim das Submissões</h4>
+              <p>Último dia para envio de projetos</p>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">15 Jul 2025</div>
+            <div class="timeline-content">
+              <h4>Avaliações</h4>
+              <p>Período de avaliação dos projetos</p>
+            </div>
           </div>
         </div>
       }
