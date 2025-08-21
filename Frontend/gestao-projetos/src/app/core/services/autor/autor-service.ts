@@ -10,7 +10,7 @@ import {environment} from '../../../../environments/environment';
 })
 export class AutorService {
 
-  private readonly apiUrl = `${environment.apiUrl}/autores`;
+  private readonly apiUrl = `${environment.apiUrl}/api/autores`;
 
   private readonly httpOptions = {
     headers: new HttpHeaders({

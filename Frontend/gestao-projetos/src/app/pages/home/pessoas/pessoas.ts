@@ -3,24 +3,14 @@ import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 import {CpfMaskPipe} from '../../../shared/pipes/cpf-mask.pipe';
 import {PhoneMaskPipe} from '../../../shared/pipes/phone-mask.pipe';
+import {AutorService} from '../../../core/services/autor/autor-service';
+import {AvaliadorService} from '../../../core/services/avaliador/avaliador-service';
+import {AutorModel} from '../../../models/Autor.model';
+import {AvaliadorModel} from '../../../models/Avaliador.model';
+import {Pessoa, TipoPessoa} from '../../../models/Pessoa.model';
+import {combineLatest, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
-// Interface para representar uma pessoa
-interface Pessoa {
-  id?: number;
-  nome: string;
-  cpf: string;
-  email: string;
-  telefone: string;
-  tipo: TipoPessoa;
-}
-
-// Enum para tipos de pessoa
-enum TipoPessoa {
-  AUTOR = 'AUTOR',
-  AVALIADOR = 'AVALIADOR',
-  COORDENADOR = 'COORDENADOR',
-  ADMINISTRADOR = 'ADMINISTRADOR'
-}
 
 @Component({
   selector: 'app-pessoas',
@@ -35,7 +25,10 @@ export class Pessoas implements OnInit {
   searchTerm: string = '';
   showModalNovaPessoa: boolean = false;
 
-  constructor() {}
+  constructor(
+    private autorService: AutorService,
+    private avaliadorService: AvaliadorService
+  ) {}
 
   ngOnInit(): void {
     this.loadPessoas();
@@ -45,51 +38,38 @@ export class Pessoas implements OnInit {
    * Carrega dados mock de pessoas para demonstração
    */
   private loadPessoas(): void {
-    // Dados mock para demonstração
-    this.pessoas = [
-      {
-        id: 1,
-        nome: 'João Silva',
-        cpf: '123.456.789-00',
-        email: 'joao.silva@example.com',
-        telefone: '(11) 99999-9999',
-        tipo: TipoPessoa.AUTOR
+    combineLatest([
+      this.autorService.listarAutores().pipe(catchError(() => of([] as AutorModel[]))),
+      this.avaliadorService.listarAvaliadores().pipe(catchError(() => of([] as AvaliadorModel[])))
+    ]).subscribe({
+      next: ([autores, avaliadores]) => {
+        this.pessoas = [
+          ...autores.map(autor => ({
+            id: autor.id,
+            nome: autor.nome,
+            cpf: autor.cpf,
+            telefone: autor.telefone,
+            email: autor.email,
+            tipo: TipoPessoa.AUTOR,
+            projetosIds: autor.projetosIds
+          })),
+          ...avaliadores.map(avaliador => ({
+            id: avaliador.id,
+            nome: avaliador.nome,
+            cpf: avaliador.cpf,
+            telefone: avaliador.telefone,
+            email: avaliador.email,
+            tipo: TipoPessoa.AVALIADOR
+          }))
+        ];
+        this.filteredPessoas = [...this.pessoas];
       },
-      {
-        id: 2,
-        nome: 'Maria Santos',
-        cpf: '987.654.321-00',
-        email: 'maria.santos@example.com',
-        telefone: '(11) 88888-8888',
-        tipo: TipoPessoa.AVALIADOR
-      },
-      {
-        id: 3,
-        nome: 'Pedro Oliveira',
-        cpf: '456.789.123-00',
-        email: 'pedro.oliveira@example.com',
-        telefone: '(11) 77777-7777',
-        tipo: TipoPessoa.COORDENADOR
-      },
-      {
-        id: 4,
-        nome: 'Ana Costa',
-        cpf: '789.123.456-00',
-        email: 'ana.costa@example.com',
-        telefone: '(11) 66666-6666',
-        tipo: TipoPessoa.ADMINISTRADOR
-      },
-      {
-        id: 5,
-        nome: 'Carlos Ferreira',
-        cpf: '321.654.987-00',
-        email: 'carlos.ferreira@example.com',
-        telefone: '(11) 55555-5555',
-        tipo: TipoPessoa.AUTOR
+      error: (err) => {
+        this.pessoas = [];
+        this.filteredPessoas = [];
+        console.error('Erro ao buscar pessoas:', err);
       }
-    ];
-
-    this.filteredPessoas = [...this.pessoas];
+    });
   }
 
   /**
@@ -116,8 +96,6 @@ export class Pessoas implements OnInit {
     const labels: Record<TipoPessoa, string> = {
       [TipoPessoa.AUTOR]: 'Autor',
       [TipoPessoa.AVALIADOR]: 'Avaliador',
-      [TipoPessoa.COORDENADOR]: 'Coordenador',
-      [TipoPessoa.ADMINISTRADOR]: 'Administrador'
     };
     return labels[tipo] || 'Desconhecido';
   }
@@ -129,8 +107,6 @@ export class Pessoas implements OnInit {
     const classes: Record<TipoPessoa, string> = {
       [TipoPessoa.AUTOR]: 'bg-primary',
       [TipoPessoa.AVALIADOR]: 'bg-success',
-      [TipoPessoa.COORDENADOR]: 'bg-info',
-      [TipoPessoa.ADMINISTRADOR]: 'bg-warning'
     };
     return classes[tipo] || 'bg-secondary';
   }
