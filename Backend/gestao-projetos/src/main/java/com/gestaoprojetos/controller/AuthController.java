@@ -1,5 +1,6 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.controller.DTO.UsuarioDTO;
 import com.gestaoprojetos.controller.DTO.UsuarioDTO.UsuarioResponseDTO;
 import com.gestaoprojetos.model.Pessoa;
 import com.gestaoprojetos.model.Usuario;
@@ -87,7 +88,7 @@ public class AuthController {
 
         try {
             Usuario usuarioSalvo = usuarioService.registrarUsuario(novo);
-            var response = new UsuarioResponseDTO(usuarioSalvo);
+            var response = new UsuarioDTO.UsuarioResumoDTO(usuarioSalvo.getId(), usuarioSalvo.getUsername());
             return ResponseEntity.created(URI.create("/usuarios/" + usuarioSalvo.getId())).body(response);
         } catch (Exception ex) {
             log.error("Erro ao registrar usuário", ex);

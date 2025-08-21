@@ -1,6 +1,7 @@
 package com.gestaoprojetos.service;
 
 import com.gestaoprojetos.controller.DTO.PessoaDTO;
+import com.gestaoprojetos.controller.DTO.PessoaDTO.PessoaResponseDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Avaliacao;
@@ -46,7 +47,7 @@ public class AvaliadorServiceIMP extends
         Avaliador avaliador = new Avaliador(
                 null,
                 avaliadorReqt.getNome(),
-                avaliadorReqt.getCPF(),
+                avaliadorReqt.getCpf(),
                 avaliadorReqt.getEmail(),
                 avaliadorReqt.getTelefone(),
                 null
@@ -95,9 +96,9 @@ public class AvaliadorServiceIMP extends
                 );
     }
 
-    public PessoaDTO.PessoaResponseDTO LazyBuscarPorId(Long id) {
+    public PessoaResponseDTO LazyBuscarPorId(Long id) {
         Avaliador avaliador = buscarPorId(id);
-        return new PessoaDTO.PessoaResponseDTO(avaliador.getId(), avaliador.getNome(), avaliador.getTelefone(), avaliador.getEmail());
+        return new PessoaResponseDTO(avaliador.getId(), avaliador.getNome(), avaliador.getCpf(), avaliador.getTelefone(), avaliador.getEmail());
     }
 
     /**
@@ -106,11 +107,12 @@ public class AvaliadorServiceIMP extends
      * @return Lista de Avaliadores.
      * Se não houver nenhum, retorna lista vazia.
      */
-    public List<PessoaDTO.PessoaResponseDTO> listarTodos() {
+    public List<PessoaResponseDTO> listarTodos() {
         return findAll().stream().map(
-                avaliador -> new PessoaDTO.PessoaResponseDTO(
+                avaliador -> new PessoaResponseDTO(
                         avaliador.getId(),
                         avaliador.getNome(),
+                        avaliador.getCpf(),
                         avaliador.getTelefone(),
                         avaliador.getEmail()
                 )

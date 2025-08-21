@@ -1,20 +1,16 @@
 package com.gestaoprojetos.controller;
 
-import com.gestaoprojetos.controller.DTO.AssociacaoDTO;
+import com.gestaoprojetos.controller.DTO.AssociacaoDTO.AssociacaoRequestDTO;
 import com.gestaoprojetos.controller.DTO.PessoaDTO;
 import com.gestaoprojetos.exception.BadRequestException;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
-import com.gestaoprojetos.model.Autor;
 import com.gestaoprojetos.model.Avaliador;
-import com.gestaoprojetos.repository.AvaliadorRepository;
-import com.gestaoprojetos.service.AvaliacaoServiceIMP;
 import com.gestaoprojetos.service.AvaliadorServiceIMP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -157,7 +153,7 @@ public class AvaliadorController {
     })
     public ResponseEntity<?> associarAvaliacao(
             @PathVariable Long avaliadorId,
-            @RequestBody @Valid AssociacaoDTO request) {
+            @RequestBody @Valid AssociacaoRequestDTO request) {
         try {
             Avaliador avaliadorAtualizado = avaliadorService.atribuirAvaliacao(avaliadorId, request.getAvaliacaoId());
             return ResponseEntity.ok(avaliadorAtualizado);

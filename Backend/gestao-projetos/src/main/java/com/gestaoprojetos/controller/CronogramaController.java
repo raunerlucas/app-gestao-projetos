@@ -71,7 +71,7 @@ public class CronogramaController {
     public ResponseEntity<List<CronogramaResponseDTO>> listarCronogramas() {
         List<CronogramaResponseDTO> lista = cronogramaService.listarTodos()
                 .stream()
-                .map(new CronogramaDTO()::toCronogramaResponseDTO)
+                .map(CronogramaDTO::toCronogramaResponseDTO)
                 .toList();
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -97,7 +97,7 @@ public class CronogramaController {
     })
     public ResponseEntity<?> buscarCronogramaPorId(@PathVariable Long id) {
         try {
-            CronogramaResponseDTO cronograma =new CronogramaDTO().toCronogramaResponseDTO(cronogramaService.buscarPorId(id));
+            CronogramaResponseDTO cronograma = CronogramaDTO.toCronogramaResponseDTO(cronogramaService.buscarPorId(id));
             if (cronograma == null) {
                 return ResponseEntity.status(404).body("Cronograma não encontrado");
             }

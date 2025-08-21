@@ -1,6 +1,7 @@
 package com.gestaoprojetos.controller;
 
 
+import com.gestaoprojetos.controller.DTO.UsuarioDTO;
 import com.gestaoprojetos.controller.DTO.UsuarioDTO.UsuarioResponseDTO;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Pessoa;
@@ -48,7 +49,7 @@ public class UsuarioController {
     public ResponseEntity<UsuarioResponseDTO> getUserById(@RequestParam Long id) {
         try {
             Usuario user = usuarioService.buscarPorId(id);
-            return ResponseEntity.ok(new UsuarioResponseDTO(user));
+            return ResponseEntity.ok(UsuarioDTO.toUsuarioResponseDTO(user));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
@@ -81,6 +82,6 @@ public class UsuarioController {
 
 
         Usuario savedUser = usuarioService.registrarUsuario(usuario);
-        return ResponseEntity.ok(new UsuarioResponseDTO(savedUser));
+        return ResponseEntity.ok(UsuarioDTO.toUsuarioResponseDTO(savedUser));
     }
 }
