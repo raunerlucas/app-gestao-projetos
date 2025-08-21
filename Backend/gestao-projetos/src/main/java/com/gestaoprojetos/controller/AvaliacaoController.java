@@ -1,8 +1,9 @@
 package com.gestaoprojetos.controller;
 
+import com.gestaoprojetos.controller.DTO.AvaliacaoDTO;
+import com.gestaoprojetos.controller.DTO.AvaliacaoDTO.AvaliacaoResponseDTO;
 import com.gestaoprojetos.exception.ResourceNotFoundException;
 import com.gestaoprojetos.model.Avaliacao;
-import com.gestaoprojetos.service.AutorServiceIMP;
 import com.gestaoprojetos.service.AvaliacaoServiceIMP;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -59,15 +60,20 @@ public class AvaliacaoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de avaliações obtida com sucesso",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Avaliacao.class))),
+                            schema = @Schema(implementation = AvaliacaoResponseDTO.class))),
             @ApiResponse(responseCode = "204", description = "Nenhuma avaliação encontrada", content = @Content),
     })
-    public ResponseEntity<List<Avaliacao>> listarAvaliacoes() {
+    public ResponseEntity<List<AvaliacaoResponseDTO>> listarAvaliacoes() {
         List<Avaliacao> avaliacoes = avaliacaoService.listarTodos();
         if (avaliacoes.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(avaliacoes);
+
+        List<AvaliacaoResponseDTO> avaliacoesDTO = avaliacoes.stream()
+                .map(AvaliacaoDTO::toAvaliacaoResponseDTO)
+                .toList();
+
+        return ResponseEntity.ok(avaliacoesDTO);
     }
 
     /**
@@ -83,13 +89,14 @@ public class AvaliacaoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Avaliação encontrada",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Avaliacao.class))),
+                            schema = @Schema(implementation = AvaliacaoResponseDTO.class))),
             @ApiResponse(responseCode = "404", description = "Avaliação não encontrada", content = @Content),
     })
-    public ResponseEntity<Avaliacao> buscarAvaliacaoPorId(@PathVariable Long id) {
+    public ResponseEntity<AvaliacaoResponseDTO> buscarAvaliacaoPorId(@PathVariable Long id) {
         try {
             Avaliacao avaliacao = avaliacaoService.buscarPorId(id);
-            return ResponseEntity.ok(avaliacao);
+            AvaliacaoResponseDTO avaliacaoDTO = AvaliacaoDTO.toAvaliacaoResponseDTO(avaliacao);
+            return ResponseEntity.ok(avaliacaoDTO);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -108,11 +115,16 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "200", description = "Lista de avaliações do avaliador encontrada", content = @Content),
             @ApiResponse(responseCode = "404", description = "Avaliador não encontrado", content = @Content),
     })
-    public ResponseEntity<List<Avaliacao>> listarPorAvaliador(@PathVariable Long avaliadorId) {
+    public ResponseEntity<List<AvaliacaoResponseDTO>> listarPorAvaliador(@PathVariable Long avaliadorId) {
         try {
             List<Avaliacao> lista = avaliacaoService.listarPorAvaliador(avaliadorId);
             if (lista.isEmpty()) return ResponseEntity.noContent().build();
-            return ResponseEntity.ok(lista);
+
+            List<AvaliacaoResponseDTO> avaliacoesDTO = lista.stream()
+                    .map(AvaliacaoDTO::toAvaliacaoResponseDTO)
+                    .toList();
+
+            return ResponseEntity.ok(avaliacoesDTO);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
@@ -131,11 +143,16 @@ public class AvaliacaoController {
             @ApiResponse(responseCode = "200", description = "Lista de avaliações do projeto obtida com sucesso", content = @Content),
             @ApiResponse(responseCode = "404", description = "Projeto não encontrado", content = @Content),
     })
-    public ResponseEntity<List<Avaliacao>> listarPorProjeto(@PathVariable Long projetoId) {
+    public ResponseEntity<List<AvaliacaoResponseDTO>> listarPorProjeto(@PathVariable Long projetoId) {
         try {
             List<Avaliacao> lista = avaliacaoService.listarPorProjeto(projetoId);
             if (lista.isEmpty()) return ResponseEntity.noContent().build();
-            return ResponseEntity.ok(lista);
+
+            List<AvaliacaoResponseDTO> avaliacoesDTO = lista.stream()
+                    .map(AvaliacaoDTO::toAvaliacaoResponseDTO)
+                    .toList();
+
+            return ResponseEntity.ok(avaliacoesDTO);
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
