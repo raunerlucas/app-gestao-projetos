@@ -10,11 +10,13 @@ import {AvaliadorModel} from '../../../models/Avaliador.model';
 import {Pessoa, TipoPessoa} from '../../../models/Pessoa.model';
 import {combineLatest, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+import {FloatMenu} from '../../../shared/float-menu/float-menu';
+import {FloatMenuConfig} from '../../../models/FloatMenuAction.model';
 
 
 @Component({
   selector: 'app-pessoas',
-  imports: [CommonModule, FormsModule, CpfMaskPipe, PhoneMaskPipe],
+  imports: [CommonModule, FormsModule, CpfMaskPipe, PhoneMaskPipe, FloatMenu],
   templateUrl: './pessoas.html',
   styleUrl: './pessoas.css'
 })
@@ -122,8 +124,35 @@ export class Pessoas implements OnInit {
    * Navega para edição da pessoa (placeholder para funcionalidade futura)
    */
   editarPessoa(id: number): void {
-    console.log('Editar pessoa com ID:', id);
-    // TODO: Implementar navegação para edição
-    alert('Funcionalidade de edição será implementada em breve!');
+    // Implementação real pode abrir modal ou navegar para edição
+    alert('Editar pessoa: ' + id);
+  }
+
+  getFloatMenuConfig(pessoa: Pessoa): FloatMenuConfig {
+    return {
+      actions: [
+        {
+          label: 'Editar',
+          icon: 'edit',
+          color: 'primary',
+          action: () => this.editarPessoa(pessoa.id)
+        },
+        {
+          label: 'Excluir',
+          icon: 'delete',
+          color: 'danger',
+          action: () => this.excluirPessoa(pessoa.id)
+        }
+      ],
+      position: 'bottom-left',
+      size: 'medium'
+    };
+  }
+
+  excluirPessoa(id: number): void {
+    // TODO: Implementar exclusão real via service
+    this.pessoas = this.pessoas.filter(p => p.id !== id);
+    this.filteredPessoas = this.filteredPessoas.filter(p => p.id !== id);
+    alert('Pessoa excluída!');
   }
 }

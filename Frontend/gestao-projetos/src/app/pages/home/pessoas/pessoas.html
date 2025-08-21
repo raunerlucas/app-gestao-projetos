@@ -59,11 +59,7 @@
                     </span>
                   </td>
                   <td class="text-end">
-                    <button
-                      class="btn btn-link text-decoration-none text-dark p-0"
-                      (click)="editarPessoa(pessoa.id!)">
-                      Editar
-                    </button>
+                    <app-float-menu [config]="getFloatMenuConfig(pessoa)"></app-float-menu>
                   </td>
                 </tr>
               }
