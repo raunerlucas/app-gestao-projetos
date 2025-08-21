@@ -47,13 +47,21 @@ public class PremioController {
     })
     public ResponseEntity<?> criarPremio(@RequestBody @Valid PremioRequestDTO premioDTO) {
         try {
+            // Validação adicional do cronogramaId
+            if (premioDTO.getCronogramaId() == null || premioDTO.getCronogramaId() <= 0) {
+                return ResponseEntity.badRequest()
+                    .body("Erro: O ID do cronograma é obrigatório e deve ser um valor válido maior que zero.");
+            }
+
             Premio novoPremio = premioService.criarPremio(PremioDTO.toPremio(premioDTO));
             PremioResponseDTO response = PremioDTO.toPremioResponseDTO(novoPremio);
             return ResponseEntity.created(URI.create("/premios/" + novoPremio.getId())).body(response);
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body("Erro ao criar prêmio: " + e.getMessage());
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return ResponseEntity.status(404).body("Erro: " + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro interno do servidor: " + e.getMessage());
         }
     }
 

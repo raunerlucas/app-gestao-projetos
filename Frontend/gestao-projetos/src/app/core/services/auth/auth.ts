@@ -19,7 +19,6 @@ export class Auth {
   }
 
   login(username: string, password: string) {
-    this.forceloginteste(username); //TODO: Apenas para teste, remover depois
 
     return this.http.post<any>(`${environment.apiUrl}/auth/login`, {username, password})
       .pipe(
