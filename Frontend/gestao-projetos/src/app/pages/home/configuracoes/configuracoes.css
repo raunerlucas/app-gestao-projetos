@@ -1,0 +1,132 @@
+.page-container {
+  padding: 1.5rem;
+  min-height: 100vh;
+  background-color: var(--background-color, #ffffff);
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color, #000000);
+  margin: 0 0 0.5rem 0;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: var(--text-muted, #6c757d);
+  margin: 0;
+}
+
+.content-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.development-notice {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border-color, #e5e5e5);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notice-icon {
+  margin-bottom: 1.5rem;
+}
+
+.notice-icon .material-symbols-outlined {
+  font-size: 4rem;
+  color: var(--warning-color, #f59e0b);
+}
+
+.notice-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-color, #000000);
+  margin: 0 0 1rem 0;
+}
+
+.notice-description {
+  font-size: 1.1rem;
+  color: var(--text-muted, #6c757d);
+  margin: 0 0 2rem 0;
+  line-height: 1.6;
+}
+
+.notice-features {
+  text-align: left;
+  background: var(--background-light, #f8f9fa);
+  border-radius: 0.375rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.notice-features h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color, #000000);
+  margin: 0 0 1rem 0;
+}
+
+.notice-features ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notice-features li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  font-size: 1rem;
+  color: var(--text-color, #000000);
+}
+
+.notice-features li .material-symbols-outlined {
+  font-size: 1.25rem;
+  color: var(--primary-color, #2563eb);
+  flex-shrink: 0;
+}
+
+.notice-features li:not(:last-child) {
+  border-bottom: 1px solid var(--border-light, #e9ecef);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .development-notice {
+    padding: 1.5rem;
+  }
+
+  .notice-icon .material-symbols-outlined {
+    font-size: 3rem;
+  }
+
+  .notice-title {
+    font-size: 1.25rem;
+  }
+
+  .notice-description {
+    font-size: 1rem;
+  }
+}
