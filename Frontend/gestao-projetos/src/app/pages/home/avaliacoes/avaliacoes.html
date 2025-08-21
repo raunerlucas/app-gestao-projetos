@@ -5,110 +5,148 @@
     <p class="text-muted">Gerencie as avaliações de projetos</p>
   </div>
 
+  <!-- Loading state -->
+  @if (loading) {
+    <div class="text-center py-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
+      </div>
+      <p class="mt-2 text-muted">Carregando avaliações...</p>
+    </div>
+  }
+
+  <!-- Error state -->
+  @if (error && !loading) {
+    <div class="alert alert-danger" role="alert">
+      <span class="material-symbols-outlined me-2">error</span>
+      {{ error }}
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger ms-2"
+        (click)="recarregarDados()">
+        Tentar novamente
+      </button>
+    </div>
+  }
+
   <!-- Container principal -->
-  <div class="card shadow-sm border" style="border-color: #e5e5e5;">
-    <div class="card-body" style="padding: 20px;">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="fw-bold mb-0">Projetos para Avaliação</h5>
-      </div>
-
-      <!-- Campo de busca -->
-      <div class="mb-4" style="max-width: 40%;">
-        <div class="position-relative">
-          <span class="material-symbols-outlined position-absolute text-muted"
-                style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #6c757d;">
-            search
-          </span>
-          <input
-            type="text"
-            class="form-control ps-5"
-            placeholder="Buscar por título, área temática ou autor..."
-            [(ngModel)]="searchTerm"
-            (input)="onSearch()"
-            style="border-radius: 6px; border-color: #d1d5db; background-color: white;">
+  @if (!loading) {
+    <div class="card shadow-sm border" style="border-color: #e5e5e5;">
+      <div class="card-body" style="padding: 20px;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h5 class="fw-bold mb-0">Lista de Avaliações</h5>
+          <span class="badge bg-secondary">{{ filteredAvaliacoes.length }} avaliação(ões)</span>
         </div>
-      </div>
 
-      <!-- Tabela -->
-      <div class="table-responsive">
-        <table class="table align-middle mb-0">
-          <thead>
-            <tr style="border-bottom: 1px solid #e5e5e5;">
-              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Título</th>
-              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Área Temática</th>
-              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Autores</th>
-              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Prazo</th>
-              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Status</th>
-              <th class="fw-semibold text-dark text-end" style="font-size: 14px; border-bottom: none;">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            @if (filteredProjetos.length > 0) {
-              @for (projeto of filteredProjetos; track projeto.id) {
-                <tr style="border-bottom: 1px solid #e5e5e5;">
-                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
-                    {{ projeto.titulo }}
-                  </td>
-                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
-                    {{ projeto.areaTematica }}
-                  </td>
-                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
-                    {{ formatAuthors(projeto.autores) }}
-                  </td>
-                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
-                    {{ formatDate(projeto.prazo) }}
-                  </td>
-                  <td style="border-bottom: none;">
-                    @if (projeto.status === StatusAvaliacao.PENDENTE) {
-                      <span class="badge rounded-pill px-3 py-2"
-                            style="background-color: #fef3c7; color: #d97706; font-size: 12px;">
-                        Pendente
+        <!-- Barra de filtros -->
+        <div class="d-flex gap-3 mb-4">
+          <!-- Campo de busca -->
+          <div class="flex-grow-1" style="max-width: 400px;">
+            <div class="position-relative">
+              <span class="material-symbols-outlined position-absolute text-muted"
+                    style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #6c757d;">
+                search
+              </span>
+              <input
+                type="text"
+                class="form-control ps-5"
+                placeholder="Buscar por projeto, avaliador ou parecer..."
+                [(ngModel)]="searchTerm"
+                (input)="onSearch()"
+                style="border-radius: 6px; border-color: #d1d5db; background-color: white;">
+            </div>
+          </div>
+
+          <!-- Filtro por status -->
+          <div style="min-width: 150px;">
+            <select
+              class="form-select"
+              [(ngModel)]="statusFilter"
+              (change)="onStatusFilterChange()"
+              style="border-radius: 6px; border-color: #d1d5db;">
+              @for (option of statusOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-responsive">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr style="border-bottom: 1px solid #e5e5e5;">
+                <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Projeto</th>
+                <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Avaliador</th>
+                <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Nota</th>
+                <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Data</th>
+                <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Status</th>
+                <th class="fw-semibold text-dark text-end" style="font-size: 14px; border-bottom: none;">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (filteredAvaliacoes.length > 0) {
+                @for (avaliacao of filteredAvaliacoes; track avaliacao.id) {
+                  <tr style="border-bottom: 1px solid #e5e5e5;">
+                    <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                      <div>
+                        <div class="fw-medium">{{ avaliacao.projeto.titulo }}</div>
+                        <small class="text-muted">{{ avaliacao.projeto.areaTematica }}</small>
+                      </div>
+                    </td>
+                    <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                      <div>
+                        <div>{{ avaliacao.avaliador.nome }}</div>
+                        <small class="text-muted">{{ avaliacao.avaliador.email }}</small>
+                      </div>
+                    </td>
+                    <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                      <span class="fw-bold text-primary">{{ formatNota(avaliacao.nota) }}</span>
+                    </td>
+                    <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                      {{ formatDate(avaliacao.dataAvaliacao) }}
+                    </td>
+                    <td style="border-bottom: none;">
+                      <span [ngClass]="getStatusBadgeClass(avaliacao.status.description)"
+                            class="rounded-pill px-3 py-2"
+                            style="font-size: 12px;">
+                        {{ avaliacao.status.description }}
                       </span>
-                    } @else {
-                      <span class="badge rounded-pill px-3 py-2"
-                            style="background-color: #d1fae5; color: #059669; font-size: 12px;">
-                        Avaliado
-                      </span>
-                    }
-                  </td>
-                  <td class="text-end" style="border-bottom: none;">
-                    @if (projeto.status === StatusAvaliacao.PENDENTE) {
-                      <button
-                        class="btn btn-dark btn-sm px-3"
-                        (click)="avaliarProjeto(projeto.id)"
-                        style="background-color: #000000; border-color: #000000; color: white; font-size: 14px;">
-                        Avaliar
-                      </button>
-                    } @else {
-                      <button
-                        class="btn btn-outline-secondary btn-sm px-3"
-                        (click)="verAvaliacao(projeto.id)"
-                        style="background-color: white; border-color: #d1d5db; color: black; font-size: 14px;">
-                        Ver Avaliação
-                      </button>
+                    </td>
+                    <td class="text-end" style="border-bottom: none;">
+                      <app-float-menu [config]="getFloatMenuConfig(avaliacao)"></app-float-menu>
+                    </td>
+                  </tr>
+                }
+              } @else {
+                <tr>
+                  <td colspan="6" class="text-center py-5" style="border-bottom: none;">
+                    <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
+                      rate_review
+                    </span>
+                    <span class="text-muted">
+                      @if (searchTerm || statusFilter !== 'TODOS') {
+                        Nenhuma avaliação encontrada com os filtros aplicados.
+                      } @else {
+                        Nenhuma avaliação encontrada.
+                      }
+                    </span>
+                    @if (searchTerm || statusFilter !== 'TODOS') {
+                      <div class="mt-2">
+                        <button
+                          class="btn btn-sm btn-outline-secondary"
+                          (click)="clearFilters()">
+                          Limpar filtros
+                        </button>
+                      </div>
                     }
                   </td>
                 </tr>
               }
-            } @else {
-              <tr>
-                <td colspan="6" class="text-center py-5" style="border-bottom: none;">
-                  <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
-                    assignment
-                  </span>
-                  <span class="text-muted">
-                    @if (searchTerm) {
-                      Nenhum projeto encontrado para "{{ searchTerm }}".
-                    } @else {
-                      Nenhum projeto para avaliação encontrado.
-                    }
-                  </span>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>

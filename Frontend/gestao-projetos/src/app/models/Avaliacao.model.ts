@@ -1,22 +1,42 @@
-export enum StatusAvaliacao {
-  PENDENTE = 'PENDENTE',
-  AVALIADO = 'AVALIADO'
+export interface AvaliadorAvaliacao {
+  id: number;
+  nome: string;
+  email: string;
 }
 
-export interface ProjetoParaAvaliacao {
+export interface ProjetoAvaliacao {
   id: number;
   titulo: string;
   areaTematica: string;
-  autores: string[];
-  prazo: Date;
-  status: StatusAvaliacao;
+}
+
+export interface StatusAvaliacao {
+  id: number;
+  description: string;
 }
 
 export interface Avaliacao {
   id: number;
-  projetoId: number;
+  parecer: string;
   nota: number;
-  comentarios: string;
-  dataAvaliacao: Date;
+  dataAvaliacao: string; // ISO date string
+  avaliador: AvaliadorAvaliacao;
+  projeto: ProjetoAvaliacao;
+  status: StatusAvaliacao;
+}
+
+export interface AvaliacaoCreateRequest {
+  parecer: string;
+  nota: number;
   avaliadorId: number;
+  projetoId: number;
+  statusId?: number;
+}
+
+export interface AvaliacaoUpdateRequest {
+  parecer?: string;
+  nota?: number;
+  avaliadorId?: number;
+  projetoId?: number;
+  statusId?: number;
 }
