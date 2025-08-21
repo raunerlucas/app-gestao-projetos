@@ -4,16 +4,6 @@ INSERT INTO _status (id, description) VALUES (2, 'Avaliado');
 INSERT INTO _status (id, description) VALUES (3, 'Em Avaliação');
 INSERT INTO _status (id, description) VALUES (4, 'Cancelado');
 
-
--- PESSOAS: Cadastros base para Autor e Avaliador
--- Observação: com InheritanceType.TABLE_PER_CLASS, cada entidade concreta (Autor, Avaliador) tem sua própria tabela.
--- Ainda assim, para que o relacionamento Usuario→Pessoa funcione, criamos registros genéricos em _pessoa.
-
--- INSERT INTO _pessoa (id, nome, cpf, telefone, email) VALUES (1, 'João Silva', '123.456.789-10', '99999-0000', 'joao@example.com');
--- INSERT INTO _pessoa (id, nome, cpf, telefone, email) VALUES (2, 'Maria Souza', '987.654.321-00', '88888-1111', 'maria@example.com');
--- INSERT INTO _pessoa (id, nome, cpf, telefone, email) VALUES (3, 'Carlos Pereira', '111.222.333-44', '77777-2222', 'carlos@example.com');
-
-
 -- Autor: herda Pessoa (id=1 → João Silva)
 INSERT INTO _autor (id, nome, cpf, telefone, email) VALUES (1, 'João Silva', '123.456.789-10', '99999-0000', 'joao@example.com');
 
