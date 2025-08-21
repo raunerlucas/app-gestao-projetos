@@ -86,7 +86,7 @@ export class Premios implements OnInit {
       nome: premioData.nome,
       descricao: premioData.descricao,
       anoEdicao: parseInt(premioData.ano),
-      cronogramaId: premioData.cronogramaId
+      cronograma: premioData.cronogramaId
     };
 
     this.premioService.criarPremio(novoPremio).subscribe({
