@@ -4,20 +4,20 @@ INSERT INTO _status (id, description) VALUES (2, 'Avaliado');
 INSERT INTO _status (id, description) VALUES (3, 'Em Avaliação');
 INSERT INTO _status (id, description) VALUES (4, 'Cancelado');
 
--- Autor: herda Pessoa (id=1 → João Silva)
-INSERT INTO _autor (id, nome, cpf, telefone, email) VALUES (1, 'João Silva', '123.456.789-10', '99999-0000', 'joao@example.com');
-
--- Avaliador: herda Pessoa (id=2 → Maria Souza)
+INSERT INTO _avaliador (id, nome, cpf, telefone, email) VALUES (5, 'Ana Costa', '555.444.333-22', '66666-3333', 'anaclara@example.com');
 INSERT INTO _avaliador (id, nome, cpf, telefone, email) VALUES (2, 'Maria Souza', '987.654.321-00', '88888-1111', 'maria@example.com');
 
--- Outro Autor (id=3 → Carlos Pereira)
+INSERT INTO _autor (id, nome, cpf, telefone, email) VALUES (1, 'João Silva', '123.456.789-10', '99999-0000', 'joao@example.com');
 INSERT INTO _autor (id, nome, cpf, telefone, email) VALUES (3, 'Carlos Pereira', '111.222.333-44', '77777-2222', 'carlos@example.com');
-
 INSERT INTO _autor (id, nome, cpf, telefone, email) VALUES (4, 'Rauner Lucas', '888.777.666-55', '77777-2222', 'rauner@example.com');
 
 
 -- CRONOGRAMA: um ciclo de submissão para projetos
 INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma) VALUES (1, '2025-06-01', '2025-06-30', 'Cronograma de Junho 2025', 'NAO_INICIADO');
+INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma) VALUES (2, '2025-06-01', '2025-06-30', 'Cronograma de Junho 2026', 'NAO_INICIADO');
+INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma) VALUES (3, '2025-06-01', '2025-06-30', 'Cronograma de Junho 2027', 'NAO_INICIADO');
+INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma) VALUES (4, '2025-06-01', '2025-06-30', 'Cronograma de Junho 2028', 'NAO_INICIADO');
+INSERT INTO _cronograma (id, data_inicio, data_fim, descricao, status_cronograma) VALUES (5, '2025-06-01', '2025-06-30', 'Cronograma de Junho 2029', 'NAO_INICIADO');
 
 
 -- PREMIO: vinculado ao cronograma acima
