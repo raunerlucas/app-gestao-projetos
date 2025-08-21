@@ -1,1 +1,114 @@
-<p>avaliacoes works!</p>
+<div class="container mt-4">
+  <!-- Header da seção -->
+  <div class="mb-4">
+    <h2 class="fw-bold text-black">Avaliações</h2>
+    <p class="text-muted">Gerencie as avaliações de projetos</p>
+  </div>
+
+  <!-- Container principal -->
+  <div class="card shadow-sm border" style="border-color: #e5e5e5;">
+    <div class="card-body" style="padding: 20px;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">Projetos para Avaliação</h5>
+      </div>
+
+      <!-- Campo de busca -->
+      <div class="mb-4" style="max-width: 40%;">
+        <div class="position-relative">
+          <span class="material-symbols-outlined position-absolute text-muted"
+                style="left: 12px; top: 50%; transform: translateY(-50%); font-size: 20px; color: #6c757d;">
+            search
+          </span>
+          <input
+            type="text"
+            class="form-control ps-5"
+            placeholder="Buscar por título, área temática ou autor..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()"
+            style="border-radius: 6px; border-color: #d1d5db; background-color: white;">
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr style="border-bottom: 1px solid #e5e5e5;">
+              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Título</th>
+              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Área Temática</th>
+              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Autores</th>
+              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Prazo</th>
+              <th class="fw-semibold text-dark" style="font-size: 14px; border-bottom: none;">Status</th>
+              <th class="fw-semibold text-dark text-end" style="font-size: 14px; border-bottom: none;">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (filteredProjetos.length > 0) {
+              @for (projeto of filteredProjetos; track projeto.id) {
+                <tr style="border-bottom: 1px solid #e5e5e5;">
+                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                    {{ projeto.titulo }}
+                  </td>
+                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                    {{ projeto.areaTematica }}
+                  </td>
+                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                    {{ formatAuthors(projeto.autores) }}
+                  </td>
+                  <td class="text-black" style="font-size: 14px; border-bottom: none;">
+                    {{ formatDate(projeto.prazo) }}
+                  </td>
+                  <td style="border-bottom: none;">
+                    @if (projeto.status === StatusAvaliacao.PENDENTE) {
+                      <span class="badge rounded-pill px-3 py-2"
+                            style="background-color: #fef3c7; color: #d97706; font-size: 12px;">
+                        Pendente
+                      </span>
+                    } @else {
+                      <span class="badge rounded-pill px-3 py-2"
+                            style="background-color: #d1fae5; color: #059669; font-size: 12px;">
+                        Avaliado
+                      </span>
+                    }
+                  </td>
+                  <td class="text-end" style="border-bottom: none;">
+                    @if (projeto.status === StatusAvaliacao.PENDENTE) {
+                      <button
+                        class="btn btn-dark btn-sm px-3"
+                        (click)="avaliarProjeto(projeto.id)"
+                        style="background-color: #000000; border-color: #000000; color: white; font-size: 14px;">
+                        Avaliar
+                      </button>
+                    } @else {
+                      <button
+                        class="btn btn-outline-secondary btn-sm px-3"
+                        (click)="verAvaliacao(projeto.id)"
+                        style="background-color: white; border-color: #d1d5db; color: black; font-size: 14px;">
+                        Ver Avaliação
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="6" class="text-center py-5" style="border-bottom: none;">
+                  <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
+                    assignment
+                  </span>
+                  <span class="text-muted">
+                    @if (searchTerm) {
+                      Nenhum projeto encontrado para "{{ searchTerm }}".
+                    } @else {
+                      Nenhum projeto para avaliação encontrado.
+                    }
+                  </span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
