@@ -1,9 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
+import {of, Subject} from 'rxjs';
+import {catchError, finalize, takeUntil} from 'rxjs/operators';
 import {FloatMenu} from '../../../shared/float-menu/float-menu';
 import {FloatMenuConfig} from '../../../models/FloatMenuAction.model';
-import {Projeto, StatusProjeto} from '../../../models/Projeto.model';
+import {Projeto} from '../../../models/Projeto.model';
+import {ProjetosService} from '../../../core/services/projetos/projetosService';
 
 @Component({
   selector: 'app-projetos',
@@ -12,106 +15,93 @@ import {Projeto, StatusProjeto} from '../../../models/Projeto.model';
   templateUrl: './projetos.html',
   styleUrl: './projetos.css'
 })
-export class Projetos implements OnInit {
+export class Projetos implements OnInit, OnDestroy {
   projetos: Projeto[] = [];
   filteredProjetos: Projeto[] = [];
   searchTerm: string = '';
   statusFilter: string = 'TODOS';
   showModalNovoProjeto: boolean = false;
+  loading: boolean = false;
+  error: string | null = null;
 
-  // Expor enum para o template
-  readonly StatusProjeto = StatusProjeto;
+  private destroy$ = new Subject<void>();
 
   // Opções do filtro de status
   statusOptions = [
     { value: 'TODOS', label: 'Todos' },
-    { value: 'PENDENTE', label: 'Pendente' },
-    { value: 'EM_AVALIACAO', label: 'Em avaliação' },
-    { value: 'AVALIADO', label: 'Avaliado' }
+    { value: 'SEM_AVALIACOES', label: 'Sem avaliações' },
+    { value: 'COM_AVALIACOES', label: 'Com avaliações' },
+    { value: 'VENCEDORES', label: 'Vencedores' }
   ];
+
+  constructor(private projetosService: ProjetosService) {}
 
   ngOnInit(): void {
     this.loadProjetos();
   }
 
-  private loadProjetos(): void {
-    // Dados mockados conforme especificação
-    this.projetos = [
-      {
-        id: 1,
-        titulo: 'Sistema de Gestão Ambiental',
-        areaTematica: 'Meio Ambiente',
-        dataEnvio: new Date('2023-05-10'),
-        autores: ['João Silva'],
-        status: StatusProjeto.AVALIADO,
-        nota: 8.5
-      },
-      {
-        id: 2,
-        titulo: 'Aplicativo de Monitoramento',
-        areaTematica: 'Tecnologia',
-        dataEnvio: new Date('2023-04-22'),
-        autores: ['Pedro Santos', 'Maria Oliveira'],
-        status: StatusProjeto.AVALIADO,
-        nota: 9.2
-      },
-      {
-        id: 3,
-        titulo: 'Plataforma de Ensino',
-        areaTematica: 'Educação',
-        dataEnvio: new Date('2023-06-05'),
-        autores: ['Ana Costa'],
-        status: StatusProjeto.PENDENTE
-      },
-      {
-        id: 4,
-        titulo: 'Sistema de Controle',
-        areaTematica: 'Engenharia',
-        dataEnvio: new Date('2023-06-01'),
-        autores: ['João Silva', 'Pedro Santos'],
-        status: StatusProjeto.EM_AVALIACAO
-      },
-      {
-        id: 5,
-        titulo: 'Aplicativo de Saúde',
-        areaTematica: 'Saúde',
-        dataEnvio: new Date('2023-05-15'),
-        autores: ['Maria Oliveira'],
-        status: StatusProjeto.AVALIADO,
-        nota: 7.8
-      }
-    ];
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
-    this.applyFilters();
+  private loadProjetos(): void {
+    this.loading = true;
+    this.error = null;
+
+    // Determinar qual endpoint usar baseado no filtro
+    let serviceCall;
+    switch (this.statusFilter) {
+      case 'SEM_AVALIACOES':
+        serviceCall = this.projetosService.listarProjetosSemAvaliacoes();
+        break;
+      case 'COM_AVALIACOES':
+        serviceCall = this.projetosService.listarProjetosComAvaliacoes();
+        break;
+      case 'VENCEDORES':
+        serviceCall = this.projetosService.listarProjetosVencedores();
+        break;
+      default:
+        serviceCall = this.projetosService.listarProjetos();
+        break;
+    }
+
+    serviceCall.pipe(
+      takeUntil(this.destroy$),
+      catchError((err) => {
+        console.error('Erro ao carregar projetos:', err);
+        this.error = 'Erro ao carregar projetos. Tente novamente.';
+        return of([]);
+      }),
+      finalize(() => {
+        this.loading = false;
+      })
+    ).subscribe(projetos => {
+      this.projetos = projetos;
+      this.applySearchFilter();
+    });
   }
 
   onSearch(): void {
-    this.applyFilters();
+    this.applySearchFilter();
   }
 
   onStatusFilterChange(): void {
-    this.applyFilters();
+    this.loadProjetos();
   }
 
-  protected applyFilters(): void {
-    let filtered = [...this.projetos];
-
-    // Filtrar por termo de busca
-    if (this.searchTerm.trim()) {
-      const term = this.searchTerm.toLowerCase().trim();
-      filtered = filtered.filter(projeto =>
-        projeto.titulo.toLowerCase().includes(term) ||
-        projeto.areaTematica.toLowerCase().includes(term) ||
-        projeto.autores.some(autor => autor.toLowerCase().includes(term))
-      );
+  private applySearchFilter(): void {
+    if (!this.searchTerm.trim()) {
+      this.filteredProjetos = [...this.projetos];
+      return;
     }
 
-    // Filtrar por status
-    if (this.statusFilter !== 'TODOS') {
-      filtered = filtered.filter(projeto => projeto.status === this.statusFilter);
-    }
-
-    this.filteredProjetos = filtered;
+    const term = this.searchTerm.toLowerCase().trim();
+    this.filteredProjetos = this.projetos.filter(projeto =>
+      projeto.titulo.toLowerCase().includes(term) ||
+      projeto.areaTematica.toLowerCase().includes(term) ||
+      projeto.autores.some(autor => autor.nome.toLowerCase().includes(term))
+    );
   }
 
   getFloatMenuConfig(projeto: Projeto): FloatMenuConfig {
@@ -130,24 +120,25 @@ export class Projetos implements OnInit {
       }
     ];
 
-    if (projeto.status === StatusProjeto.AVALIADO) {
+    // Adicionar ação "Ver Avaliações" se o projeto tiver avaliações
+    if (projeto.avaliacoes && projeto.avaliacoes.length > 0) {
       actions.push({
-        label: 'Ver Avaliação',
+        label: 'Ver Avaliações',
         icon: 'rate_review',
-        color: 'success',
-        action: () => this.verAvaliacao(projeto.id)
+        color: 'success' as const,
+        action: () => this.verAvaliacoes(projeto.id)
       });
     }
 
     actions.push({
       label: 'Excluir',
       icon: 'delete',
-      color: 'danger',
+      color: 'danger' as const,
       action: () => this.excluirProjeto(projeto.id)
     });
 
     return {
-      actions: actions,
+      actions,
       position: 'bottom-left',
       size: 'medium'
     } as FloatMenuConfig;
@@ -158,58 +149,104 @@ export class Projetos implements OnInit {
   }
 
   visualizarProjeto(id: number): void {
-    console.log('Visualizar projeto:', id);
-    alert('Visualização do projeto será implementada em breve!');
+    this.loading = true;
+    this.projetosService.buscarProjetoPorId(id).pipe(
+      takeUntil(this.destroy$),
+      catchError((err) => {
+        console.error('Erro ao buscar projeto:', err);
+        alert('Erro ao carregar detalhes do projeto.');
+        return of(null);
+      }),
+      finalize(() => {
+        this.loading = false;
+      })
+    ).subscribe(projeto => {
+      if (projeto) {
+        console.log('Projeto encontrado:', projeto);
+        // TODO: Implementar modal de visualização ou navegação
+        alert(`Visualizando projeto: ${projeto.titulo}`);
+      }
+    });
   }
 
   editarProjeto(id: number): void {
     console.log('Editar projeto:', id);
-    alert('Edição do projeto será implementada em breve!');
+    // TODO: Implementar navegação para edição ou modal
+    alert('Funcionalidade de edição será implementada em breve!');
   }
 
-  verAvaliacao(id: number): void {
-    console.log('Ver avaliação do projeto:', id);
-    alert('Visualização da avaliação será implementada em breve!');
+  verAvaliacoes(id: number): void {
+    console.log('Ver avaliações do projeto:', id);
+    // TODO: Implementar modal ou navegação para visualizar avaliações
+    alert('Visualização das avaliações será implementada em breve!');
   }
 
   excluirProjeto(id: number): void {
-    if (confirm('Tem certeza que deseja excluir este projeto?')) {
-      this.projetos = this.projetos.filter(p => p.id !== id);
-      this.applyFilters();
-      alert('Projeto excluído com sucesso!');
+    if (!confirm('Tem certeza que deseja excluir este projeto? Esta ação não pode ser desfeita.')) {
+      return;
     }
+
+    this.loading = true;
+    this.projetosService.excluirProjeto(id).pipe(
+      takeUntil(this.destroy$),
+      catchError((err) => {
+        console.error('Erro ao excluir projeto:', err);
+        alert('Erro ao excluir projeto. Tente novamente.');
+        return of(null);
+      }),
+      finalize(() => {
+        this.loading = false;
+      })
+    ).subscribe(() => {
+      alert('Projeto excluído com sucesso!');
+      this.loadProjetos(); // Recarregar a lista
+    });
   }
 
   getStatusDisplay(projeto: Projeto): string {
-    if (projeto.status === StatusProjeto.AVALIADO && projeto.nota) {
-      return `Avaliado (${projeto.nota})`;
+    if (projeto.avaliacoes && projeto.avaliacoes.length > 0) {
+      // Calcular média das notas
+      const mediaNotas = projeto.avaliacoes.reduce((sum, av) => sum + av.nota, 0) / projeto.avaliacoes.length;
+      return `Avaliado (${mediaNotas.toFixed(1)})`;
+    } else {
+      return 'Pendente';
     }
-    return this.getStatusLabel(projeto.status);
   }
 
-  getStatusLabel(status: StatusProjeto): string {
-    const labels = {
-      [StatusProjeto.PENDENTE]: 'Pendente',
-      [StatusProjeto.EM_AVALIACAO]: 'Em avaliação',
-      [StatusProjeto.AVALIADO]: 'Avaliado'
-    };
-    return labels[status];
+  getStatusBadgeClass(projeto: Projeto): string {
+    if (projeto.avaliacoes && projeto.avaliacoes.length > 0) {
+      return 'badge bg-success text-white';
+    } else {
+      return 'badge bg-warning text-dark';
+    }
   }
 
-  getStatusBadgeClass(status: StatusProjeto): string {
-    const classes = {
-      [StatusProjeto.PENDENTE]: 'badge bg-warning text-dark',
-      [StatusProjeto.EM_AVALIACAO]: 'badge bg-info text-white',
-      [StatusProjeto.AVALIADO]: 'badge bg-success text-white'
-    };
-    return classes[status];
+  formatAuthors(autores: any[]): string {
+    if (Array.isArray(autores) && autores.length > 0) {
+      return autores.map(autor => autor.nome || autor).join(', ');
+    }
+    return 'Sem autores';
   }
 
-  formatAuthors(autores: string[]): string {
-    return autores.join(', ');
+  formatDate(dateString: string): string {
+    try {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat('pt-BR').format(date);
+    } catch (error) {
+      console.error('Erro ao formatar data:', error);
+      return dateString;
+    }
   }
 
-  formatDate(date: Date): string {
-    return new Intl.DateTimeFormat('pt-BR').format(date);
+  // Método para limpar filtros
+  clearFilters(): void {
+    this.searchTerm = '';
+    this.statusFilter = 'TODOS';
+    this.loadProjetos();
+  }
+
+  // Método para recarregar dados
+  recarregarDados(): void {
+    this.loadProjetos();
   }
 }
