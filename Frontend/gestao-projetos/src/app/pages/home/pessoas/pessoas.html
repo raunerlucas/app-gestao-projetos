@@ -1,1 +1,114 @@
-<p>pessoas works!</p>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="fw-bold">Pessoas</h2>
+      <p class="text-muted">Gerencie autores e avaliadores do sistema</p>
+    </div>
+    <button class="btn btn-dark" (click)="toggleModalNovaPessoa()">
+      <span class="material-symbols-outlined">add</span>
+      Cadastrar Pessoa
+    </button>
+  </div>
+
+  <!-- Card com tabela -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title fw-bold mb-3">Lista de Pessoas</h5>
+
+      <!-- Campo de busca -->
+      <div class="search-container mb-3">
+        <div class="input-group">
+          <span class="input-group-text bg-white border-end-0">
+            <span class="material-symbols-outlined text-muted">search</span>
+          </span>
+          <input
+            type="text"
+            class="form-control border-start-0"
+            placeholder="Buscar por nome, email ou CPF..."
+            [(ngModel)]="searchTerm"
+            (input)="onSearch()">
+        </div>
+      </div>
+
+      <!-- Tabela -->
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>CPF</th>
+              <th>Email</th>
+              <th>Telefone</th>
+              <th>Tipo</th>
+              <th class="text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (filteredPessoas.length > 0) {
+              @for (pessoa of filteredPessoas; track pessoa.id) {
+                <tr>
+                  <td class="fw-medium">{{ pessoa.nome }}</td>
+                  <td>{{ pessoa.cpf | cpfMask }}</td>
+                  <td>{{ pessoa.email }}</td>
+                  <td>{{ pessoa.telefone | phoneMask }}</td>
+                  <td>
+                    <span
+                      class="badge rounded-pill"
+                      [ngClass]="getTipoBadgeClass(pessoa.tipo)">
+                      {{ getTipoLabel(pessoa.tipo) }}
+                    </span>
+                  </td>
+                  <td class="text-end">
+                    <button
+                      class="btn btn-link text-decoration-none text-dark p-0"
+                      (click)="editarPessoa(pessoa.id!)">
+                      Editar
+                    </button>
+                  </td>
+                </tr>
+              }
+            } @else {
+              <tr>
+                <td colspan="6" class="text-center py-4">
+                  <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
+                    person_off
+                  </span>
+                  <span class="text-muted">Nenhuma pessoa encontrada.</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para nova pessoa -->
+@if (showModalNovaPessoa) {
+  <div class="modal-backdrop fade show" (click)="toggleModalNovaPessoa()"></div>
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold">Cadastrar Nova Pessoa</h5>
+          <button type="button" class="btn-close" (click)="toggleModalNovaPessoa()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="text-center py-4">
+            <span class="material-symbols-outlined d-block mb-2 text-warning" style="font-size: 3rem;">
+              construction
+            </span>
+            <h6 class="fw-bold">Funcionalidade em Desenvolvimento</h6>
+            <p class="text-muted">O cadastro de pessoas está sendo desenvolvido e estará disponível em breve.</p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="toggleModalNovaPessoa()">
+            Fechar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
