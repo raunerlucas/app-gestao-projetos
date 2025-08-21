@@ -1,0 +1,215 @@
+/* Container principal */
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  background: #rgba(59, 130, 246, 0.2);
+  font-family: 'Inter', Arial, sans-serif;
+  color: #000;
+}
+
+/* Header */
+.dashboard-header {
+  margin-bottom: 32px;
+}
+.dashboard-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.dashboard-subtitle {
+  color: #6B7280;
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+/* Métricas */
+.dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.metric-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
+  padding: 24px 20px 20px 20px;
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+.metric-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+.metric-icon-doc::before {
+  content: '\1F4C4'; /* Emoji documento */
+  font-size: 22px;
+}
+.metric-icon-check::before {
+  content: '\21BB'; /* Emoji círculo atualização */
+  font-size: 22px;
+}
+.metric-icon-user::before {
+  content: '\1F465'; /* Emoji pessoas */
+  font-size: 22px;
+}
+.metric-icon-clock::before {
+  content: '\23F0'; /* Emoji relógio */
+  font-size: 22px;
+}
+.metric-content {
+  flex: 1;
+}
+.metric-title {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6B7280;
+}
+.metric-value {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 4px 0 2px 0;
+}
+.metric-desc {
+  font-size: 0.95rem;
+  color: #6B7280;
+}
+
+/* Tabs */
+.dashboard-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+.tab {
+  background: #F3F4F6;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 10px 24px;
+  font-size: 1rem;
+  color: #6B7280;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.tab.active {
+  background: #fff;
+  color: #000;
+  border-bottom: 2px solid #000;
+  font-weight: 700;
+}
+
+/* Projetos Recentes */
+.dashboard-projects {
+  margin-top: 8px;
+}
+.projects-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.projects-header h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+.btn-primary {
+  background: #000;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-primary:hover {
+  background: #222;
+}
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.project-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.03);
+  padding: 20px 18px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.project-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.project-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+.project-note {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+.project-status {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #6B7280;
+}
+.project-desc {
+  font-size: 0.98rem;
+  color: #6B7280;
+}
+.btn-outline {
+  background: #fff;
+  color: #000;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s, border 0.2s;
+}
+.btn-outline:hover {
+  background: #d1fae5;
+  border-color: #bdbdbd;
+}
+
+@media (max-width: 1024px) {
+  .dashboard-metrics, .projects-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 700px) {
+  .dashboard-metrics, .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-container {
+    padding: 16px 4px;
+  }
+}
+

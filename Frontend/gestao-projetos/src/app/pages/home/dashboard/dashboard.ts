@@ -8,4 +8,9 @@ import {Component} from '@angular/core';
   styleUrl: './dashboard.css'
 })
 export class Dashboard {
+  selectedTab: string = 'recentes';
+
+  setTab(tab: string) {
+    this.selectedTab = tab;
+  }
 }

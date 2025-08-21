@@ -1,1 +1,90 @@
-<p> Esse é para ser o dashboard </p>
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <h1 class="dashboard-title">Dashboard</h1>
+    <p class="dashboard-subtitle">Bem-vindo ao Sistema de Gestão de Projetos. Visualize estatísticas e informações importantes.</p>
+  </header>
+
+  <!-- Linha de Cards de Métricas -->
+  <section class="dashboard-metrics">
+    <div class="metric-card">
+      <div class="metric-icon metric-icon-doc"></div>
+      <div class="metric-content">
+        <span class="metric-title">Total de Projetos</span>
+        <span class="metric-value">24</span>
+        <span class="metric-desc">18 avaliados, 6 pendentes</span>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon metric-icon-check"></div>
+      <div class="metric-content">
+        <span class="metric-title">Avaliações</span>
+        <span class="metric-value">16</span>
+        <span class="metric-desc">8 avaliações pendentes</span>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon metric-icon-user"></div>
+      <div class="metric-content">
+        <span class="metric-title">Pessoas</span>
+        <span class="metric-value">42</span>
+        <span class="metric-desc">Autores e avaliadores cadastrados</span>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon metric-icon-clock"></div>
+      <div class="metric-content">
+        <span class="metric-title">Próximo Prazo</span>
+        <span class="metric-value">30/06/2023</span>
+        <span class="metric-desc">Fim do período de submissão</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Abas de Navegação -->
+  <nav class="dashboard-tabs">
+    <button class="tab active">Projetos Recentes</button>
+    <button class="tab active">Avaliações Pendentes</button>
+    <button class="tab active">Cronograma</button>
+  </nav>
+
+  <!-- Seção Projetos Recentes -->
+  <section class="dashboard-projects">
+    <div class="projects-header">
+      <h2>Projetos Recentes</h2>
+      <button class="btn-primary">+ Novo Projeto</button>
+    </div>
+    <div class="projects-grid">
+      <!-- Card 1 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <span class="project-title">Sistema de Gestão Ambiental</span>
+          <span class="project-note">Nota: 8.5</span>
+        </div>
+        <div class="project-desc">Enviado em 10/05/2023</div>
+        <div class="project-desc">Projeto focado em sustentabilidade e gestão de recursos naturais.</div>
+        <button class="btn-outline">Ver detalhes</button>
+      </div>
+      <!-- Card 2 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <span class="project-title">Aplicativo de Monitoramento</span>
+          <span class="project-note">Nota: 9.2</span>
+        </div>
+        <div class="project-desc">Enviado em 22/04/2023</div>
+        <div class="project-desc">Aplicativo para monitoramento de métricas em tempo real.</div>
+        <button class="btn-outline">Ver detalhes</button>
+      </div>
+      <!-- Card 3 -->
+      <div class="project-card">
+        <div class="project-card-header">
+          <span class="project-title">Plataforma de Ensino</span>
+          <span class="project-status">Pendente</span>
+        </div>
+        <div class="project-desc">Enviado em 05/06/2023</div>
+        <div class="project-desc">Plataforma educacional com recursos interativos.</div>
+        <button class="btn-outline">Ver detalhes</button>
+      </div>
+    </div>
+  </section>
+</div>
