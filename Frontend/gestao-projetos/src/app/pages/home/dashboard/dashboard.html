@@ -1,90 +1,266 @@
-<div class="dashboard-container">
-  <!-- Header -->
-  <header class="dashboard-header">
-    <h1 class="dashboard-title">Dashboard</h1>
-    <p class="dashboard-subtitle">Bem-vindo ao Sistema de Gestão de Projetos. Visualize estatísticas e informações importantes.</p>
-  </header>
+<div class="container mt-4">
+  <!-- Header da seção -->
+  <div class="mb-4">
+    <h1 class="fw-bold text-black" style="font-size: 24px;">Dashboard</h1>
+    <p class="text-muted" style="font-size: 16px;">Bem-vindo ao Sistema de Gestão de Projetos. Visualize estatísticas e informações importantes.</p>
+  </div>
 
-  <!-- Linha de Cards de Métricas -->
-  <section class="dashboard-metrics">
-    <div class="metric-card">
-      <div class="metric-icon metric-icon-doc"></div>
-      <div class="metric-content">
-        <span class="metric-title">Total de Projetos</span>
-        <span class="metric-value">24</span>
-        <span class="metric-desc">18 avaliados, 6 pendentes</span>
+  <!-- Loading state -->
+  @if (loading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Carregando...</span>
       </div>
+      <p class="mt-3 text-muted">Carregando dados do dashboard...</p>
     </div>
-    <div class="metric-card">
-      <div class="metric-icon metric-icon-check"></div>
-      <div class="metric-content">
-        <span class="metric-title">Avaliações</span>
-        <span class="metric-value">16</span>
-        <span class="metric-desc">8 avaliações pendentes</span>
-      </div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-icon metric-icon-user"></div>
-      <div class="metric-content">
-        <span class="metric-title">Pessoas</span>
-        <span class="metric-value">42</span>
-        <span class="metric-desc">Autores e avaliadores cadastrados</span>
-      </div>
-    </div>
-    <div class="metric-card">
-      <div class="metric-icon metric-icon-clock"></div>
-      <div class="metric-content">
-        <span class="metric-title">Próximo Prazo</span>
-        <span class="metric-value">30/06/2023</span>
-        <span class="metric-desc">Fim do período de submissão</span>
-      </div>
-    </div>
-  </section>
+  }
 
-  <!-- Abas de Navegação -->
-  <nav class="dashboard-tabs">
-    <button class="tab active">Projetos Recentes</button>
-    <button class="tab active">Avaliações Pendentes</button>
-    <button class="tab active">Cronograma</button>
-  </nav>
+  <!-- Error state -->
+  @if (error && !loading) {
+    <div class="alert alert-danger" role="alert">
+      <span class="material-symbols-outlined me-2">error</span>
+      {{ error }}
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-danger ms-2"
+        (click)="recarregarDados()">
+        Tentar novamente
+      </button>
+    </div>
+  }
 
-  <!-- Seção Projetos Recentes -->
-  <section class="dashboard-projects">
-    <div class="projects-header">
-      <h2>Projetos Recentes</h2>
-      <button class="btn-primary">+ Novo Projeto</button>
-    </div>
-    <div class="projects-grid">
-      <!-- Card 1 -->
-      <div class="project-card">
-        <div class="project-card-header">
-          <span class="project-title">Sistema de Gestão Ambiental</span>
-          <span class="project-note">Nota: 8.5</span>
+  <!-- Dashboard content -->
+  @if (!loading) {
+    <!-- Cards de Métricas -->
+    <section class="row g-4 mb-5">
+      <!-- Total de Projetos -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card metric-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="metric-icon bg-primary">
+              <span class="material-symbols-outlined text-white">folder</span>
+            </div>
+            <div class="ms-3">
+              <h5 class="metric-value mb-1">{{ metrics.totalProjetos }}</h5>
+              <p class="metric-title text-muted mb-1">Total de Projetos</p>
+              <small class="metric-desc text-muted">
+                {{ metrics.projetosAvaliados }} avaliados, {{ metrics.projetosPendentes }} pendentes
+              </small>
+            </div>
+          </div>
         </div>
-        <div class="project-desc">Enviado em 10/05/2023</div>
-        <div class="project-desc">Projeto focado em sustentabilidade e gestão de recursos naturais.</div>
-        <button class="btn-outline">Ver detalhes</button>
       </div>
-      <!-- Card 2 -->
-      <div class="project-card">
-        <div class="project-card-header">
-          <span class="project-title">Aplicativo de Monitoramento</span>
-          <span class="project-note">Nota: 9.2</span>
+
+      <!-- Avaliações -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card metric-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="metric-icon bg-success">
+              <span class="material-symbols-outlined text-white">rate_review</span>
+            </div>
+            <div class="ms-3">
+              <h5 class="metric-value mb-1">{{ metrics.totalAvaliacoes }}</h5>
+              <p class="metric-title text-muted mb-1">Avaliações</p>
+              <small class="metric-desc text-muted">
+                {{ metrics.avaliacoesPendentes }} pendentes
+              </small>
+            </div>
+          </div>
         </div>
-        <div class="project-desc">Enviado em 22/04/2023</div>
-        <div class="project-desc">Aplicativo para monitoramento de métricas em tempo real.</div>
-        <button class="btn-outline">Ver detalhes</button>
       </div>
-      <!-- Card 3 -->
-      <div class="project-card">
-        <div class="project-card-header">
-          <span class="project-title">Plataforma de Ensino</span>
-          <span class="project-status">Pendente</span>
+
+      <!-- Pessoas -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card metric-card h-100">
+          <div class="card-body d-flex align-items-center">
+            <div class="metric-icon bg-info">
+              <span class="material-symbols-outlined text-white">people</span>
+            </div>
+            <div class="ms-3">
+              <h5 class="metric-value mb-1">{{ metrics.totalPessoas }}</h5>
+              <p class="metric-title text-muted mb-1">Pessoas</p>
+              <small class="metric-desc text-muted">
+                {{ metrics.autores }} autores, {{ metrics.avaliadores }} avaliadores
+              </small>
+            </div>
+          </div>
         </div>
-        <div class="project-desc">Enviado em 05/06/2023</div>
-        <div class="project-desc">Plataforma educacional com recursos interativos.</div>
-        <button class="btn-outline">Ver detalhes</button>
       </div>
-    </div>
-  </section>
+
+      <!-- Link para ações rápidas -->
+      <div class="col-md-6 col-lg-3">
+        <div class="card metric-card h-100 border-primary">
+          <div class="card-body d-flex align-items-center">
+            <div class="metric-icon bg-primary">
+              <span class="material-symbols-outlined text-white">add_circle</span>
+            </div>
+            <div class="ms-3">
+              <h6 class="metric-title mb-2">Ações Rápidas</h6>
+              <button class="btn btn-sm btn-primary" routerLink="/home/projetos">
+                <span class="material-symbols-outlined me-1" style="font-size: 16px;">add</span>
+                Novo Projeto
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navegação por abas -->
+    <nav class="dashboard-tabs mb-4">
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            [ngClass]="{'active': selectedTab === 'projetos'}"
+            (click)="setTab('projetos')">
+            <span class="material-symbols-outlined me-2">folder</span>
+            Projetos Recentes
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            [ngClass]="{'active': selectedTab === 'avaliacoes'}"
+            (click)="setTab('avaliacoes')">
+            <span class="material-symbols-outlined me-2">pending_actions</span>
+            Avaliações Pendentes
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            [ngClass]="{'active': selectedTab === 'destaque'}"
+            (click)="setTab('destaque')">
+            <span class="material-symbols-outlined me-2">star</span>
+            Projetos Destaque
+          </button>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Conteúdo das abas -->
+    <section class="tab-content">
+      <!-- Aba Projetos Recentes -->
+      @if (selectedTab === 'projetos') {
+        <div class="card shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">Projetos Recentes</h5>
+            <button class="btn btn-primary btn-sm" routerLink="/home/projetos">
+              <span class="material-symbols-outlined me-1" style="font-size: 16px;">visibility</span>
+              Ver Todos
+            </button>
+          </div>
+          <div class="card-body p-0">
+            @if (projetosRecentes.length > 0) {
+              <div class="row g-0">
+                @for (projeto of projetosRecentes; track projeto.id) {
+                  <div class="col-md-6 col-lg-4">
+                    <div class="project-card-dashboard">
+                      <div class="project-header">
+                        <h6 class="project-title">{{ projeto.titulo }}</h6>
+                        <span [ngClass]="getProjetoStatusClass(projeto)" class="project-status">
+                          {{ getProjetoStatus(projeto) }}
+                        </span>
+                      </div>
+                      <p class="project-area">{{ projeto.areaTematica }}</p>
+                      <small class="project-date">{{ formatDate(projeto.dataEnvio) }}</small>
+                      <div class="project-authors">
+                        <small class="text-muted">{{ formatAuthors(projeto.autores) }}</small>
+                      </div>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="text-center py-4">
+                <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
+                  folder_open
+                </span>
+                <p class="text-muted">Nenhum projeto encontrado.</p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Aba Avaliações Pendentes -->
+      @if (selectedTab === 'avaliacoes') {
+        <div class="card shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">Avaliações Pendentes</h5>
+            <button class="btn btn-primary btn-sm" routerLink="/home/avaliacoes">
+              <span class="material-symbols-outlined me-1" style="font-size: 16px;">visibility</span>
+              Ver Todas
+            </button>
+          </div>
+          <div class="card-body">
+            @if (avaliacoesPendentes.length > 0) {
+              <div class="list-group list-group-flush">
+                @for (avaliacao of avaliacoesPendentes; track avaliacao.id) {
+                  <div class="list-group-item border-0 px-0">
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h6 class="mb-1">{{ avaliacao.projeto.titulo }}</h6>
+                        <p class="mb-1 text-muted">{{ avaliacao.projeto.areaTematica }}</p>
+                        <small class="text-muted">Avaliador: {{ avaliacao.avaliador.nome }}</small>
+                      </div>
+                      <span class="badge bg-warning text-dark">
+                        {{ avaliacao.status.description }}
+                      </span>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="text-center py-4">
+                <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
+                  check_circle
+                </span>
+                <p class="text-muted">Nenhuma avaliação pendente.</p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Aba Projetos Destaque -->
+      @if (selectedTab === 'destaque') {
+        <div class="card shadow-sm">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">Projetos em Destaque</h5>
+            <small class="text-muted">Melhores avaliações</small>
+          </div>
+          <div class="card-body p-0">
+            @if (projetosDestaque.length > 0) {
+              <div class="row g-0">
+                @for (projeto of projetosDestaque; track projeto.id) {
+                  <div class="col-md-4">
+                    <div class="destaque-card">
+                      <div class="destaque-header">
+                        <span class="material-symbols-outlined text-warning">star</span>
+                        <h6 class="mb-0">{{ projeto.titulo }}</h6>
+                      </div>
+                      <p class="text-muted mb-2">{{ projeto.areaTematica }}</p>
+                      <div class="destaque-status">
+                        {{ getProjetoStatus(projeto) }}
+                      </div>
+                      <small class="text-muted">{{ formatAuthors(projeto.autores) }}</small>
+                    </div>
+                  </div>
+                }
+              </div>
+            } @else {
+              <div class="text-center py-4">
+                <span class="material-symbols-outlined d-block mb-2 text-muted" style="font-size: 3rem;">
+                  star_border
+                </span>
+                <p class="text-muted">Nenhum projeto avaliado ainda.</p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+  }
 </div>
